@@ -112,7 +112,7 @@ class Store(context: Context) : SQLiteOpenHelper(context, "lyricsflow.db", null,
     }
 }
 
-class Secrets(context: Context) {
+class Secrets(context: Context, private val slot: String = "key") {
     private val prefs = context.getSharedPreferences("credentials", Context.MODE_PRIVATE)
 
     private fun key(): SecretKey {
@@ -133,24 +133,30 @@ class Secrets(context: Context) {
                 .generateKey()
     }
 
+    // Credentials must be durable before a login/rotation is reported as successful.
+    @android.annotation.SuppressLint("ApplySharedPref", "UseKtx")
     fun write(value: String) {
         if (value.isEmpty()) {
-            prefs.edit().clear().apply()
+            check(prefs.edit().remove(slot).commit()) { "无法安全清除登录凭证" }
             return
         }
         val c = Cipher.getInstance("AES/GCM/NoPadding")
         c.init(Cipher.ENCRYPT_MODE, key())
-        prefs
-            .edit()
-            .putString(
-                "key",
-                Base64.encodeToString(c.iv + c.doFinal(value.toByteArray()), Base64.NO_WRAP),
-            )
-            .apply()
+        check(
+            prefs
+                .edit()
+                .putString(
+                    slot,
+                    Base64.encodeToString(c.iv + c.doFinal(value.toByteArray()), Base64.NO_WRAP),
+                )
+                .commit()
+        ) {
+            "无法安全保存登录凭证"
+        }
     }
 
     fun read(): String = runCatching {
-        val b = Base64.decode(prefs.getString("key", null) ?: return "", Base64.NO_WRAP)
+        val b = Base64.decode(prefs.getString(slot, null) ?: return "", Base64.NO_WRAP)
         val c = Cipher.getInstance("AES/GCM/NoPadding")
         c.init(Cipher.DECRYPT_MODE, key(), GCMParameterSpec(128, b.copyOfRange(0, 12)))
         String(c.doFinal(b.copyOfRange(12, b.size)))

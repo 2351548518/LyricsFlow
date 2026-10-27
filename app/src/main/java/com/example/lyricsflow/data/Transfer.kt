@@ -231,7 +231,7 @@ object Transfer {
             prefix + if (translation) r.translation else r.text
         }
 
-    fun backup(graph: AppGraph): ByteArray {
+    fun backup(graph: AppGraph, includeBackground: Boolean = true): ByteArray {
         val out = ByteArrayOutputStream()
         ZipOutputStream(out).use { zip ->
             fun add(name: String, text: String) {
@@ -275,7 +275,7 @@ object Transfer {
                     .put("coverBlur", p.coverBlur)
                     .put("trackPreferences", graph.trackPreferences())
             val image = File(graph.app.filesDir, "background.jpg")
-            if (image.exists())
+            if (includeBackground && image.exists())
                 settings.put(
                     "backgroundImage",
                     android.util.Base64.encodeToString(

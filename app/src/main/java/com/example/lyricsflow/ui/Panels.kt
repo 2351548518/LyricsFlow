@@ -8,6 +8,8 @@ import android.provider.Settings
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -23,7 +25,6 @@ import androidx.compose.ui.unit.*
 import com.example.lyricsflow.core.*
 import com.example.lyricsflow.data.*
 import com.example.lyricsflow.overlay.LyricsOverlayService
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
 import kotlinx.coroutines.*
@@ -34,16 +35,16 @@ fun PageTitle(title: String, subtitle: String = "") {
     Text(
         title,
         Modifier.padding(top = 16.dp, bottom = 8.dp),
-        fontSize = 30.sp,
+        fontSize = 25.sp,
         fontWeight = FontWeight.SemiBold,
     )
     if (subtitle.isNotBlank())
         Text(
             subtitle,
             Modifier.padding(bottom = 22.dp),
-            fontSize = 13.sp,
+            fontSize = 14.sp,
             lineHeight = 21.sp,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = .55f),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
 }
 
@@ -52,7 +53,7 @@ private fun Section(text: String) {
     Text(
         text,
         Modifier.padding(top = 26.dp, bottom = 12.dp),
-        fontSize = 12.sp,
+        fontSize = 13.sp,
         color = MaterialTheme.colorScheme.primary,
         fontWeight = FontWeight.Bold,
         letterSpacing = 1.sp,
@@ -61,25 +62,32 @@ private fun Section(text: String) {
 
 @Composable
 private fun SettingRow(title: String, sub: String = "", onClick: () -> Unit) {
-    Column {
+    Surface(
+        Modifier.fillMaxWidth().padding(bottom = 8.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        shape = RoundedCornerShape(18.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+    ) {
         Row(
-            Modifier.fillMaxWidth().clickable(onClick = onClick).padding(vertical = 18.dp),
+            Modifier.fillMaxWidth()
+                .clickable(onClick = onClick)
+                .padding(horizontal = 16.dp, vertical = 17.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(Modifier.weight(1f)) {
-                Text(title, fontSize = 16.sp)
+                Text(title, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
                 if (sub.isNotBlank())
                     Text(
                         sub,
                         Modifier.padding(top = 6.dp),
-                        fontSize = 12.sp,
-                        lineHeight = 18.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = .5f),
+                        fontSize = 13.sp,
+                        lineHeight = 20.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
             }
-            Glyph("chevron", Modifier.size(17.dp))
+            Spacer(Modifier.width(12.dp))
+            Glyph("chevron", Modifier.size(18.dp))
         }
-        HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = .07f))
     }
 }
 
@@ -91,54 +99,100 @@ internal fun Toggle(
     onChange: (Boolean) -> Unit,
 ) {
     Row(
-        Modifier.fillMaxWidth().padding(vertical = 10.dp),
+        Modifier.fillMaxWidth()
+            .toggleable(value = checked, role = Role.Switch, onValueChange = onChange)
+            .semantics(mergeDescendants = true) { stateDescription = if (checked) "已开启" else "已关闭" }
+            .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Column(Modifier.weight(1f)) {
+        Column(Modifier.weight(1f).padding(end = 12.dp)) {
             Text(title, fontSize = 15.sp)
             if (sub.isNotBlank())
                 Text(
                     sub,
                     fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = .5f),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    lineHeight = 19.sp,
                 )
         }
-        Switch(checked = checked, onCheckedChange = onChange)
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Switch(
+                checked = checked,
+                onCheckedChange = null,
+                thumbContent = { Glyph(if (checked) "check" else "minus", Modifier.size(12.dp)) },
+                colors =
+                    SwitchDefaults.colors(
+                        checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                        checkedTrackColor = MaterialTheme.colorScheme.primary,
+                        checkedBorderColor = MaterialTheme.colorScheme.primary,
+                        checkedIconColor = MaterialTheme.colorScheme.primary,
+                        uncheckedThumbColor = MaterialTheme.colorScheme.onSurface,
+                        uncheckedTrackColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        uncheckedBorderColor = MaterialTheme.colorScheme.outline,
+                        uncheckedIconColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    ),
+            )
+            Text(
+                if (checked) "开" else "关",
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
     }
 }
 
 @Composable
 private fun Choice(labels: List<String>, selected: Int, change: (Int) -> Unit) {
     FlowRow(
-        Modifier.fillMaxWidth(),
+        Modifier.fillMaxWidth().selectableGroup(),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         labels.forEachIndexed { i, l ->
-            FilterChip(selected = selected == i, onClick = { change(i) }, label = { Text(l) })
+            FlowChoiceChip(l, selected == i) { change(i) }
         }
     }
 }
 
 @Composable
-fun MyScreen(s: ScreenState, navigate: (String) -> Unit, preview: () -> Unit, live: () -> Unit) {
+fun MyScreen(
+    s: ScreenState,
+    navigate: (String) -> Unit,
+    preview: () -> Unit,
+    live: () -> Unit,
+    githubLogin: String = "",
+) {
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(top = 16.dp)) {
         item {
             Surface(
                 Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(22.dp),
-                color = MaterialTheme.colorScheme.surface.copy(alpha = .72f),
+                color = MaterialTheme.colorScheme.surfaceContainerHigh,
                 border =
                     androidx.compose.foundation.BorderStroke(
                         1.dp,
-                        MaterialTheme.colorScheme.primary.copy(alpha = .14f),
+                        MaterialTheme.colorScheme.outlineVariant,
                     ),
             ) {
                 Column(Modifier.padding(22.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Glyph("user", Modifier.size(34.dp))
+                        Surface(
+                            shape = CircleShape,
+                            color = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                        ) {
+                            Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) {
+                                Glyph("user", Modifier.size(26.dp))
+                            }
+                        }
                         Spacer(Modifier.width(14.dp))
                         Column {
-                            Text("本地聆听者", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                            Text(
+                                if (githubLogin.isBlank()) "本地聆听者" else "@$githubLogin",
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                            )
                             Text(
                                 "属于你的歌词空间",
                                 fontSize = 12.sp,
@@ -147,7 +201,12 @@ fun MyScreen(s: ScreenState, navigate: (String) -> Unit, preview: () -> Unit, li
                         }
                     }
                     Spacer(Modifier.height(16.dp))
-                    Text("设置与歌词保存在本机；GitHub 同步将在后续版本提供。", fontSize = 12.sp, lineHeight = 19.sp)
+                    Text(
+                        "歌词、偏好和主题，保存在这台设备上。",
+                        fontSize = 13.sp,
+                        lineHeight = 21.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
             }
         }
@@ -158,6 +217,14 @@ fun MyScreen(s: ScreenState, navigate: (String) -> Unit, preview: () -> Unit, li
         item { SettingRow("歌词与评论来源", "QQ 音乐 · 网易云音乐 · LRCLIB") { navigate("sources") } }
         item { SettingRow("在线翻译", "你的 API、你的模型") { navigate("translation") } }
         item { Section("数据与支持") }
+        item {
+            SettingRow(
+                "GitHub 同步",
+                if (githubLogin.isBlank()) "可选登录 · 主题、配置与歌词的私有仓库" else "@$githubLogin · 管理私有仓库同步",
+            ) {
+                navigate("github")
+            }
+        }
         item { SettingRow("导入、导出与备份", "本地文件与数据管理") { navigate("data") } }
         item { SettingRow("帮助与隐私", "权限说明、接口与兼容边界") { navigate("help") } }
         item {
@@ -171,7 +238,7 @@ fun MyScreen(s: ScreenState, navigate: (String) -> Unit, preview: () -> Unit, li
                 Modifier.padding(vertical = 28.dp),
                 fontSize = 9.sp,
                 letterSpacing = 1.5.sp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = .3f),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }
@@ -300,7 +367,11 @@ fun SearchSheet(
     ModalBottomSheet(
         onDismissRequest = dismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        contentColor = MaterialTheme.colorScheme.onSurface,
+        tonalElevation = 0.dp,
     ) {
+        FlowSheetSystemBars()
         Column(
             Modifier.fillMaxWidth()
                 .heightIn(max = 780.dp)
@@ -330,12 +401,20 @@ fun SearchSheet(
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
             )
-            Button(
+            FlowButton(
                 onClick = { search() },
                 enabled = !busy && query.isNotBlank(),
                 modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
             ) {
-                Text("搜索歌曲")
+                if (busy) {
+                    CircularProgressIndicator(
+                        Modifier.size(16.dp),
+                        strokeWidth = 2.dp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Spacer(Modifier.width(8.dp))
+                }
+                Text(if (busy) "正在搜索…" else "搜索歌曲")
             }
             Toggle("扩展歌名与别名", expanded, "支持近似关键词并按相似度排序；开启后还会尝试去掉译名、仅搜当前歌名。") {
                 expanded = it
@@ -369,7 +448,7 @@ fun SearchSheet(
                     modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                     singleLine = true,
                 )
-                OutlinedButton(
+                FlowOutlinedButton(
                     onClick = {
                         request {
                             val value = id.trim()
@@ -432,7 +511,7 @@ fun SearchSheet(
                     modifier = Modifier.padding(vertical = 8.dp),
                 )
             if (cursors.isNotEmpty())
-                OutlinedButton(
+                FlowOutlinedButton(
                     onClick = { search(true) },
                     enabled = !busy,
                     modifier = Modifier.fillMaxWidth(),
@@ -448,7 +527,7 @@ fun SearchSheet(
                 }
             }
             if (cursors.isNotEmpty())
-                OutlinedButton(
+                FlowOutlinedButton(
                     onClick = { search(true) },
                     enabled = !busy,
                     modifier = Modifier.fillMaxWidth(),
@@ -549,10 +628,10 @@ fun CommentsScreen(graph: AppGraph, pinned: Track?, initial: Track?, back: () ->
     DisposableEffect(Unit) { onDispose { selectedJob?.cancel() } }
     LazyColumn(Modifier.fillMaxSize()) {
         item { PageTitle("听听共鸣", pinned?.let { "${it.title} · ${it.artist}" } ?: "先选择一首歌") }
-        if (current.playback.track?.key != pinned?.key)
+        if (pinned != null && current.playback.track?.key != pinned.key)
             item {
                 Surface(
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = .1f),
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     shape = RoundedCornerShape(12.dp),
                 ) {
                     Text("正在阅读进入页面时的歌曲。播放已切换，可返回首页查看新歌。", Modifier.padding(14.dp), fontSize = 12.sp)
@@ -565,11 +644,13 @@ fun CommentsScreen(graph: AppGraph, pinned: Track?, initial: Track?, back: () ->
             }
         }
         item {
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                FilterChip(selected = hot, onClick = { hot = true }, label = { Text("热门") })
-                Spacer(Modifier.width(8.dp))
-                FilterChip(selected = !hot, onClick = { hot = false }, label = { Text("最新") })
-                Spacer(Modifier.weight(1f))
+            FlowRow(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                itemVerticalAlignment = Alignment.CenterVertically,
+            ) {
+                FlowChoiceChip("热门", hot) { hot = true }
+                FlowChoiceChip("最新", !hot) { hot = false }
                 TextButton(onClick = { search = true }) { Text("匹配此来源", fontSize = 12.sp) }
                 IconButton(
                     onClick = { fetch(true, true) },
@@ -584,47 +665,11 @@ fun CommentsScreen(graph: AppGraph, pinned: Track?, initial: Track?, back: () ->
             Text(
                 "${provider.label} · 只读评论 · 不支持发布或点赞",
                 Modifier.padding(bottom = 16.dp),
-                fontSize = 10.sp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = .45f),
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        items(comments, key = { provider.name + it.id }) { c ->
-            Column(Modifier.fillMaxWidth().padding(vertical = 16.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Surface(
-                        shape = CircleShape,
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = .12f),
-                        modifier = Modifier.size(34.dp),
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Text(c.author.take(1), fontSize = 13.sp)
-                        }
-                    }
-                    Spacer(Modifier.width(10.dp))
-                    Column(Modifier.weight(1f)) {
-                        Text(c.author, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
-                        if (c.time > 0)
-                            Text(
-                                SimpleDateFormat("yyyy.MM.dd", Locale.CHINA).format(Date(c.time)),
-                                fontSize = 10.sp,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = .4f),
-                            )
-                    }
-                    Text(
-                        "♡ ${c.likes}",
-                        fontSize = 11.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = .4f),
-                    )
-                }
-                Text(
-                    c.text,
-                    Modifier.padding(top = 12.dp, bottom = 20.dp),
-                    fontSize = 15.sp,
-                    lineHeight = 26.sp,
-                )
-                HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = .08f))
-            }
-        }
+        items(comments, key = { provider.name + it.id }) { c -> FlowCommentCard(c) }
         if (busy)
             item {
                 Box(Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
@@ -637,9 +682,9 @@ fun CommentsScreen(graph: AppGraph, pinned: Track?, initial: Track?, back: () ->
                     error,
                     Modifier.padding(vertical = 20.dp),
                     fontSize = 13.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = .6f),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                OutlinedButton(onClick = { fetch(comments.isEmpty(), true) }) { Text("重试") }
+                FlowOutlinedButton(onClick = { fetch(comments.isEmpty(), true) }) { Text("重试") }
             }
         if (more && !busy)
             item {
@@ -653,7 +698,7 @@ fun CommentsScreen(graph: AppGraph, pinned: Track?, initial: Track?, back: () ->
                     "共鸣暂时读到这里。",
                     Modifier.padding(vertical = 28.dp),
                     fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = .35f),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
     }
@@ -696,7 +741,8 @@ fun Appearance(
         PageTitle("个性化", "文字的样子，也是聆听的一部分。")
         Surface(
             shape = RoundedCornerShape(22.dp),
-            color = MaterialTheme.colorScheme.primary.copy(alpha = .08f),
+            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         ) {
             Column(Modifier.fillMaxWidth().padding(24.dp)) {
                 Text(
@@ -736,7 +782,7 @@ fun Appearance(
             else "跟随封面：取图片 RGB 均值，生成柔和主题色。封面背景下歌词使用反色并调整可读性。",
             fontSize = 12.sp,
             lineHeight = 19.sp,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = .65f),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Choice(
             listOf("跟随系统", "浅色", "深色"),
@@ -770,7 +816,7 @@ fun Appearance(
             "0 保留原图，数值越大越柔和；仅模糊封面和自定义图片，歌词保持清晰。",
             fontSize = 12.sp,
             lineHeight = 19.sp,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = .65f),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Section("主题文件")
         Text(style?.let { "当前主题：${it.name}" } ?: "当前主题：内置柔和", fontSize = 13.sp)
@@ -783,7 +829,7 @@ fun Appearance(
             "导入主题只执行原生声明式配置，支持字体、布局及白名单时间轴动画；不执行脚本。",
             fontSize = 12.sp,
             lineHeight = 20.sp,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = .5f),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Spacer(Modifier.height(24.dp))
     }
@@ -854,7 +900,7 @@ fun PermissionSettings(s: ScreenState, graph: AppGraph, overlay: () -> Unit) {
             Modifier.padding(vertical = 20.dp),
             fontSize = 12.sp,
             lineHeight = 20.sp,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = .5f),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -898,7 +944,7 @@ fun TranslationSettings(s: ScreenState, graph: AppGraph) {
             singleLine = true,
         )
         Toggle("同意发送歌词并承担服务费用", consent) { consent = it }
-        Button(
+        FlowButton(
             onClick = {
                 runCatching {
                     require(url.isBlank() || Uri.parse(url).scheme == "https") { "仅支持 HTTPS" }
@@ -923,7 +969,7 @@ fun TranslationSettings(s: ScreenState, graph: AppGraph) {
         Toggle("自动翻译缺失的译文", s.prefs.autoTranslate, "仅已授权时生效；应用内每日不限字符数与请求次数") {
             graph.preferences(s.prefs.copy(autoTranslate = it))
         }
-        OutlinedButton(
+        FlowOutlinedButton(
             onClick = {
                 val captured = graph.state.value
                 val hash = captured.lyrics?.hash
@@ -960,7 +1006,7 @@ fun TranslationSettings(s: ScreenState, graph: AppGraph) {
             "授权后可自动翻译缺失译文，来源已有译文时保留。每批最多 30 行／4,000 字符，失败不自动无限重试。模型响应必须返回完整且不重复的行 ID。",
             fontSize = 12.sp,
             lineHeight = 20.sp,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = .5f),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -985,7 +1031,7 @@ fun SourceSettings(s: ScreenState, graph: AppGraph, search: () -> Unit) {
             modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
             singleLine = true,
         )
-        Button(
+        FlowButton(
             onClick = {
                 if (url.isBlank() || Uri.parse(url).scheme == "https") {
                     graph.preferences(s.prefs.copy(gateway = url.trim().trimEnd('/')))
@@ -1129,7 +1175,7 @@ fun HelpScreen(page: String) {
         )
         Section("兼容边界")
         Text(
-            "QQ 和网易云使用非官方接口，可用性受地区、网络与平台调整影响。同步精度取决于播放器提供的进度。没有真实逐字时间戳时仅逐行同步。预览模式为自有测试文本，不播放音频。\n\nGitHub 登录、远程 Spotify、自动生成注音不属于本机首版范围。",
+            "QQ 和网易云使用非官方接口，可用性受地区、网络与平台调整影响。同步精度取决于播放器提供的进度。没有真实逐字时间戳时仅逐行同步。预览模式为自有测试文本，不播放音频。\n\nGitHub 为可选登录，手动同步到个人私有仓库。Token 通过 Android Keystore 加密，不进入备份；退出不会删除远端文件。远程 Spotify、自动生成注音仍未提供。",
             fontSize = 13.sp,
             lineHeight = 24.sp,
         )

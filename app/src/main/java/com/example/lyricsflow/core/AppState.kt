@@ -70,6 +70,7 @@ class AppGraph(val app: Application) {
     val store = Store(app)
     val secrets = Secrets(app)
     val api = MusicApi(store)
+    val github by lazy { GitHubSync(this) }
     private val prefs = app.getSharedPreferences("settings", 0)
     private val mutable = MutableStateFlow(ScreenState(prefs = readPrefs()))
     val state = mutable.asStateFlow()

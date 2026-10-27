@@ -1,12 +1,14 @@
 # LyricsFlow 产品需求与实现规格（PRD）
 
-> 版本：1.1  
-> 编写日期：2026-10-26（Asia/Shanghai）  
+> 版本：1.2<br>
+> 编写日期：2026-10-26；更新日期：2026-10-27（Asia/Shanghai）<br>
 > 状态：需求澄清后的开发基线；外部服务仍需按本文门槛完成接入验证。  
 > 适用范围：Android 首版及后续演进规划。  
 > 原始输入：[LyricsFlow.md](./LyricsFlow.md)、[LyricsFlow.pdf](./LyricsFlow.pdf)、现有 Android 工程、与产品负责人的三轮需求确认。
 
 > 1.1 调整：依据产品负责人新增要求，QQ 音乐、网易云的歌词与热门评论提升为 V1 优先适配；替换 1.0 中“评论仅做条件空态、两来源后续接入”的范围。接口、源码与只读探测详见 [QQ / 网易云 API 调研](./QQ-NetEase-API-Research.md)。播放状态仍优先来自本机 Spotify 媒体会话。
+
+> 1.2 调整：产品负责人新增 GitHub 登录、自动创建个人私有仓库与资料上传要求。当前交付可选 OAuth Device Flow + 手动快照同步；替换旧第 18 节“仅后续 GitHub App / 用户手动建仓”的实现范围。注册、权限和已实现边界见 [GitHub 同步说明](./GitHub-Sync.md)。
 
 ### 文档导航
 
@@ -16,7 +18,7 @@
 - 页面体验：[信息架构](#5-用户场景与信息架构)、[首页](#7-首页详细交互)、[评论](#8-评论页面)、[我的与设置](#9-我的及设置规格)。
 - 核心能力：[播放同步](#10-播放状态与歌词同步)、[歌词来源](#11-歌词获取匹配与来源策略)、[翻译](#13-在线翻译完整规格)、[个性化](#14-个性化与原生渲染引擎)、[悬浮窗](#15-桌面悬浮窗与后台生命周期)。
 - 实现约束：[数据模型](#16-本地数据模型与标识)、[文件格式](#17-文件格式导入导出与未来自定义服务)、[技术架构](#20-建议技术架构与工程边界)、[非功能要求](#22-隐私安全可访问性与非功能要求)。
-- 后续能力：[GitHub 同步](#18-github-账户与同步方案v2)、[Spotify 远程](#19-spotify-官方增强与远程播放后续)。
+- 可选同步：[GitHub 同步](#18-github-账户与同步方案手动快照)、后续 [Spotify 远程](#19-spotify-官方增强与远程播放后续)。
 - 开发交付：[验收用例](#23-验收用例与发布标准)、[里程碑与验证门槛](#24-开发里程碑风险与待验证清单)、[需求追踪](#25-原始需求追踪与参考资料)。
 
 ## 0. 阅读约定与边界
@@ -26,7 +28,7 @@
 - **外部依赖**：第三方服务的授权、覆盖率、接口稳定性和平台行为，不视为已经完成验证。
 - **验收目标**：开发完成后需要测量或验证的目标值，不代表当前项目已达到这些指标。
 - V1 指首版完整交付范围；M0～M5 是 V1 内部开发里程碑；V1.1、V2 是后续范围。不能把仅完成 M1 的版本称为完整 V1。
-- 本文提供产品需求和关键实现约束，不表示应用功能已经实现。当前代码仍是 Compose 初始模板。
+- 本文提供产品需求和关键实现约束，不表示应用功能已经实现。当前原生实现进度以 Android 实现说明与专项验收记录为准。
 - 本次不改写原始 Markdown 和 PDF，避免丢失参考图、原始意图及历史依据。
 
 ## 1. 优化后的产品描述
@@ -39,7 +41,7 @@ LyricsFlow 是一款原生 Android 歌词伴侣应用，优先服务于在本机
 
 首页及桌面悬浮窗共享统一的歌词数据与时间轴。通过版本化声明式配置，将内容、视觉样式和动画行为分离，预设“经典滚动”和“自由排版”两种展示模式，支持配置导入、预览和导出。首版不执行任意 JavaScript、HTML 或远程代码。
 
-应用以本地优先、无必需自建后端、美观流畅和低功耗为原则。首版先面向个人使用与 APK 分发，保留未来开源能力；GitHub 资料同步及 Spotify 远程播放作为后续可选扩展。
+应用以本地优先、无必需自建后端、美观流畅和低功耗为原则。首版先面向个人使用与 APK 分发，保留未来开源能力；GitHub 资料同步作为可选功能，支持手动快照上传与下载合并；Spotify 远程播放仍为后续扩展。
 
 ## 2. 已确认的产品决策
 
@@ -53,7 +55,7 @@ LyricsFlow 是一款原生 Android 歌词伴侣应用，优先服务于在本机
 | D06 | 在线翻译使用用户提供的 OpenAI 兼容 URL、Key、模型；确认后自动翻译并缓存 | 无内置共享付费 Key；首次启用需确认数据发送及可能费用 |
 | D07 | 锁屏隐藏；暂停保留当前歌词，5 分钟后隐藏；恢复播放后自动显示 | 区分“用户开启桌面歌词”和“窗口此刻可见”；受系统服务存活状态约束 |
 | D08 | 首版尽量实现 QQ、网易云两套真实热评适配；运行时无结果或故障时解释原因 | 两套适配器和真实联调属于 V1 工作，不能只做空页面；短时故障不阻断歌词，不伪造评论 |
-| D09 | GitHub 登录、同步在后续版本实现，PRD 先写完整方案；首版本地导入导出 | V1 核心功能无应用账户依赖；GitHub 模块不得阻塞首版 |
+| D09 | 2026-10-27 新增要求覆盖原延期决策：实现 GitHub 登录、自动创建个人私有仓库、主题/配置/数据上传与下载恢复 | 保持可选；OAuth App Device Flow 无 Secret；先交付手动快照与冲突保护，完整自动合并另立阶段 |
 | D10 | 来源附带罗马音时显示；首版不自动生成注音 | 支持可选注音轨道与开关；不承诺所有日语歌曲有注音 |
 | D11 | 优先支持 QQ 音乐、网易云，因为二者同时提供歌词与评论；允许研究官方及非官方文档 | 新增确认覆盖 1.0 的来源优先级；目标为双平台真实链路，至少一个平台真实热评通过后才可宣称首版评论可用 |
 
@@ -77,7 +79,7 @@ LyricsFlow 是一款原生 Android 歌词伴侣应用，优先服务于在本机
 - 任意 HTML/CSS/JS 执行、远程脚本、插件市场和完整可视化动画编辑器。
 - 自动生成逐字时间戳、自动罗马音、机器估算逐字时间并冒充真实同步。
 - 评论发布、点赞、回复、评论社区和第三方音乐账户登录。
-- GitHub 登录与云同步、官方后端、内置免费翻译配额。
+- 必需的应用账户或官方后端、内置免费翻译配额；GitHub 自动双向合并仍不在当前交付范围。
 - 在系统强制停止后自行复活、绕过锁屏或系统敏感页面、保证所有厂商后台常驻。
 
 ### 3.3 成功标准
@@ -107,8 +109,8 @@ LyricsFlow 是一款原生 Android 歌词伴侣应用，优先服务于在本机
 | 悬浮窗 | 拖动、缩放、锁定、双语、横竖屏适配、暂停 / 锁屏策略 | 经系统验证的更多展示形态 |
 | 评论 | QQ 与网易云热评适配、同曲映射、来源切换、分页 / 去重、缓存、真实联调及故障状态 | 更丰富排序、跨平台聚合排序、楼层与时刻评论 |
 | 来源连接 | 原生直连优先；V1 提供 QQ / 网易云固定社区网关协议、Base URL、可选网关访问令牌及分能力测试 | 任意自定义业务服务协议与可视化映射 |
-| 数据 | 本地缓存、逐曲来源 / 偏移、歌词与配置导入导出、备份恢复 | GitHub 私有仓库同步 |
-| 账户 | 本地使用，无强制应用账户 | GitHub 可选登录；Spotify 远程授权独立管理 |
+| 数据 | 本地缓存、逐曲来源 / 偏移、导入导出、备份恢复；可选 GitHub 私有仓库手动快照 | GitHub 自动双向合并与删除传播 |
+| 账户 | 本地使用，无强制账户；GitHub 可选 OAuth 登录 | Spotify 远程授权独立管理 |
 
 **V1 最低可发布组合**：本机媒体会话 + QQ / 网易云两套目录、歌词和热评适配器 + 至少一个平台真实热评链路通过 + LRCLIB / 本地补充 + 经典滚动 + 真实逐字能力 + 自由排版 + 用户自配翻译 + 悬浮窗 + 两主页面 + 本地备份。目标是 QQ 与网易云均可实际读取；另一平台若受外部条件阻断，须完成适配、可复现诊断及补救路径并在发行说明披露。不能把双方均无真实数据的评论空页当作完成。
 
@@ -201,6 +203,8 @@ QQ / 网易云分别标记搜索、歌词、评论的可用状态，不因一种
 | 底部 Dock | 首页 / 我的，与歌曲操作区分隔 |
 
 字号是初始设计值，支持系统字体缩放与个性化覆盖。歌手是歌曲表演者信息；没有数据时显示“未知歌手”，不擅自推断词作者或曲作者。
+
+2026-10-27 控件可读性修订：我的、设置、评论、歌曲匹配和来源弹窗与首页共用封面取色及完整控件色板。单选项使用高对比度实色底、勾选、加粗标签与明确选中语义；未选中项采用清晰边框，不仅靠轻微透明度区分。开关同时显示开／关文字与位置／图标。一般文字及说明目标对比度至少 4.5:1，选中标签至少 7:1，交互边界至少 3:1；禁用图标和装饰分隔线单独处理。搜索处理中明确显示状态。设置与评论采用同色系分层卡片，平板阅读列居中并限制最大宽度，避免横向过度拉伸。
 
 ### 7.2 主状态
 
@@ -300,7 +304,7 @@ V1 必须交付 `QqCommentsProvider`、`NeteaseCommentsProvider` 及真实联调
 
 ### 9.1 首页入口
 
-“我的”顶部显示本地使用状态、当前播放来源、关键权限状态与缓存占用；V1 不显示虚假的“已登录”用户头像。账户与连接页说明“当前无需应用账户”，并显示“GitHub 同步：后续版本”。
+“我的”顶部显示本地使用状态、当前播放来源、关键权限状态与缓存占用；V1 不显示虚假的“已登录”用户头像。“我的 → GitHub 同步”提供可选登录与注册指引、私有仓库连接、上传/下载预览；不登录仍能使用所有本地能力。
 
 ### 9.2 设置项与默认值
 
@@ -1003,55 +1007,41 @@ V1 不提供通用任意请求编排器。后续新增 LyricsFlow 自定义业�
 - 分页和最大响应大小必须固定；错误映射到统一错误模型。服务返回的 URL 不允许携带本机 Key 跳转其他主机。
 - 若第三方接口格式不同，在提供者适配器中转换，不让主题引擎和页面直接理解每个平台的原始 JSON。
 
-## 18. GitHub 账户与同步方案（V2）
+## 18. GitHub 账户与同步方案（手动快照）
 
-### 18.1 产品范围
+### 18.1 范围与阶段
 
-GitHub 是可选的个人资料存储目标，用户不登录也能使用全部本地能力。同步对象是用户主题、逐曲来源绑定 / 时间偏移、主动选择的歌词与译文、可选自定义背景；不把评论缓存、播放历史和第三方凭证默认上传。
+依据 2026-10-27 新指示，当前交付可选 GitHub 登录、个人私有仓库自动创建/连接、手动上传与下载恢复。本机功能不依赖 GitHub。完整注册流程、协议与安全边界见 [GitHub-Sync.md](./GitHub-Sync.md)；测试证据见 [GitHub 专项验收](./android-qa/GitHub-Sync.md)。真实账号联调需先注册 OAuth App，当前尚无真实 Client ID。
 
-### 18.2 无必需后端的授权方案
+### 18.2 授权与账户
 
-- 优先注册 GitHub App，启用 Device Flow；用户在系统浏览器完成授权，并把 App 安装到所选仓库。
-- 仓库权限仅申请必要的 Metadata 读取与 Contents 读写，允许用户仅选择一个专用私有仓库；不申请所有私有仓库的宽泛 OAuth `repo` scope 作为默认方案。
-- 客户端包含公开 Client ID，不包含 Client Secret、GitHub App 私钥或安装 token 签名能力。
-- 按服务返回 `interval` 轮询，处理 `authorization_pending`、`slow_down`、拒绝和超时；不在用户拒绝后继续轮询。
-- 使用到期 user access token 与 refresh token，刷新并发单飞，成功后原子替换；当前官方文档允许 Device Flow 生成的 token 刷新时省略 Client Secret。若未来规则变化，要求重新授权或重新评估后端，不把 secret 塞进 APK。
-- 私有仓库默认由用户创建并选择，避免为自动创建仓库扩大权限；可提供“打开 GitHub 创建仓库”的引导。
+- 使用 OAuth App Device Flow。填写公开 Client ID；在系统浏览器输入 GitHub 验证码授权，不嵌入 Client Secret，不收集 GitHub 密码。
+- 按服务 interval 轮询，pending 继续等待、slow_down 至少增加 5 秒；拒绝、取消和到期停止。支持到期 Token 刷新，刷新时校验用户 ID。操作串行。
+- 为满足当前自动创建私有仓库的无后端方案，申请 `repo` scope；它可访问用户有权限的公开及私有仓库，不能限制为唯一仓库，登录前必须明确展示。只请求此 scope 和公开身份，不额外申请删除仓库或 email 权限。
+- Token 和 refresh token 使用 Android Keystore 独立加密，排除本地导出、云端快照、日志、Android 云备份及设备迁移。退出清除本机凭证，保留本地资料与远端仓库；提供打开 GitHub 撤销授权入口。
+- 旧方案建议的细粒度 GitHub App 是后续权限收窄方向，需要另行完成创建权限、安装与仓库选择链路；当前不得宣称已采用安装级最小授权。
 
-依据：[GitHub App 用户 token 与 Device Flow](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-user-access-token-for-a-github-app)、[刷新用户 token](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/refreshing-user-access-tokens)。正式开发 V2 时重新核对平台规则。
+依据：[官方 Device Flow 与刷新](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps)、[OAuth scopes](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps)。
 
-### 18.3 同步目录与提交
+### 18.3 仓库、资料与提交
 
-```text
-lyricsflow/
-├─ manifest.json
-├─ snapshots/<snapshot-id>/settings.json
-├─ snapshots/<snapshot-id>/tracks.json
-├─ snapshots/<snapshot-id>/bindings.json
-├─ snapshots/<snapshot-id>/platform-mappings.json
-├─ snapshots/<snapshot-id>/comment-preferences.json
-├─ snapshots/<snapshot-id>/adjustments.json
-├─ objects/lyrics/<content-hash>.json
-├─ objects/styles/<content-hash>.json
-└─ objects/assets/<content-hash>.<extension>
-```
+- 默认仓库名 `lyricsflow-sync`，用户可改名。仅使用当前账号拥有的个人私有仓库；不存在时 `POST /user/repos` 明确 `private=true`、`auto_init=true`。拒绝公开、归档、禁用、所有者不符或无写入权限的仓库。不改仓库可见性，不操作组织仓库。
+- 仓库目录为 `lyricsflow/manifest.json`、`data.json`、`settings.json`。复用本地备份 Schema 1.0；data 存主题原始 JSON、绑定、本地歌词和译文（含缓存歌词）、已保存歌词；settings 存显示配置和逐曲来源/评论偏好/偏移。
+- 自定义背景默认不上传，用户开启后放入 settings；不上传评论缓存、网络缓存、播放历史、第三方 Key、GitHub 凭证、Client ID、服务地址、模型、付费同意或设备权限。
+- 上传前显示类别、数量、体积、背景是否包含，确认后才写远端。总展开上限 20 MB、数据库正文 16 MB / 3000 项，所有路径、格式、Schema 和图片均需校验。
+- 用 Git Blobs → Trees → Commit → 更新分支一次发布全部文件，`base_tree` 保留其他目录，`parents` 指向读取版本，`force=false`。下载固定 commit 的 tree/blob，避免混读半份数据。不存储临时 download_url。
+- 保存最近共同基线 SHA 及账号/仓库/分支身份。远端未接收、提交期间并发或规则阻止提交时停止，不强推；无内容变化跳过提交。发布前再检查隐私与仓库身份。
 
-- 数据格式复用本地备份模型；内容对象不可变，按哈希去重；单个内容对象默认 ≤ 5 MiB，较大图片先缩小或排除。
-- 初版同步每个仓库串行执行：读取 manifest 与其 SHA → 上传新的不可变对象和 snapshot → 最后带旧 SHA 更新 manifest。
-- manifest 是完整快照入口；下载端只读取其指向的已完成快照，避免多文件逐个更新造成半份数据。
-- 发生 409 / 422 或 SHA 不匹配时重新读取远端并进入冲突流程；不强推、不删除用户其他目录，不以本机时钟较新为理由覆盖。
-- 孤立对象允许留待后续清理；清理必须确认无快照引用，不能因一次同步失败删除远端内容。
-- 内容 API 与更新规则以 [GitHub Repository Contents API](https://docs.github.com/en/rest/repos/contents) 为准；不把 `download_url` 当作永久稳定地址保存。
+依据：[创建仓库](https://docs.github.com/en/rest/repos/repos#create-a-repository-for-the-authenticated-user)、[Git trees](https://docs.github.com/en/rest/git/trees#create-a-tree)、[更新引用](https://docs.github.com/en/rest/git/refs#update-a-reference)。
 
-### 18.4 合并、冲突与退出
+### 18.4 下载、冲突与后续
 
-1. 基于最近共同同步版本做三方比较：只有本地变更则上传，只有远端变更则下载；不同实体可自动合并。
-2. 同一主题 / 歌词的双方修改保留双份，显示来源设备及时间供选择；平台映射与评论来源偏好也按实体版本合并，冲突先保留人工确认的选择供用户决定，不能只使用 Last Write Wins。
-3. 删除使用 tombstone；保留至少 30 天及足够同步轮次，避免离线设备复活已删除数据。
-4. 上传前可预览文件类别、数量和大小；默认首次手动同步，成功后允许用户开启每日 / Wi-Fi 下的延迟自动同步。
-5. 自动同步使用 WorkManager 的可延迟任务，不承诺精确时间；不影响歌词实时显示。
-6. 退出 GitHub 只删除本机 token 并停止同步，保留本地资料；删除远端必须是单独明确操作。
-7. 私有仓库不是端到端加密保险箱，不上传 API Key；歌词与封面是否允许云端保留按来源权限处理，默认只同步可导出的内容。
+1. 新设备或有未合并远端版本时，先下载校验并预览；用户确认前不改本机资料。确认时重新检查远端 commit，已变化则要求重新下载。
+2. 恢复前原子写入最近一份本机备份到 noBackupFilesDir，写失败即停止。提供导出入口，通过本地备份导入可回退。
+3. 明示合并规则：本地独有项保留；同 ID 的歌词、主题和绑定使用云端版本；显示配置按云端恢复；自动翻译与付费授权关闭。数据库合并为事务，但偏好、图片、数据库整体不宣称跨存储事务。
+4. 当前不提供自动后台同步、三方实体合并、冲突保留双份、墓碑删除传播。删除不跨设备传播，不能把此版称为完整多端自动同步。以后增加上述能力必须版本化并保留旧快照兼容。
+5. 私有仓库不等于端到端加密；旧数据保留在 Git 历史中。用户确认上传内容可云端保留。网络或授权失败不影响本机歌词。
+6. 验收必须区分协议假服务测试与真实 GitHub 账号联调。待真实 Client ID 注册后，补测浏览器授权、真实创建私有仓库、两设备上传/下载、撤权/到期和并发冲突。
 
 ## 19. Spotify 官方增强与远程播放（后续）
 
@@ -1281,7 +1271,7 @@ app / navigation / dependency wiring
 6. 建立兼容性表、来源状态表、性能基线和发行说明，明确已支持与暂不可用能力。
 7. APK 签名、正式应用 ID、版本号与升级保留数据流程确认；可完成安装与覆盖升级测试。
 
-GitHub / 远程播放不作为 V1 发布门槛；一旦进入 V2 交付，必须额外验证 token 生命周期、仓库权限、并发冲突、离线合并及配额降级。
+远程播放不作为 V1 发布门槛。GitHub 手动快照按第 18 节独立验收；真实联调未完成前不得宣称云端全链路通过，自动合并的后续门槛另行验收。
 
 ## 24. 开发里程碑、风险与待验证清单
 
@@ -1296,7 +1286,7 @@ GitHub / 远程播放不作为 V1 发布门槛；一旦进入 V2 交付，必须
 | M4 桌面与资料 | 正式悬浮窗、服务通知、锁定 / 缩放 / 暂停 / 锁屏、本地备份、评论集成回归 | 生命周期、权限、跨页状态、平台映射恢复用例通过 |
 | M5 稳定发行 | 跨设备测试、性能 / 功耗测量、隐私与来源说明、签名升级验证 | 满足第 23.3 节，产出 V1 APK 与发行说明 |
 | V1.1 来源扩展 | LrcShare / 任意自定义业务服务、更多评论排序与来源 | 不包含被提前到 V1 的 QQ / 网易云基本歌词与热评适配；新增能力单独验证 |
-| V2 可选同步 | GitHub 私有仓库同步、Spotify 官方增强与远程模式 | 独立授权与冲突解决通过，不破坏本地优先能力 |
+| 可选手动同步 / 后续自动同步 | 当前 GitHub 私有仓库手动快照；后续三方合并、Spotify 远程 | 当前需独立授权、私有性、恢复与冲突保护验证；后续功能单独验收 |
 
 里程碑是依赖顺序，不是未经估算的工期承诺。M0 可用非常小的技术原型验证悬浮窗和媒体权限，正式 UI 在后续替换；不能拖到 M4 才发现系统链路不可行。
 
@@ -1332,7 +1322,7 @@ GitHub / 远程播放不作为 V1 发布门槛；一旦进入 V2 交付，必须
 | G07 | Android 12+ 锁定窗口实际触摸穿透 | M0 / M4 | 限制 alpha 或调整窗口策略，无法通过则不发布误导性锁定模式 |
 | G08 | 正式包名、项目 URL / 联系方式、签名保管 | M5 前 | 由产品负责人提供真实发行身份；开发阶段不填虚构信息 |
 | G09 | QQ 新版 Mobile 搜索公共参数、新热评分页；网易云新版接口、固定网关协议与服务权限 | M0～M2，V1 主线 | 完成两套适配与真实 / 异常记录，验证人工绑定和已确认网关；官方资格未取得不得写成官方授权 |
-| G10 | GitHub App 注册、仓库权限、Device Flow 与远程 Spotify 资格 | V2 前 | 维持本地备份与本机播放；不嵌入 secret 或承诺公众 API 权限 |
+| G10 | GitHub OAuth App 注册、真实 Device Flow、私有仓库与多设备联调；Spotify 远程资格单独评估 | GitHub 真实交付前 / 远程后续 | 当前暂无真实 Client ID；提供注册指引与协议假服务测试，不嵌入 secret 或宣称真实云端已通过 |
 
 若 G02、G03 等验证导致无法满足核心已确认目标，应提交具体证据与可选方案，再由产品负责人选择；不能用“实现中自行降级”为由隐去主要能力。
 
@@ -1354,7 +1344,7 @@ GitHub / 远程播放不作为 V1 发布门槛；一旦进入 V2 交付，必须
 | 来源选择、刷新、桌面与翻译开关 | 第 7、9 节 | V1 |
 | 热门评论、用户名、正文、来源 | 第 8、11.6～11.9、17、23 节 | V1 QQ / 网易云真实适配、两来源切换、同曲绑定、分页缓存与发布门槛 |
 | 新增：优先 QQ / 网易云首版歌词评论接入 | D05、D08、D11；第 4、8、11、23、24 节及 API 调研 | 已覆盖原 1.0 后续来源 / 空态交付策略 |
-| GitHub 登录与资料保存 | 第 18 节 | V2 可选，方案已定义 |
+| GitHub 登录与资料保存 | 第 18 节 | 当前可选手动快照已实现；待真实 Client ID 联调 |
 | 两入口液态玻璃 Dock | 第 5.3 节 | V1 原生实现及效果降级 |
 | 悬浮窗拖动缩放、双语与个性化 | 第 14、15 节 | V1 |
 | 线上翻译及自定义大模型接口 | 第 13 节 | V1 用户自配兼容接口 |
@@ -1378,7 +1368,7 @@ GitHub / 远程播放不作为 V1 发布门槛；一旦进入 V2 交付，必须
 | LrcShare | [快速开始](https://api.lrcshare.com/docs/guide/quickstart.html) | 需 Key、目录与 session；不能视为无鉴权全库 |
 | QQ 官方 / 社区 | [腾讯云官方 H5 / IoT 文档](https://cloud.tencent.com/document/product/1081/67456)、[新版热评](https://l-1124.github.io/QQMusicApi/reference/modules/comment/)、[Sansenjian 评论](https://sansenjian.github.io/qq-music-api/api/comments.html) | 官方上下文不能直接移作普通 Android REST 授权；新版匿名热评样本可行，旧评论 500，搜索仍需验证 |
 | 网易云官方 / 社区 | 原始官方链接、[Enhanced 项目](https://github.com/NeteaseCloudMusicApiEnhanced/api-enhanced)、[调研](./QQ-NetEase-API-Research.md) | 官方页面未读到正文；社区源码与匿名样本确认搜索 / 歌词 / 评论 / 热评路径，不等于开放平台授权 |
-| GitHub | [用户 token](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-user-access-token-for-a-github-app)、[刷新](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/refreshing-user-access-tokens)、[仓库内容](https://docs.github.com/en/rest/repos/contents) | 后续采用最小仓库权限与版本检查，不在客户端存放 App Secret |
+| GitHub | [OAuth Device Flow](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps)、[权限](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps)、[Git API](https://docs.github.com/en/rest/git/trees) | 当前可选手动快照：OAuth repo 权限明确告知、私有性检查、原子提交、基线冲突保护；不在客户端存放 Secret |
 | Spotify | [配额模式](https://developer.spotify.com/documentation/web-api/concepts/quota-modes)、[7 月更新](https://developer.spotify.com/blog/2026-07-23-web-api-quota-updates)、[Android SDK](https://developer.spotify.com/documentation/android/tutorials/getting-started) | 远程接入有资格、授权与配额门槛，不作为 V1 唯一链路 |
 
 ### 25.3 变更记录

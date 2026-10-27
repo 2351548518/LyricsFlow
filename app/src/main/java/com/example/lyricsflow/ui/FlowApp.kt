@@ -41,6 +41,7 @@ import org.json.JSONObject
 @Composable
 fun FlowApp(graph: AppGraph) {
     val s by graph.state.collectAsState()
+    val github by graph.github.state.collectAsState()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val dark =
@@ -52,7 +53,6 @@ fun FlowApp(graph: AppGraph) {
     val average = rememberCoverAverage(s.playback.artwork)
     val palette =
         remember(s.prefs.palette, average, dark) { flowPalette(s.prefs.palette, average, dark) }
-    val accent = palette.accent
     val bg = palette.background
     val surfaceDark = CoverColors.luminance(bg.toArgb()) < .18
     SideEffect {
@@ -63,42 +63,8 @@ fun FlowApp(graph: AppGraph) {
             }
         }
     }
-    val actionInk = Color(CoverColors.readable(palette.ink.toArgb(), accent.toArgb()))
-    val accentInk = Color(CoverColors.readable(accent.toArgb(), bg.toArgb()))
-    val primaryInk = Color(CoverColors.readable(Color.White.toArgb(), accentInk.toArgb()))
-    val scheme =
-        if (surfaceDark)
-            darkColorScheme(
-                primary = accentInk,
-                secondary = accentInk,
-                primaryContainer = accent,
-                onPrimaryContainer = actionInk,
-                onSecondary = primaryInk,
-                secondaryContainer = accent.copy(alpha = .15f),
-                background = bg,
-                surface = bg,
-                onSurface = palette.ink,
-                onBackground = palette.ink,
-                onPrimary = primaryInk,
-                onSecondaryContainer = accentInk,
-                surfaceVariant = palette.water.copy(alpha = .16f).compositeOver(bg),
-            )
-        else
-            lightColorScheme(
-                primary = accentInk,
-                secondary = accentInk,
-                primaryContainer = accent,
-                onPrimaryContainer = actionInk,
-                onSecondary = primaryInk,
-                secondaryContainer = accent.copy(alpha = .15f),
-                background = bg,
-                surface = bg,
-                onSurface = palette.ink,
-                onBackground = palette.ink,
-                onPrimary = primaryInk,
-                onSecondaryContainer = accentInk,
-                surfaceVariant = palette.water.copy(alpha = .12f).compositeOver(bg),
-            )
+    val scheme = remember(palette) { flowColorScheme(palette) }
+    val accent = scheme.onSurface
     var page by rememberSaveable { mutableStateOf("home") }
     var sheet by rememberSaveable { mutableStateOf("") }
     var pendingImport by remember { mutableStateOf("lyrics") }
@@ -240,6 +206,7 @@ fun FlowApp(graph: AppGraph) {
                             "sources",
                             "translation",
                             "data",
+                            "github",
                             "library",
                             "help",
                         )
@@ -249,7 +216,17 @@ fun FlowApp(graph: AppGraph) {
     }
     BackHandler(enabled = sheet.isNotEmpty() || page != "home") { back() }
     CompositionLocalProvider(LocalCoverAverage provides average) {
-        MaterialTheme(colorScheme = scheme) {
+        MaterialTheme(
+            colorScheme = scheme,
+            shapes =
+                Shapes(
+                    extraSmall = RoundedCornerShape(8.dp),
+                    small = RoundedCornerShape(12.dp),
+                    medium = RoundedCornerShape(16.dp),
+                    large = RoundedCornerShape(24.dp),
+                    extraLarge = RoundedCornerShape(28.dp),
+                ),
+        ) {
             Surface(Modifier.fillMaxSize(), color = bg, contentColor = scheme.onBackground) {
                 FlowBackdrop(palette, dark)
                 Scaffold(
@@ -258,7 +235,13 @@ fun FlowApp(graph: AppGraph) {
                     bottomBar = { if (page == "home" || page == "my") Dock(page) { page = it } },
                     modifier = Modifier.safeDrawingPadding(),
                 ) { pad ->
-                    Column(Modifier.fillMaxSize().padding(pad).padding(horizontal = 24.dp)) {
+                    Column(
+                        Modifier.fillMaxSize()
+                            .padding(pad)
+                            .wrapContentWidth(Alignment.CenterHorizontally)
+                            .widthIn(max = if (page == "home") Dp.Infinity else 840.dp)
+                            .padding(horizontal = 24.dp)
+                    ) {
                         if (page != "home" && page != "my")
                             Header(
                                 page,
@@ -304,7 +287,9 @@ fun FlowApp(graph: AppGraph) {
                                         graph.live()
                                         page = "home"
                                     },
+                                    githubLogin = github.login,
                                 )
+                            "github" -> GitHubSettings(graph.github, ::output)
                             "library" ->
                                 Library(graph) { t, l ->
                                     graph.browseLocal(t, l)
@@ -380,15 +365,16 @@ fun FlowApp(graph: AppGraph) {
                         onDismissRequest = { sheet = "" },
                         title = { Text("选择歌词来源") },
                         text = {
-                            Column {
+                            Column(Modifier.verticalScroll(rememberScrollState())) {
+                                if (s.source == Provider.LOCAL)
+                                    Text(
+                                        "当前：本地歌词",
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
                                 LYRIC_PROVIDERS.forEach { p ->
-                                    TextButton(
-                                        onClick = {
-                                            graph.selectSource(p)
-                                            sheet = ""
-                                        }
-                                    ) {
-                                        Text(p.label)
+                                    FlowChoiceChip(p.label, s.source == p) {
+                                        graph.selectSource(p)
+                                        sheet = ""
                                     }
                                 }
                                 Toggle(
@@ -505,68 +491,7 @@ fun FlowApp(graph: AppGraph) {
                             onClick = {
                                 scope.launch {
                                     try {
-                                        withContext(Dispatchers.IO) {
-                                            graph.store.restore(backup.first)
-                                        }
-                                        val o = backup.second
-                                        val p = s.prefs
-                                        o.optJSONObject("trackPreferences")?.let {
-                                            graph.restoreTrackPreferences(it)
-                                        }
-                                        if (o.has("backgroundImage"))
-                                            withContext(Dispatchers.IO) {
-                                                BackgroundFiles.importImage(
-                                                    context,
-                                                    android.util.Base64.decode(
-                                                        o.getString("backgroundImage"),
-                                                        android.util.Base64.DEFAULT,
-                                                    ),
-                                                )
-                                            }
-                                        graph.preferences(
-                                            p.copy(
-                                                translation =
-                                                    o.optBoolean("translation", p.translation),
-                                                romanization =
-                                                    o.optBoolean("romanization", p.romanization),
-                                                free = o.optBoolean("free", p.free),
-                                                fontSize =
-                                                    o.optDouble("fontSize", 30.0)
-                                                        .toFloat()
-                                                        .coerceIn(10f, 96f),
-                                                dark =
-                                                    o.optString("dark", "system").takeIf {
-                                                        it in listOf("light", "dark", "system")
-                                                    } ?: "system",
-                                                palette = o.optInt("palette", 0).coerceIn(0, 4),
-                                                reduced = o.optBoolean("reduced", false),
-                                                autoSources =
-                                                    o.optBoolean("autoSources", p.autoSources),
-                                                overlaySize =
-                                                    o.optDouble("overlaySize", 22.0)
-                                                        .toFloat()
-                                                        .coerceIn(12f, 48f),
-                                                overlayAlpha =
-                                                    o.optDouble("overlayAlpha", .85)
-                                                        .toFloat()
-                                                        .coerceIn(.2f, 1f),
-                                                overlayTranslation =
-                                                    o.optBoolean("overlayTranslation", true),
-                                                autoTranslate = false,
-                                                consent = false,
-                                                coverBlur =
-                                                    o.optDouble("coverBlur", p.coverBlur.toDouble())
-                                                        .toFloat()
-                                                        .takeIf { it.isFinite() }
-                                                        ?.coerceIn(0f, 24f) ?: 8f,
-                                                background =
-                                                    o.optString("background", "color").takeIf {
-                                                        it in listOf("color", "cover", "custom")
-                                                    } ?: "color",
-                                            )
-                                        )
-                                        graph.backgroundChanged()
-                                        graph.reloadStyles()
+                                        restoreBackup(graph, backup)
                                         graph.message("备份已恢复")
                                         pendingBackup = null
                                     } catch (e: Exception) {
@@ -590,7 +515,7 @@ fun FlowApp(graph: AppGraph) {
 @Composable
 private fun Header(page: String, status: String, back: () -> Unit, info: () -> Unit) {
     Row(
-        Modifier.fillMaxWidth().padding(vertical = 16.dp),
+        Modifier.fillMaxWidth().padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (page != "home" && page != "my")
@@ -600,10 +525,12 @@ private fun Header(page: String, status: String, back: () -> Unit, info: () -> U
             ) {
                 Glyph("back")
             }
-        Glyph("logo", Modifier.size(24.dp))
-        Spacer(Modifier.width(8.dp))
-        Text("Lyrics", fontSize = 21.sp, fontWeight = FontWeight.Bold, letterSpacing = (-.7).sp)
-        Text("Flow", fontSize = 22.sp, fontFamily = FontFamily.Serif, fontStyle = FontStyle.Italic)
+        Text(
+            "LyricsFlow",
+            fontSize = 19.sp,
+            fontFamily = FontFamily.Serif,
+            fontStyle = FontStyle.Italic,
+        )
         Spacer(Modifier.weight(1f))
         if (page == "home")
             Text(
@@ -638,20 +565,30 @@ private fun Dock(page: String, onSelect: (String) -> Unit) {
                     Row(
                         Modifier.clip(CircleShape)
                             .background(
-                                if (page == id) MaterialTheme.colorScheme.primary.copy(alpha = .12f)
+                                if (page == id) MaterialTheme.colorScheme.primary
                                 else Color.Transparent
                             )
                             .clickable { onSelect(id) }
+                            .semantics {
+                                selected = page == id
+                                role = Role.Tab
+                            }
                             .padding(horizontal = 24.dp, vertical = 12.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Glyph(if (id == "home") "home" else "user", Modifier.size(19.dp))
-                        Spacer(Modifier.width(8.dp))
-                        Text(
-                            label,
-                            fontSize = 14.sp,
-                            fontWeight = if (page == id) FontWeight.Bold else FontWeight.Normal,
-                        )
+                        CompositionLocalProvider(
+                            LocalContentColor provides
+                                if (page == id) MaterialTheme.colorScheme.onPrimary
+                                else MaterialTheme.colorScheme.onSurface
+                        ) {
+                            Glyph(if (id == "home") "home" else "user", Modifier.size(19.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text(
+                                label,
+                                fontSize = 14.sp,
+                                fontWeight = if (page == id) FontWeight.Bold else FontWeight.Normal,
+                            )
+                        }
                     }
                 }
             }
@@ -799,6 +736,7 @@ fun Glyph(kind: String, modifier: Modifier = Modifier) {
                 )
             }
             "check" -> path(4f, 12f, 9f, 17f, 20f, 6f)
+            "minus" -> line(6f, 12f, 18f, 12f)
             else -> {
                 drawCircle(color, 9 * k, Offset(12 * k, 12 * k), style = Stroke(1.6f * k))
                 line(12f, 11f, 12f, 17f)
@@ -913,7 +851,7 @@ private fun Home(
                                     textAlign = TextAlign.Center,
                                     color = LocalLyricInk.current.color,
                                 )
-                                OutlinedButton(onClick = search) { Text("歌曲匹配") }
+                                FlowOutlinedButton(onClick = search) { Text("歌曲匹配") }
                             }
                     }
                 }
@@ -1110,7 +1048,9 @@ private fun TrackMarquee(text: String, reduced: Boolean, title: Boolean) {
             fontSize = if (title) 25.sp else 15.sp,
             lineHeight = if (title) 31.sp else 22.sp,
             fontWeight = if (title) FontWeight.SemiBold else FontWeight.Medium,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (title) 1f else .76f),
+            color =
+                if (title) MaterialTheme.colorScheme.onSurface
+                else MaterialTheme.colorScheme.onSurfaceVariant,
             maxLines = 1,
             softWrap = false,
             overflow = TextOverflow.Clip,

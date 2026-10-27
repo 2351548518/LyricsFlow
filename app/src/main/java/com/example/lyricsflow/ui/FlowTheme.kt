@@ -4,10 +4,14 @@ import android.graphics.Bitmap
 import android.os.Build
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
+import com.example.lyricsflow.core.ControlColors
 import com.example.lyricsflow.core.CoverColors
 import java.util.WeakHashMap
 import kotlin.coroutines.coroutineContext
@@ -135,6 +139,64 @@ internal fun flowPalette(index: Int, average: Int?, dark: Boolean): FlowPalette 
         Color(CoverColors.mix(seed, 0xff6daeb7.toInt(), .5f)),
         Color(CoverColors.mix(seed, 0xffe0d7c3.toInt(), .65f)),
         index == 4,
+    )
+}
+
+internal fun flowColorScheme(palette: FlowPalette): ColorScheme {
+    val ui = ControlColors.from(palette.background.toArgb(), palette.ink.toArgb())
+    val base =
+        if (CoverColors.luminance(ui.background) < .18) darkColorScheme() else lightColorScheme()
+    val action = Color(ui.action)
+    val onAction = Color(ui.onAction)
+    val error = Color(CoverColors.readable(0xffd43f54.toInt(), ui.background))
+    return base.copy(
+        primary = action,
+        onPrimary = onAction,
+        primaryContainer = action,
+        onPrimaryContainer = onAction,
+        secondary = action,
+        onSecondary = onAction,
+        secondaryContainer = Color(ui.high),
+        onSecondaryContainer = Color(ui.ink),
+        tertiary = action,
+        onTertiary = onAction,
+        tertiaryContainer = Color(ui.highest),
+        onTertiaryContainer = Color(ui.ink),
+        background = palette.background,
+        onBackground = Color(ui.ink),
+        surface = Color(ui.surface),
+        onSurface = Color(ui.ink),
+        surfaceVariant = Color(ui.highest),
+        onSurfaceVariant = Color(ui.muted),
+        surfaceContainerLowest = palette.background,
+        surfaceContainerLow = Color(ui.low),
+        surfaceContainer = Color(ui.surface),
+        surfaceContainerHigh = Color(ui.high),
+        surfaceContainerHighest = Color(ui.highest),
+        surfaceDim = Color(ui.high),
+        surfaceBright = Color(ui.low),
+        surfaceTint = action,
+        outline = Color(ui.outline),
+        outlineVariant = Color(ui.divider),
+        inverseSurface = action,
+        inverseOnSurface = onAction,
+        inversePrimary = onAction,
+        primaryFixed = action,
+        primaryFixedDim = action,
+        onPrimaryFixed = onAction,
+        onPrimaryFixedVariant = onAction,
+        secondaryFixed = action,
+        secondaryFixedDim = action,
+        onSecondaryFixed = onAction,
+        onSecondaryFixedVariant = onAction,
+        tertiaryFixed = action,
+        tertiaryFixedDim = action,
+        onTertiaryFixed = onAction,
+        onTertiaryFixedVariant = onAction,
+        error = error,
+        onError = Color(CoverColors.readable(ui.background, error.toArgb())),
+        errorContainer = Color(ui.high),
+        onErrorContainer = error,
     )
 }
 

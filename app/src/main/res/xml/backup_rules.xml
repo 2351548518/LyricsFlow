@@ -7,6 +7,7 @@
 -->
 <full-backup-content>
     <exclude domain="sharedpref" path="credentials.xml"/>
+    <exclude domain="sharedpref" path="github-sync.xml"/>
     <exclude domain="sharedpref" path="overlay-position.xml"/>
     <!--
    <include domain="sharedpref" path="."/>

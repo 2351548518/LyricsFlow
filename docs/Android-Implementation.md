@@ -24,6 +24,7 @@ APK：[app-debug.apk](../app/build/outputs/apk/debug/app-debug.apk)。安装使�
 | 模块 | 实际行为 |
 | --- | --- |
 | 原生界面 | Jetpack Compose；柔和渐变与水流曲线、轻量浮动 Dock；首页／我的去除冗余品牌栏；歌名 25 sp、歌手 15 sp，单行溢出向左滚动；手机单栏、平板双栏 |
+| 控件与阅读 | 完整封面色系控件角色；单选实色底＋勾选，开关显示开／关；我的／设置／评论分层卡片，匹配弹窗同色系；平板阅读列最大 840 dp |
 | 播放监听 | 用户授权 NotificationListenerService 后访问 MediaSession；允许列表过滤；优先正在播放的 Spotify，可固定 QQ／网易云等；前台每 15 秒校准 |
 | 时间轴 | 基于单调时钟重建进度；暂停、seek、倍速；缺进度时不选中同步行；逐曲／逐来源偏移，正值表示延后 |
 | QQ 直连 | 完整关键词搜索、每页 30 条及后续页，失败时降级 Desktop／Smartbox 并提示；区分 MID／数字 ID；GetPlayLyricInfo 原文＋译文，旧逐行接口降级；新版热评及最新评论 |
@@ -61,16 +62,16 @@ APK：[app-debug.apk](../app/build/outputs/apk/debug/app-debug.apk)。安装使�
 6. 网络响应缓存按容量清理，歌词库与导入资料保留。备份包有 20 MB 读取限制，数据正文最多 16 MB／3000 项；采用 `manifest.json`、`data.json`、`settings.json` 的开发版布局，不能当作 PRD 中完整互操作备份规范的最终定稿。
 7. 已在用户提供的 HONOR 真机完成 Spotify／QQ／网易云真实本机播放器联调，初次修复见 [真机记录](./android-qa/Real-Device-Playback.md)。后续补齐完整搜索和 QQ 来源译文，之前未匹配的 QQ 日语歌已匹配成功；最终 QQ 时间歌词及 Spotify 连接回归通过，见 [QQ 专项记录](./android-qa/QQ-Lyrics-Search.md)。十首真歌、厂商后台策略和 60 分钟压力验收仍未完成。
 8. Android 35 平板模拟器、Android 37 手机模拟器和一台上报 API 37 的 HONOR 真机已测试；Android 24–34、36 和其他实体机型尚未覆盖。应用包名、正式签名和公开发布配置仍待发布阶段确定。
-9. GitHub 登录同步、远程 Spotify、自动生成罗马音属于已确认的后续范围。
+9. GitHub 可选登录及私有仓库手动快照已按 2026-10-27 新要求实现，详见 [注册与同步说明](./GitHub-Sync.md) 和 [专项验收](./android-qa/GitHub-Sync.md)。尚无真实 Client ID，真实 GitHub 登录/建仓/远端读写未联调；自动双向合并仍为后续范围。远程 Spotify、自动生成罗马音仍未提供。
 
 本次没有把 PRD 的 44 条发布验收全部标为通过。准确证据见 [Android 验收记录](./android-qa/README.md)。
 
 ## 重复验证
 
 ```powershell
-# 默认运行 12 项不依赖第三方网络的设备测试，并执行单元测试、Lint 和构建。
+# 默认运行 23 项不依赖第三方网络的设备测试，并执行单元测试、Lint 和构建。
 .\scripts\Run-AndroidQa.ps1 -Device emulator-5554
-# 额外运行来源接口、译文、分页、缓存、自动匹配和 LRCLIB 界面，共 26 项设备测试。
+# 额外运行来源接口、译文、分页、缓存、自动匹配和 LRCLIB 界面，共 37 项设备测试。
 .\scripts\Run-AndroidQa.ps1 -Device emulator-5556 -IncludeNetwork
 ```
 
@@ -81,3 +82,7 @@ APK：[app-debug.apk](../app/build/outputs/apk/debug/app-debug.apk)。安装使�
 后续修正等待函数与校准设置同名的问题：校准默认保持 0 ms，首次升级清理误写的 300 ms，见 [校准修复记录](./android-qa/Calibration-Zero.md)。
 
 2026-10-27 UI 后续修订：跟随封面使用完整均色色调；歌词背景直角、手机左右铺满，文字继续与标题对齐；稳定取色状态及短暂元数据缺失，避免刷新／切歌时闪回默认主题。实现、耗时、回归与已知原图分辨率限制见 [UI 专项记录](./android-qa/Flow-UI.md)。
+
+按钮选中状态与设置／评论／匹配界面进一步统一，颜色边界、场景与截图见 [控件可读性专项](./android-qa/Control-Readability.md)。
+
+2026-10-27 GitHub 增量：`GitHubApi` 负责固定官方端点、私有仓库检查和完整 Git 提交；`GitHubSync` 负责设备授权、刷新、预览、基线与恢复副本；`BackupRestore` 统一本地与云端恢复，`GitHubSettings` 接入我的页面。Token 与翻译 Key 使用独立加密槽，GitHub 状态排除系统备份。详见 [GitHub 同步说明](./GitHub-Sync.md)。

@@ -21,11 +21,12 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Test installation failed.' }
     # Required by the controlled MediaSession test. This changes the selected QA device only.
     & $adbExecutable -s $Device shell cmd notification allow_listener com.example.lyricsflow/com.example.lyricsflow.playback.MusicNotificationListener
-    $testClasses = 'com.example.lyricsflow.PlaybackIntegrationTest,com.example.lyricsflow.PlayerMetadataTest,com.example.lyricsflow.UiFlowTest,com.example.lyricsflow.ImportSecurityTest,com.example.lyricsflow.CalibrationOffsetTest,com.example.lyricsflow.FlowAppearanceTest,com.example.lyricsflow.TranslationPolicyTest'
-    $expectedCount = 12
+    $testClasses = 'com.example.lyricsflow.PlaybackIntegrationTest,com.example.lyricsflow.PlayerMetadataTest,com.example.lyricsflow.UiFlowTest,com.example.lyricsflow.ImportSecurityTest,com.example.lyricsflow.CalibrationOffsetTest,com.example.lyricsflow.FlowAppearanceTest,com.example.lyricsflow.TranslationPolicyTest,com.example.lyricsflow.ControlReadabilityTest'
+    $testClasses += ',com.example.lyricsflow.GitHubSyncTest,com.example.lyricsflow.GitHubUiTest'
+    $expectedCount = 23
     if ($IncludeNetwork) {
         $testClasses += ',com.example.lyricsflow.ProviderIntegrationTest,com.example.lyricsflow.QqDiscoveryTest,com.example.lyricsflow.SearchUiTest,com.example.lyricsflow.AutomaticMatchingTest'
-        $expectedCount = 26
+        $expectedCount = 37
     }
     $testOutput = & $adbExecutable -s $Device shell am instrument -w -r -e disableAnalytics true -e class $testClasses com.example.lyricsflow.test/androidx.test.runner.AndroidJUnitRunner
     $outputDirectory = Join-Path $projectDirectory 'docs\android-qa'
