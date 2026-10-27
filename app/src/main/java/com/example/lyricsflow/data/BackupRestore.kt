@@ -2,6 +2,7 @@ package com.example.lyricsflow.data
 
 import android.util.Base64
 import com.example.lyricsflow.core.AppGraph
+import com.example.lyricsflow.core.OverlayColors
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -39,8 +40,9 @@ suspend fun restoreBackup(
             reduced = o.optBoolean("reduced", false),
             autoSources = o.optBoolean("autoSources", p.autoSources),
             overlaySize = number("overlaySize", 22f, 12f, 48f),
-            overlayAlpha = number("overlayAlpha", .85f, .2f, 1f),
+            overlayAlpha = number("overlayAlpha", .85f, 0f, 1f),
             overlayTranslation = o.optBoolean("overlayTranslation", true),
+            overlayColor = OverlayColors.normalize(o.optString("overlayColor", "")).orEmpty(),
             autoTranslate = false,
             consent = false,
             coverBlur = number("coverBlur", p.coverBlur, 0f, 24f),

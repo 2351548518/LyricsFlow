@@ -11,6 +11,9 @@ import android.provider.Settings
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.*
@@ -288,6 +291,7 @@ fun FlowApp(graph: AppGraph) {
                                         page = "home"
                                     },
                                     githubLogin = github.login,
+                                    githubLastSync = github.lastSync,
                                 )
                             "github" -> GitHubSettings(graph.github, ::output)
                             "library" ->
@@ -1150,6 +1154,17 @@ private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position:
         vertical: Boolean = false,
     ) {
         val row = lines[index]
+        val highlighted =
+            s.playback.positionKnown &&
+                active in lines.indices &&
+                row.start != null &&
+                row.start == lines[active].start
+        val emphasis by
+            animateFloatAsState(
+                targetValue = if (highlighted) 1.18f else 1f,
+                animationSpec = if (s.prefs.reduced) snap() else tween(220),
+                label = "current-lyric-size",
+            )
         val current =
             index == active ||
                 row.start == null ||
@@ -1168,13 +1183,16 @@ private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position:
                 "monospace" -> FontFamily.Monospace
                 else -> FontFamily.SansSerif
             }
+        val preferredSize = s.prefs.fontSize * emphasis
         val textSize =
             if (partitionHeight != null)
-                minOf(s.prefs.fontSize, ((partitionHeight - 36f) / 2.5f).coerceAtLeast(10f))
-            else s.prefs.fontSize
+                minOf(preferredSize, ((partitionHeight - 36f) / 2.5f).coerceAtLeast(10f))
+            else preferredSize
         val translationSize =
             if (partitionHeight != null) (textSize * .6f).coerceAtLeast(12f)
-            else (theme?.translation?.size ?: (s.prefs.fontSize * .6f)).coerceAtLeast(16f)
+            else
+                (theme?.translation?.size ?: (s.prefs.fontSize * .6f)).coerceAtLeast(16f) *
+                    (1f + (emphasis - 1f) * .55f)
         Column(
             modifier
                 .fillMaxWidth()

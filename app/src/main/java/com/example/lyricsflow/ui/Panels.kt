@@ -162,7 +162,17 @@ fun MyScreen(
     preview: () -> Unit,
     live: () -> Unit,
     githubLogin: String = "",
+    githubLastSync: Long = 0,
 ) {
+    val syncLabel =
+        remember(githubLogin, githubLastSync) {
+            when {
+                githubLogin.isBlank() -> "数据保存在本地"
+                githubLastSync <= 0 -> "上次同步：尚未同步"
+                else ->
+                    "上次同步：${java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date(githubLastSync))}"
+            }
+        }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(top = 16.dp)) {
         item {
             Surface(
@@ -183,30 +193,25 @@ fun MyScreen(
                             contentColor = MaterialTheme.colorScheme.onPrimary,
                         ) {
                             Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) {
-                                Glyph("user", Modifier.size(26.dp))
+                                GitHubAvatar(githubLogin)
                             }
                         }
                         Spacer(Modifier.width(14.dp))
-                        Column {
+                        Column(Modifier.weight(1f)) {
                             Text(
                                 if (githubLogin.isBlank()) "本地聆听者" else "@$githubLogin",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
+                                maxLines = 1,
+                                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                             )
                             Text(
-                                "属于你的歌词空间",
+                                syncLabel,
                                 fontSize = 12.sp,
                                 modifier = Modifier.padding(top = 5.dp),
                             )
                         }
                     }
-                    Spacer(Modifier.height(16.dp))
-                    Text(
-                        "歌词、偏好和主题，保存在这台设备上。",
-                        fontSize = 13.sp,
-                        lineHeight = 21.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
                 }
             }
         }
@@ -518,6 +523,7 @@ fun SearchSheet(
                 ) {
                     Text("加载更多候选")
                 }
+            if (rows.isNotEmpty()) Spacer(Modifier.height(16.dp))
             rows.forEach { t ->
                 SettingRow(
                     t.title,
@@ -888,10 +894,11 @@ fun PermissionSettings(s: ScreenState, graph: AppGraph, overlay: () -> Unit) {
         )
         Text("背景不透明度 · ${(s.prefs.overlayAlpha*100).toInt()}%", fontSize = 14.sp)
         Slider(
-            value = s.prefs.overlayAlpha,
+            value = s.prefs.overlayAlpha.coerceIn(0f, 1f),
             onValueChange = { graph.preferences(s.prefs.copy(overlayAlpha = it)) },
-            valueRange = .2f..1f,
+            valueRange = 0f..1f,
         )
+        OverlayColorSettings(s, graph)
         Toggle("悬浮窗显示译文", s.prefs.overlayTranslation) {
             graph.preferences(s.prefs.copy(overlayTranslation = it))
         }
@@ -1017,6 +1024,7 @@ fun SourceSettings(s: ScreenState, graph: AppGraph, search: () -> Unit) {
     Column(Modifier.fillMaxSize().imePadding().verticalScroll(rememberScrollState())) {
         PageTitle("歌词与评论来源", "先找到同一首歌，再读懂同一种心情。")
         Text("QQ 音乐、网易云音乐使用独立适配器。歌词与评论来源可分别选择，接口异常时不会展示伪造评论。", fontSize = 13.sp, lineHeight = 22.sp)
+        Spacer(Modifier.height(16.dp))
         SettingRow("搜索与手动匹配", "通过歌名、歌手、网易云 ID 或 QQ songmid 确认歌曲", search)
         Section("网易云可选网关")
         Text(
@@ -1031,6 +1039,7 @@ fun SourceSettings(s: ScreenState, graph: AppGraph, search: () -> Unit) {
             modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
             singleLine = true,
         )
+        Spacer(Modifier.height(16.dp))
         FlowButton(
             onClick = {
                 if (url.isBlank() || Uri.parse(url).scheme == "https") {

@@ -69,9 +69,9 @@ APK：[app-debug.apk](../app/build/outputs/apk/debug/app-debug.apk)。安装使�
 ## 重复验证
 
 ```powershell
-# 默认运行 25 项不依赖第三方网络的设备测试，并执行单元测试、Lint 和构建。
+# 默认运行 28 项不依赖第三方网络的设备测试，并执行单元测试、Lint 和构建。
 .\scripts\Run-AndroidQa.ps1 -Device emulator-5554
-# 额外运行来源接口、译文、分页、缓存、自动匹配和 LRCLIB 界面，共 39 项设备测试。
+# 额外运行来源接口、译文、分页、缓存、自动匹配和 LRCLIB 界面，共 42 项设备测试。
 .\scripts\Run-AndroidQa.ps1 -Device emulator-5556 -IncludeNetwork
 ```
 
@@ -84,5 +84,9 @@ APK：[app-debug.apk](../app/build/outputs/apk/debug/app-debug.apk)。安装使�
 2026-10-27 UI 后续修订：跟随封面使用完整均色色调；歌词背景直角、手机左右铺满，文字继续与标题对齐；稳定取色状态及短暂元数据缺失，避免刷新／切歌时闪回默认主题。实现、耗时、回归与已知原图分辨率限制见 [UI 专项记录](./android-qa/Flow-UI.md)。
 
 按钮选中状态与设置／评论／匹配界面进一步统一，颜色边界、场景与截图见 [控件可读性专项](./android-qa/Control-Readability.md)。
+
+最新阅读与账户修订：匹配页候选按钮与列表、来源说明与入口、网关输入与保存按钮统一留白 16 dp；我的页显示真实 GitHub 头像和上次同步时间；当前歌词原文放大约 18%、译文约 10%；悬浮原文/译文同色，背景支持 0%–100% 并兼容备份恢复。真机截图与回归见 [阅读细节专项](./android-qa/Reader-Polish.md)。
+
+悬浮文字颜色现可通过设置选预设、RGB 滑块或十六进制值，手动颜色优先于主题，同步作用于原文和译文；本地/云端备份携带新字段 overlayColor。测试与图片见 [悬浮颜色专项](./android-qa/Overlay-Text-Color.md)。
 
 2026-10-27 GitHub 增量：`GitHubApi` 负责固定官方端点、私有仓库检查和完整 Git 提交；`GitHubSync` 负责设备授权、刷新、预览、基线与恢复副本；`BackupRestore` 统一本地与云端恢复，`GitHubSettings` 接入我的页面。Token 与翻译 Key 使用独立加密槽，GitHub 状态排除系统备份。详见 [GitHub 同步说明](./GitHub-Sync.md)。

@@ -29,6 +29,7 @@ data class Preferences(
     val autoTranslate: Boolean = false,
     val autoSources: Boolean = true,
     val coverBlur: Float = 8f,
+    val overlayColor: String = "",
 )
 
 data class ScreenState(
@@ -160,7 +161,7 @@ class AppGraph(val app: Application) {
             prefs.getInt("palette", 0),
             prefs.getBoolean("reduced", false),
             prefs.getFloat("overlaySize", 22f),
-            prefs.getFloat("overlayAlpha", .85f),
+            prefs.getFloat("overlayAlpha", .85f).takeIf { it.isFinite() }?.coerceIn(0f, 1f) ?: .85f,
             prefs.getBoolean("overlayTranslation", true),
             prefs.getString("url", "")!!,
             prefs.getString("model", "")!!,
@@ -171,6 +172,7 @@ class AppGraph(val app: Application) {
             prefs.getBoolean("autoTranslate", false),
             prefs.getBoolean("autoSources", true),
             prefs.getFloat("coverBlur", 8f).takeIf { it.isFinite() }?.coerceIn(0f, 24f) ?: 8f,
+            OverlayColors.normalize(prefs.getString("overlayColor", "").orEmpty()).orEmpty(),
         )
 
     fun preferences(p: Preferences) {
@@ -187,6 +189,7 @@ class AppGraph(val app: Application) {
             .putFloat("overlaySize", p.overlaySize)
             .putFloat("overlayAlpha", p.overlayAlpha)
             .putBoolean("overlayTranslation", p.overlayTranslation)
+            .putString("overlayColor", p.overlayColor)
             .putString("url", p.translationUrl)
             .putString("model", p.model)
             .putBoolean("consent", p.consent)

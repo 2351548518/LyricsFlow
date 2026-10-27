@@ -160,6 +160,11 @@ internal class GitHubApi(private val http: GitHubTransport = GitHubHttp()) {
 
     suspend fun user(token: String) = http.send("GET", "/user", null, token).json
 
+    suspend fun publicUser(login: String): JSONObject {
+        require(Regex("[A-Za-z0-9-]{1,39}").matches(login))
+        return http.send("GET", "/users/${enc(login)}", null, "").json
+    }
+
     suspend fun repository(
         token: String,
         login: String,

@@ -23,10 +23,11 @@ try {
     & $adbExecutable -s $Device shell cmd notification allow_listener com.example.lyricsflow/com.example.lyricsflow.playback.MusicNotificationListener
     $testClasses = 'com.example.lyricsflow.PlaybackIntegrationTest,com.example.lyricsflow.PlayerMetadataTest,com.example.lyricsflow.UiFlowTest,com.example.lyricsflow.ImportSecurityTest,com.example.lyricsflow.CalibrationOffsetTest,com.example.lyricsflow.FlowAppearanceTest,com.example.lyricsflow.TranslationPolicyTest,com.example.lyricsflow.ControlReadabilityTest'
     $testClasses += ',com.example.lyricsflow.GitHubSyncTest,com.example.lyricsflow.GitHubUiTest,com.example.lyricsflow.GitHubNetworkPolicyTest'
-    $expectedCount = 25
+    $testClasses += ',com.example.lyricsflow.ReaderPolishTest'
+    $expectedCount = 28
     if ($IncludeNetwork) {
         $testClasses += ',com.example.lyricsflow.ProviderIntegrationTest,com.example.lyricsflow.QqDiscoveryTest,com.example.lyricsflow.SearchUiTest,com.example.lyricsflow.AutomaticMatchingTest'
-        $expectedCount = 39
+        $expectedCount = 42
     }
     $testOutput = & $adbExecutable -s $Device shell am instrument -w -r -e disableAnalytics true -e class $testClasses com.example.lyricsflow.test/androidx.test.runner.AndroidJUnitRunner
     $outputDirectory = Join-Path $projectDirectory 'docs\android-qa'

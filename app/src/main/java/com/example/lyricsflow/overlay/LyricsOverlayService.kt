@@ -175,7 +175,7 @@ class LyricsOverlayService : Service() {
             }
         translation =
             TextView(this).apply {
-                setTextColor(0xffc6d2c0.toInt())
+                setTextColor(Color.WHITE)
                 maxLines = 3
             }
         val resize =
@@ -322,8 +322,9 @@ class LyricsOverlayService : Service() {
                 styleRaw
         if (signature != rendered) {
             rendered = signature
+            val lyricColor = OverlayColors.resolve(s.prefs.overlayColor, theme?.original?.color)
             text?.apply {
-                val color = theme?.original?.color?.toInt() ?: Color.WHITE
+                val color = lyricColor
                 setTextColor(color)
                 textSize =
                     if (s.prefs.overlaySize == 22f) theme?.original?.size ?: 22f
@@ -359,7 +360,7 @@ class LyricsOverlayService : Service() {
             }
             translation?.apply {
                 text = line?.translation.orEmpty()
-                setTextColor(theme?.translation?.color?.toInt() ?: 0xffc6d2c0.toInt())
+                setTextColor(lyricColor)
                 textSize =
                     theme?.translation?.size ?: (s.prefs.overlaySize * .65f).coerceAtLeast(12f)
                 visibility =
@@ -387,7 +388,9 @@ class LyricsOverlayService : Service() {
             translationY = motion.y * height
         }
         handle?.visibility = if (locked) View.GONE else View.VISIBLE
-        panel?.background?.alpha = (s.prefs.overlayAlpha * 255).toInt()
+        translation?.alpha = motion.opacity
+        panel?.background?.alpha =
+            ((s.prefs.overlayAlpha.takeIf { it.isFinite() } ?: .85f).coerceIn(0f, 1f) * 255).toInt()
     }
 
     override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {

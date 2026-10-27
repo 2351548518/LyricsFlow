@@ -271,6 +271,7 @@ object Transfer {
                     .put("overlaySize", p.overlaySize)
                     .put("overlayAlpha", p.overlayAlpha)
                     .put("overlayTranslation", p.overlayTranslation)
+                    .put("overlayColor", p.overlayColor)
                     .put("background", p.background)
                     .put("coverBlur", p.coverBlur)
                     .put("trackPreferences", graph.trackPreferences())
@@ -334,6 +335,10 @@ object Transfer {
                 Triple(k, id, b)
             }
         val settings = jsonObject(entries["settings.json"] ?: "{}")
+        if (settings.has("overlayColor"))
+            require(OverlayColors.normalize(settings.getString("overlayColor")) != null) {
+                "悬浮歌词颜色应为 #RRGGBB，或留空跟随主题"
+            }
         settings.optJSONObject("trackPreferences")?.let { o ->
             val keys = o.keys()
             while (keys.hasNext()) {
