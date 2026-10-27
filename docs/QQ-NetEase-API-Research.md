@@ -1,7 +1,7 @@
 # QQ 音乐 / 网易云 API 接入调研与适配依据
 
-> 版本：1.1  
-> 核实日期：2026-10-26（Asia/Shanghai）  
+> 版本：1.2
+> 核实日期：2026-10-27（Asia/Shanghai）；初次调研 2026-10-26。
 > 用途：为 [LyricsFlow PRD 1.1](./LyricsFlow-PRD.md) 的首版歌词及评论适配提供依据。  
 > 研究范围：官方公开文档、社区项目文档与源码、小规模匿名只读请求。初次调研时未登录账户、未申请平台权限、未部署代理或实现 Android 适配器；后续原生实现验证补充在第 8 节。
 
@@ -10,7 +10,7 @@
 1. **QQ 与网易云都应列入 V1 优先适配**：需要搜索 / 详情、歌词、热门评论三个闭环，不能只预留评论空页面。
 2. **存在无需自建服务的可行路径**：本次匿名直连拿到了 QQ 歌词、新版 QQ 热评，以及网易云搜索、歌词、普通评论与热评。成功仅限所测样本和当前网络，不代表获得正式开放平台授权或覆盖所有歌曲。
 3. **QQ 评论应优先新版接口**：旧 `fcg_global_comment_h5.fcg` 多种已文档化参数组合本次返回 HTTP 500；`music.globalComment.CommentRead/GetHotCommentList` 返回成功业务码与真实评论。
-4. **QQ 自动搜索仍需重点验证**：最小 Desktop 搜索请求返回成功业务码但候选为空。较新社区源码已经采用 Mobile 搜索；不能把 `code=0` 当作自动匹配成功。
+4. **QQ 搜索必须区分完整搜索与建议**：初次 Desktop 请求返回成功但候选为空。2026-10-27 已在 Android 验证 `client_search_cp` 完整分页，替代把 Smartbox 当主搜索的降级实现，见第 9 节。不能把 `code=0` 当作候选成功。
 5. **网关是可选兼容路径**：V1 支持指定社区 API 协议的 Base URL，供用户选用可信已有服务或自行部署；不自动寻找公共代理，也不把代理等同于接口一定可用。
 
 | 等级 | 含义 | 本次达到情况 |
@@ -232,3 +232,11 @@ Referer: https://y.qq.com/
 对应原始日志见 [手机](./android-qa/providers-phone.log)、[平板](./android-qa/providers-tablet.log) 和 [验收记录](./android-qa/README.md)。搜索／详情可以命中之前取得的真实缓存；设备测试中歌词及评论的强制刷新项会实际请求服务。
 
 平板复测曾发生网易云 `UnknownHostException`，已保留 [失败日志](./android-qa/instrumentation-tablet-dns-failure.log)，随后同一 APK 重试成功。平台和网络可用性不是长期承诺；没有使用示例评论绕过失败。
+
+## 9. QQ 译文与完整搜索补充（2026-10-27）
+
+已实现并验证 `music.musichallSong.PlayLyricInfo/GetPlayLyricInfo`，使用 `crypt=0,qrc=0,trans=1` 获取 Base64 UTF-8 原文／译文。MID `001CNiOJ3VyAHu` 的旧接口 `trans` 为空，新接口 22 行译文与 22 行原文按时间戳对齐。新接口优先、旧接口降级，QQ 缓存增加版本标记并自动升级；不调用大模型补造来源译文。
+
+完整搜索采用 `https://c.y.qq.com/soso/fcgi-bin/client_search_cp?w=…&format=json&n=30&p=…&cr=1&t=0&g_tk=5381`。Android `rionos` 样本前两页各 30 首，第二页 30 个新 ID，总量报告 508。完整搜索失败才尝试 Desktop／建议。人工候选保留近似结果，支持分页、去重、译名扩展、相似度排序；自动绑定保留歌手／时长／版本保护。
+
+详细请求、证据与未覆盖范围见 [专项说明](./android-qa/QQ-Lyrics-Search.md)。资料依据 [歌词模块](https://github.com/L-1124/QQMusicApi/blob/main/qqmusic_api/modules/lyric.py)、[公共参数](https://github.com/L-1124/QQMusicApi/blob/main/qqmusic_api/core/versioning.py)、[旧完整搜索与建议区别](https://github.com/jsososo/QQMusicApi/blob/master/routes/search.js)，可用性以本轮 Android 请求和后续回归为准。

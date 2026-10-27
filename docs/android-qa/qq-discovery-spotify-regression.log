@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.RealPlayerIntegrationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.RealPlayerIntegrationTest:
+INSTRUMENTATION_STATUS: test=existingPlayerPublishesLivePlayback
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: result=REAL_PLAYER package=com.spotify.music title=Sincerely local=true automatic=true advancing=true pause=true seek=true resume=true positionDeltaMs=0 lyrics=39 source=QQ message=已载入本地歌词
+INSTRUMENTATION_STATUS_CODE: 2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.RealPlayerIntegrationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=existingPlayerPublishesLivePlayback
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 9.297
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

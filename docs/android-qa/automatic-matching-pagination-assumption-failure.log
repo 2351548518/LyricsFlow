@@ -1,0 +1,334 @@
+Standard Install: Sent 11.72 MB (1 APK)
+Standard Install: Sent 1.10 MB (1 APK)
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlaybackIntegrationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.PlaybackIntegrationTest:
+INSTRUMENTATION_STATUS: test=realSessionUpdatesSeekPauseAndSwitch
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlaybackIntegrationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realSessionUpdatesSeekPauseAndSwitch
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.PlayerMetadataTest:
+INSTRUMENTATION_STATUS: test=spotifyAndNormalQqKeepStandardFields
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=spotifyAndNormalQqKeepStandardFields
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=qqBluetoothLyricUpdatesKeepTheSameSong
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=qqBluetoothLyricUpdatesKeepTheSameSong
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.UiFlowTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.UiFlowTest:
+INSTRUMENTATION_STATUS: test=previewSettingsLibraryAndBack
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.UiFlowTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=previewSettingsLibraryAndBack
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ImportSecurityTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.ImportSecurityTest:
+INSTRUMENTATION_STATUS: test=androidXmlParserAndLosslessLyricRoundtrip
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ImportSecurityTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=androidXmlParserAndLosslessLyricRoundtrip
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ImportSecurityTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=schemaUnknownFieldsRangesAndNativeMotion
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ImportSecurityTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=schemaUnknownFieldsRangesAndNativeMotion
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ProviderIntegrationTest
+INSTRUMENTATION_STATUS: current=7
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.ProviderIntegrationTest:
+INSTRUMENTATION_STATUS: test=neteaseRealLyricsAndComments
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ProviderIntegrationTest
+INSTRUMENTATION_STATUS: current=7
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=neteaseRealLyricsAndComments
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ProviderIntegrationTest
+INSTRUMENTATION_STATUS: current=8
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=qqRealLyricsAndComments
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ProviderIntegrationTest
+INSTRUMENTATION_STATUS: current=8
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=qqRealLyricsAndComments
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ProviderIntegrationTest
+INSTRUMENTATION_STATUS: current=9
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=storeAndBackupKeepCredentialsOutAndRejectZipTraversal
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ProviderIntegrationTest
+INSTRUMENTATION_STATUS: current=9
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=storeAndBackupKeepCredentialsOutAndRejectZipTraversal
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.QqDiscoveryTest
+INSTRUMENTATION_STATUS: current=10
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.QqDiscoveryTest:
+INSTRUMENTATION_STATUS: test=qqTranslationHasAlignedNativeTimestamps
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: discovery=QQ modern lyrics=22 translated=22 revision=2
+INSTRUMENTATION_STATUS_CODE: 2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.QqDiscoveryTest
+INSTRUMENTATION_STATUS: current=10
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=qqTranslationHasAlignedNativeTimestamps
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.QqDiscoveryTest
+INSTRUMENTATION_STATUS: current=11
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=codecHandlesBase64EntitiesMissingAndEncryptedFields
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.QqDiscoveryTest
+INSTRUMENTATION_STATUS: current=11
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=codecHandlesBase64EntitiesMissingAndEncryptedFields
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.QqDiscoveryTest
+INSTRUMENTATION_STATUS: current=12
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=qqSearchHasFullResultsPaginationAndAliasMatching
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: discovery=QQ first=30 next=30 total=508 newIds=27 aliasCandidates=30
+INSTRUMENTATION_STATUS_CODE: 2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.QqDiscoveryTest
+INSTRUMENTATION_STATUS: current=12
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=qqSearchHasFullResultsPaginationAndAliasMatching
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.QqDiscoveryTest
+INSTRUMENTATION_STATUS: current=13
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=staleQqCacheUpgradesAndPreservesExistingTranslation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: discovery=QQ legacy cache upgraded; existing machine translation preserved
+INSTRUMENTATION_STATUS_CODE: 2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.QqDiscoveryTest
+INSTRUMENTATION_STATUS: current=13
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=staleQqCacheUpgradesAndPreservesExistingTranslation
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.QqDiscoveryTest
+INSTRUMENTATION_STATUS: current=14
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=neteaseSearchAlsoPaginates
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: discovery=NetEase first=30 next=30 total=277
+INSTRUMENTATION_STATUS_CODE: 2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.QqDiscoveryTest
+INSTRUMENTATION_STATUS: current=14
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=neteaseSearchAlsoPaginates
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SearchUiTest
+INSTRUMENTATION_STATUS: current=15
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.SearchUiTest:
+INSTRUMENTATION_STATUS: test=searchShowsThirtyThenSixtyAndClearsStaleResults
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SearchUiTest
+INSTRUMENTATION_STATUS: current=15
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stack=androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 45000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.example.lyricsflow.SearchUiTest.searchShowsThirtyThenSixtyAndClearsStaleResults(SearchUiTest.kt:74)
+
+INSTRUMENTATION_STATUS: stream=
+Error in searchShowsThirtyThenSixtyAndClearsStaleResults(com.example.lyricsflow.SearchUiTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 45000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.example.lyricsflow.SearchUiTest.searchShowsThirtyThenSixtyAndClearsStaleResults(SearchUiTest.kt:74)
+
+INSTRUMENTATION_STATUS: test=searchShowsThirtyThenSixtyAndClearsStaleResults
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SearchUiTest
+INSTRUMENTATION_STATUS: current=16
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=lrclibIsVisibleAndKeepsItsSelectionAndRecordIdInput
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SearchUiTest
+INSTRUMENTATION_STATUS: current=16
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=lrclibIsVisibleAndKeepsItsSelectionAndRecordIdInput
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AutomaticMatchingTest
+INSTRUMENTATION_STATUS: current=17
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.AutomaticMatchingTest:
+INSTRUMENTATION_STATUS: test=holonesKeepsTheTranslatedTitleAndArtistAlias
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: matching=Holones candidates=30 mid=004d2PCl0QeQvl reason=歌名、歌手与时长符合
+INSTRUMENTATION_STATUS_CODE: 2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AutomaticMatchingTest
+INSTRUMENTATION_STATUS: current=17
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=holonesKeepsTheTranslatedTitleAndArtistAlias
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AutomaticMatchingTest
+INSTRUMENTATION_STATUS: current=18
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=durationMetadataArrivalRetriesAnUnresolvedSong
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: matching=Duration 0 -> 249000 ms retried unchanged track key and resolved Avid
+INSTRUMENTATION_STATUS_CODE: 2
+INSTRUMENTATION_STATUS: matching=Preferred QQ rejected unknown mizuki alias; AppGraph automatically used NetEase and displayed fallback notice
+INSTRUMENTATION_STATUS_CODE: 2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AutomaticMatchingTest
+INSTRUMENTATION_STATUS: current=18
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=durationMetadataArrivalRetriesAnUnresolvedSong
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AutomaticMatchingTest
+INSTRUMENTATION_STATUS: current=19
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=avidFindsTheLocalizedMultiArtistCredit
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: matching=Avid candidates=23 id=2009678546 duration=249000 reason=相同歌手、版本与近似时长的多专辑发行
+INSTRUMENTATION_STATUS_CODE: 2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AutomaticMatchingTest
+INSTRUMENTATION_STATUS: current=19
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=avidFindsTheLocalizedMultiArtistCredit
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AutomaticMatchingTest
+INSTRUMENTATION_STATUS: current=20
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=quickSongSwitchCannotPublishThePreviousSongLyrics
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: matching=Quick switch published only the second track's cached lyrics
+INSTRUMENTATION_STATUS_CODE: 2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AutomaticMatchingTest
+INSTRUMENTATION_STATUS: current=20
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=20
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=quickSongSwitchCannotPublishThePreviousSongLyrics
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 139.985
+There was 1 failure:
+1) searchShowsThirtyThenSixtyAndClearsStaleResults(com.example.lyricsflow.SearchUiTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 45000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.example.lyricsflow.SearchUiTest.searchShowsThirtyThenSixtyAndClearsStaleResults(SearchUiTest.kt:74)
+
+FAILURES!!!
+Tests run: 20,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

@@ -185,6 +185,7 @@ fun lyricsJson(l: Lyrics): JSONObject =
     JSONObject()
         .put("source", l.source.name)
         .put("instrumental", l.instrumental)
+        .put("providerRevision", l.providerRevision)
         .put(
             "lines",
             JSONArray().apply {
@@ -254,5 +255,6 @@ fun readLyrics(o: JSONObject): Lyrics {
         runCatching { Provider.valueOf(o.optString("source", "LOCAL")) }
             .getOrDefault(Provider.LOCAL),
         o.optBoolean("instrumental"),
+        o.optInt("providerRevision"),
     )
 }

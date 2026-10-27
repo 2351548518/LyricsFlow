@@ -267,6 +267,7 @@ object Transfer {
                     .put("dark", p.dark)
                     .put("palette", p.palette)
                     .put("reduced", p.reduced)
+                    .put("autoSources", p.autoSources)
                     .put("overlaySize", p.overlaySize)
                     .put("overlayAlpha", p.overlayAlpha)
                     .put("overlayTranslation", p.overlayTranslation)

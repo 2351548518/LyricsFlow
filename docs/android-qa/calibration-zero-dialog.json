@@ -1,0 +1,106 @@
+[
+  {
+    "window-title": "",
+    "type": "APPLICATION",
+    "active": true,
+    "focused": true,
+    "layer": 0,
+    "bounds": "[58,832][1178,1966]",
+    "content": [
+      {
+        "class": "android.widget.TextView",
+        "text": "校准歌词时间",
+        "bounds": "[142,916][646,1028]",
+        "center": "[394,972]"
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "0 ms",
+        "bounds": "[142,1084][261,1154]",
+        "center": "[201,1119]"
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "默认 0 ms。正值让歌词稍后出现；只保存到这首歌与当前来源。",
+        "bounds": "[142,1154][1094,1294]",
+        "center": "[618,1224]"
+      },
+      {
+        "class": "android.widget.SeekBar",
+        "interactions": [
+          "FOCUSABLE"
+        ],
+        "bounds": "[107,1301][1129,1455]",
+        "center": "[618,1378]"
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[142,1462][436,1630]",
+        "center": "[289,1546]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "−100 ms",
+            "bounds": "[184,1511][394,1581]",
+            "center": "[289,1546]"
+          }
+        ]
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[436,1462][731,1630]",
+        "center": "[583,1546]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "+100 ms",
+            "bounds": "[478,1511][689,1581]",
+            "center": "[583,1546]"
+          }
+        ]
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[731,1462][934,1630]",
+        "center": "[832,1546]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "归零",
+            "bounds": "[783,1511][883,1581]",
+            "center": "[833,1546]"
+          }
+        ]
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[891,1714][1094,1882]",
+        "center": "[992,1798]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "完成",
+            "bounds": "[943,1763][1043,1833]",
+            "center": "[993,1798]"
+          }
+        ]
+      }
+    ]
+  }
+]

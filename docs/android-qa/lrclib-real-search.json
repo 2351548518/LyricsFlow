@@ -1,0 +1,258 @@
+[
+  {
+    "window-title": "",
+    "type": "APPLICATION",
+    "active": true,
+    "focused": true,
+    "layer": 0,
+    "bounds": "[0,0][1236,2664]",
+    "content": [
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "LONG_CLICKABLE"
+        ],
+        "bounds": "[562,135][674,303]",
+        "center": "[618,219]",
+        "children": [
+          {
+            "class": "android.view.View",
+            "interactions": [
+              "CLICKABLE",
+              "FOCUSABLE"
+            ],
+            "bounds": "[534,135][702,303]",
+            "center": "[618,219]",
+            "children": [
+              {
+                "class": "android.view.View",
+                "content-desc": "拖动手柄",
+                "bounds": "[562,212][674,226]",
+                "center": "[618,219]"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "class": "android.widget.ScrollView",
+        "interactions": [
+          "SCROLLABLE"
+        ],
+        "bounds": "[84,303][1152,2664]",
+        "center": "[618,1483]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "寻找这首歌",
+            "bounds": "[84,303][527,417]",
+            "center": "[305,360]"
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "核对歌名、歌手和专辑，再确认匹配。",
+            "bounds": "[84,445][827,529]",
+            "center": "[455,487]"
+          },
+          {
+            "class": "android.view.View",
+            "interactions": [
+              "CHECKABLE",
+              "CLICKABLE",
+              "FOCUSABLE"
+            ],
+            "bounds": "[84,585][388,753]",
+            "center": "[236,669]",
+            "children": [
+              {
+                "class": "android.widget.TextView",
+                "text": "QQ 音乐",
+                "bounds": "[140,634][332,704]",
+                "center": "[236,669]"
+              }
+            ]
+          },
+          {
+            "class": "android.view.View",
+            "interactions": [
+              "CHECKABLE",
+              "CLICKABLE",
+              "FOCUSABLE"
+            ],
+            "bounds": "[416,585][776,753]",
+            "center": "[596,669]",
+            "children": [
+              {
+                "class": "android.widget.TextView",
+                "text": "网易云音乐",
+                "bounds": "[472,634][720,704]",
+                "center": "[596,669]"
+              }
+            ]
+          },
+          {
+            "class": "android.view.View",
+            "interactions": [
+              "CHECKABLE",
+              "CLICKABLE",
+              "FOCUSABLE"
+            ],
+            "state": [
+              "CHECKED"
+            ],
+            "bounds": "[804,585][1095,753]",
+            "center": "[949,669]",
+            "children": [
+              {
+                "class": "android.widget.TextView",
+                "text": "LRCLIB",
+                "bounds": "[860,634][1039,704]",
+                "center": "[949,669]"
+              }
+            ]
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "LRCLIB 提供原文歌词，可能没有中文译文；评论仍来自 QQ／网易云。",
+            "bounds": "[84,753][1152,921]",
+            "center": "[618,837]"
+          },
+          {
+            "class": "android.widget.EditText",
+            "text": "Avid",
+            "interactions": [
+              "CLICKABLE",
+              "LONG_CLICKABLE",
+              "FOCUSABLE",
+              "EDITABLE"
+            ],
+            "state": [
+              "FOCUSED"
+            ],
+            "bounds": "[84,921][1152,1145]",
+            "center": "[618,1033]",
+            "children": [
+              {
+                "class": "android.widget.TextView",
+                "text": "歌曲 / 歌手",
+                "bounds": "[140,921][360,977]",
+                "center": "[250,949]"
+              }
+            ]
+          },
+          {
+            "class": "android.view.View",
+            "interactions": [
+              "CLICKABLE",
+              "FOCUSABLE"
+            ],
+            "bounds": "[84,1180][1152,1348]",
+            "center": "[618,1264]",
+            "children": [
+              {
+                "class": "android.widget.TextView",
+                "text": "搜索歌曲",
+                "bounds": "[519,1229][718,1299]",
+                "center": "[618,1264]"
+              }
+            ]
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "扩展歌名与别名",
+            "bounds": "[84,1383][460,1467]",
+            "center": "[272,1425]"
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "支持近似关键词并按相似度排序；开启后还会尝试去掉译名、仅搜当前歌名。",
+            "bounds": "[84,1467][970,1635]",
+            "center": "[527,1551]"
+          },
+          {
+            "class": "android.view.View",
+            "interactions": [
+              "CHECKABLE",
+              "CLICKABLE",
+              "FOCUSABLE"
+            ],
+            "state": [
+              "CHECKED"
+            ],
+            "bounds": "[970,1425][1152,1593]",
+            "center": "[1061,1509]"
+          },
+          {
+            "class": "android.view.View",
+            "interactions": [
+              "CLICKABLE",
+              "FOCUSABLE"
+            ],
+            "bounds": "[84,1670][664,1838]",
+            "center": "[374,1754]",
+            "children": [
+              {
+                "class": "android.widget.TextView",
+                "text": "使用歌曲链接／ID 绑定",
+                "bounds": "[126,1719][622,1789]",
+                "center": "[374,1754]"
+              }
+            ]
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "已显示 20 首 · 原关键词约 20 首",
+            "bounds": "[84,1866][731,1950]",
+            "center": "[407,1908]"
+          },
+          {
+            "class": "android.view.View",
+            "interactions": [
+              "CLICKABLE",
+              "FOCUSABLE"
+            ],
+            "bounds": "[84,1978][1152,2335]",
+            "center": "[618,2156]",
+            "children": [
+              {
+                "class": "android.widget.TextView",
+                "text": "Avid",
+                "bounds": "[84,2041][220,2125]",
+                "center": "[152,2083]"
+              },
+              {
+                "class": "android.widget.TextView",
+                "text": "Hiroyuki Sawano · Avid\n250 秒 · LRCLIB",
+                "bounds": "[84,2146][607,2272]",
+                "center": "[345,2209]"
+              }
+            ]
+          },
+          {
+            "class": "android.view.View",
+            "interactions": [
+              "CLICKABLE",
+              "FOCUSABLE"
+            ],
+            "bounds": "[84,2339][1152,2664]",
+            "center": "[618,2501]",
+            "children": [
+              {
+                "class": "android.widget.TextView",
+                "text": "Avid",
+                "bounds": "[84,2402][220,2486]",
+                "center": "[152,2444]"
+              },
+              {
+                "class": "android.widget.TextView",
+                "text": "SawanoHiroyuki · Avid\n250 秒 · LRCLIB",
+                "bounds": "[84,2507][594,2633]",
+                "center": "[339,2570]"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

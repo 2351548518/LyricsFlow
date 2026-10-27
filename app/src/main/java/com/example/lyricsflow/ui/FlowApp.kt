@@ -358,7 +358,7 @@ fun FlowApp(graph: AppGraph) {
                     title = { Text("选择歌词来源") },
                     text = {
                         Column {
-                            listOf(Provider.QQ, Provider.NETEASE, Provider.LRCLIB).forEach { p ->
+                            LYRIC_PROVIDERS.forEach { p ->
                                 TextButton(
                                     onClick = {
                                         graph.selectSource(p)
@@ -368,7 +368,14 @@ fun FlowApp(graph: AppGraph) {
                                     Text(p.label)
                                 }
                             }
-                            Text("QQ 搜索受限时可用 songmid 绑定。评论来源独立于歌词。", fontSize = 13.sp)
+                            Toggle(
+                                "自动尝试其他歌词源",
+                                s.prefs.autoSources,
+                                "匹配不到或接口不可用时，尝试其他来源。优先来源也用于新歌曲。",
+                            ) {
+                                graph.preferences(s.prefs.copy(autoSources = it))
+                            }
+                            Text("评论来源独立于歌词。可在歌曲匹配中手动确认候选。", fontSize = 13.sp)
                         }
                     },
                     confirmButton = { TextButton(onClick = { sheet = "search" }) { Text("歌曲匹配") } },
@@ -380,20 +387,20 @@ fun FlowApp(graph: AppGraph) {
                     text = {
                         Column {
                             Text("${s.delay} ms")
-                            Text("正值让歌词稍后出现；只保存到这首歌与当前来源。", fontSize = 13.sp)
+                            Text("默认 0 ms。正值让歌词稍后出现；只保存到这首歌与当前来源。", fontSize = 13.sp)
                             Slider(
                                 value = s.delay.toFloat(),
-                                onValueChange = { graph.delay((it / 100).toLong() * 100) },
+                                onValueChange = { graph.setLyricOffset((it / 100).toLong() * 100) },
                                 valueRange = -10000f..10000f,
                             )
                             Row {
-                                TextButton(onClick = { graph.delay(s.delay - 100) }) {
+                                TextButton(onClick = { graph.setLyricOffset(s.delay - 100) }) {
                                     Text("−100 ms")
                                 }
-                                TextButton(onClick = { graph.delay(s.delay + 100) }) {
+                                TextButton(onClick = { graph.setLyricOffset(s.delay + 100) }) {
                                     Text("+100 ms")
                                 }
-                                TextButton(onClick = { graph.delay(0) }) { Text("归零") }
+                                TextButton(onClick = { graph.setLyricOffset(0) }) { Text("归零") }
                             }
                         }
                     },
@@ -502,6 +509,8 @@ fun FlowApp(graph: AppGraph) {
                                                 } ?: "system",
                                             palette = o.optInt("palette", 0).coerceIn(0, 3),
                                             reduced = o.optBoolean("reduced", false),
+                                            autoSources =
+                                                o.optBoolean("autoSources", p.autoSources),
                                             overlaySize =
                                                 o.optDouble("overlaySize", 22.0)
                                                     .toFloat()
@@ -917,6 +926,18 @@ private fun Home(
                 "播放来自 ${playbackAppName(s.playback.packageName)}",
                 fontSize = 10.sp,
                 color = MaterialTheme.colorScheme.primary,
+            )
+        if (s.matchNotice.isNotBlank() && !s.demo && !s.browsing)
+            Text(s.matchNotice, fontSize = 10.sp, color = MaterialTheme.colorScheme.primary)
+        if (
+            s.prefs.translation &&
+                s.lyrics?.lines?.any { needsChineseTranslation(it.text) } == true &&
+                s.lyrics.lines.none { it.translation.isNotBlank() }
+        )
+            Text(
+                "当前来源暂无可用译文，可切换来源或配置在线翻译。",
+                fontSize = 10.sp,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = .6f),
             )
         BoxWithConstraints(Modifier.fillMaxWidth()) {
             val compact = maxWidth < 380.dp

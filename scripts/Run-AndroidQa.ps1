@@ -21,11 +21,11 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Test installation failed.' }
     # Required by the controlled MediaSession test. This changes the selected QA device only.
     & $adbExecutable -s $Device shell cmd notification allow_listener com.example.lyricsflow/com.example.lyricsflow.playback.MusicNotificationListener
-    $testClasses = 'com.example.lyricsflow.PlaybackIntegrationTest,com.example.lyricsflow.PlayerMetadataTest,com.example.lyricsflow.UiFlowTest,com.example.lyricsflow.ImportSecurityTest'
-    $expectedCount = 6
+    $testClasses = 'com.example.lyricsflow.PlaybackIntegrationTest,com.example.lyricsflow.PlayerMetadataTest,com.example.lyricsflow.UiFlowTest,com.example.lyricsflow.ImportSecurityTest,com.example.lyricsflow.CalibrationOffsetTest'
+    $expectedCount = 8
     if ($IncludeNetwork) {
-        $testClasses += ',com.example.lyricsflow.ProviderIntegrationTest'
-        $expectedCount = 9
+        $testClasses += ',com.example.lyricsflow.ProviderIntegrationTest,com.example.lyricsflow.QqDiscoveryTest,com.example.lyricsflow.SearchUiTest,com.example.lyricsflow.AutomaticMatchingTest'
+        $expectedCount = 22
     }
     $testOutput = & $adbExecutable -s $Device shell am instrument -w -r -e disableAnalytics true -e class $testClasses com.example.lyricsflow.test/androidx.test.runner.AndroidJUnitRunner
     $outputDirectory = Join-Path $projectDirectory 'docs\android-qa'

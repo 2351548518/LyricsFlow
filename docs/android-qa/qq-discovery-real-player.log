@@ -1,0 +1,41 @@
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.RealPlayerIntegrationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.RealPlayerIntegrationTest:
+INSTRUMENTATION_STATUS: test=inspectPlayerMetadata
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: metadata=android.media.metadata.TITLE=ウィアートル (旅人); android.media.metadata.ARTIST=rionos; android.media.metadata.ALBUM=映画『さよならの朝に約束の花をかざろう』オリジナルサウンドトラック (朝花夕誓 动画电影原声带); android.media.metadata.DISPLAY_TITLE=null; android.media.metadata.DISPLAY_SUBTITLE=null; android.media.metadata.DISPLAY_DESCRIPTION=null; android.media.metadata.ALBUM_ARTIST=rionos; ucar.media.metadata.UCAR_TITLE=ウィアートル (旅人); ucar.media.metadata.UCAR_ARTIST=rionos; keys=[android.media.metadata.ALBUM, android.media.metadata.ALBUM_ART, android.media.metadata.ALBUM_ARTIST, android.media.metadata.ARTIST, android.media.metadata.DISC_NUMBER, android.media.metadata.DURATION, android.media.metadata.GENRE, android.media.metadata.MEDIA_ID, android.media.metadata.NUM_TRACKS, android.media.metadata.RATING, android.media.metadata.TITLE, android.media.metadata.TRACK_NUMBER, ucar.media.metadata.COLLECT_STATE, ucar.media.metadata.LYRICS_WHOLE, ucar.media.metadata.PLAY_MODE, ucar.media.metadata.SOUND_QUALITY, ucar.media.metadata.UCAR_ARTIST, ucar.media.metadata.UCAR_TITLE, ucar.media.metadata.VIP]
+INSTRUMENTATION_STATUS_CODE: 2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.RealPlayerIntegrationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=inspectPlayerMetadata
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.RealPlayerIntegrationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=existingPlayerPublishesLivePlayback
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: result=REAL_PLAYER package=com.tencent.qqmusic title=ウィアートル (旅人) local=true automatic=true advancing=true pause=true seek=true resume=true positionDeltaMs=0 lyrics=22 source=QQ message=已载入本地歌词
+INSTRUMENTATION_STATUS_CODE: 2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.RealPlayerIntegrationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=existingPlayerPublishesLivePlayback
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 23.672
+
+OK (2 tests)
+
+
+INSTRUMENTATION_CODE: -1

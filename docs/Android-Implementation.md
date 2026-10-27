@@ -1,6 +1,6 @@
 # Android 实现与运行说明
 
-核实日期：2026-10-26。工程包名 `com.example.lyricsflow`；`minSdk 24`、`targetSdk / compileSdk 37`。这是可运行的原生 Android 开发版本，正式发布仍以 PRD 第 23 节为门槛。
+核实日期：2026-10-27。工程包名 `com.example.lyricsflow`；`minSdk 24`、`targetSdk / compileSdk 37`。这是可运行的原生 Android 开发版本，正式发布仍以 PRD 第 23 节为门槛。
 
 ## 运行
 
@@ -26,7 +26,8 @@ APK：[app-debug.apk](../app/build/outputs/apk/debug/app-debug.apk)。安装使�
 | 原生界面 | Jetpack Compose；参考原型的暖灰、苔绿、衬线标题、浮动 Dock；手机单栏、平板双栏；Canvas 绘制自有插画 |
 | 播放监听 | 用户授权 NotificationListenerService 后访问 MediaSession；允许列表过滤；优先正在播放的 Spotify，可固定 QQ／网易云等；前台每 15 秒校准 |
 | 时间轴 | 基于单调时钟重建进度；暂停、seek、倍速；缺进度时不选中同步行；逐曲／逐来源偏移，正值表示延后 |
-| QQ 直连 | Desktop 搜索失败或空候选时尝试 Smartbox；读取歌曲详情，区分 MID／数字 ID；歌词、新版热评及最新评论 |
+| QQ 直连 | 完整关键词搜索、每页 30 条及后续页，失败时降级 Desktop／Smartbox 并提示；区分 MID／数字 ID；GetPlayLyricInfo 原文＋译文，旧逐行接口降级；新版热评及最新评论 |
+| 搜索与匹配 | 三来源匹配窗口；译名／合作歌手别名、近似候选排序、分页去重；最多 3 种查询／300 首展示；优先来源可自动回退其余源；同录音多发行按专辑／时长选择，保留主唱、时长、版本保护和具体失败原因 |
 | 网易云直连 | 搜索、详情、原文、译文、来源罗马音、热门／最新评论；可选 Enhanced 协议 HTTPS 网关 |
 | 补充来源 | LRCLIB 搜索及歌词接口；没有评论能力 |
 | 歌词格式 | LRC、多时间戳、offset、增强 LRC、YRC、基础 TTML、明文 QRC；不生成虚假逐字时间戳；拒绝 DTD、实体及过深 XML |
@@ -58,7 +59,7 @@ APK：[app-debug.apk](../app/build/outputs/apk/debug/app-debug.apk)。安装使�
 4. 翻译服务配置、授权、批次、限额、响应检查和缓存已实现。获得产品负责人提供的临时测试凭证后，已在 Android 手机通过 DeepSeek 真实手动／自动翻译和缓存验证，详见 [专项记录](./android-qa/DeepSeek-Translation.md)。测试完成恢复原配置；应用不内置共享 Key。整首长歌词、其他服务及跨日限额仍需扩大验证。
 5. 自由布局采用有限分区避免互相覆盖，长文本可省略；高级主题在极端字号／复杂 XML 下仍需扩大样本验证。主题导入先显示静态预览，再在原生页面实际运行时间轴。
 6. 网络响应缓存按容量清理，歌词库与导入资料保留。备份包有 20 MB 读取限制，数据正文最多 16 MB／3000 项；采用 `manifest.json`、`data.json`、`settings.json` 的开发版布局，不能当作 PRD 中完整互操作备份规范的最终定稿。
-7. 已在用户提供的 HONOR 真机完成 Spotify／QQ／网易云真实本机播放器联调。修复 QQ 蓝牙歌词污染曲名、暂停时跳回旧 Spotify 会话的问题；三款连接／暂停／seek／重连均通过，Spotify 与网易云另通过歌词同步检查。QQ 当前测试曲目未自动匹配歌词，详见 [真机记录](./android-qa/Real-Device-Playback.md)。十首真歌、厂商后台策略和 60 分钟压力验收仍未完成。
+7. 已在用户提供的 HONOR 真机完成 Spotify／QQ／网易云真实本机播放器联调，初次修复见 [真机记录](./android-qa/Real-Device-Playback.md)。后续补齐完整搜索和 QQ 来源译文，之前未匹配的 QQ 日语歌已匹配成功；最终 QQ 时间歌词及 Spotify 连接回归通过，见 [QQ 专项记录](./android-qa/QQ-Lyrics-Search.md)。十首真歌、厂商后台策略和 60 分钟压力验收仍未完成。
 8. Android 35 平板模拟器、Android 37 手机模拟器和一台上报 API 37 的 HONOR 真机已测试；Android 24–34、36 和其他实体机型尚未覆盖。应用包名、正式签名和公开发布配置仍待发布阶段确定。
 9. GitHub 登录同步、远程 Spotify、自动生成罗马音属于已确认的后续范围。
 
@@ -67,10 +68,14 @@ APK：[app-debug.apk](../app/build/outputs/apk/debug/app-debug.apk)。安装使�
 ## 重复验证
 
 ```powershell
-# 默认运行 6 项不依赖第三方网络的设备测试，并执行单元测试、Lint 和构建。
+# 默认运行 8 项不依赖第三方网络的设备测试，并执行单元测试、Lint 和构建。
 .\scripts\Run-AndroidQa.ps1 -Device emulator-5554
-# 额外运行 QQ／网易云真实接口及备份测试，共 9 项设备测试。
+# 额外运行来源接口、译文、分页、缓存、自动匹配和 LRCLIB 界面，共 22 项设备测试。
 .\scripts\Run-AndroidQa.ps1 -Device emulator-5556 -IncludeNetwork
 ```
 
 脚本会为所选 QA 设备授予本应用通知使用权，以运行受控媒体会话测试。测试类通过构造参数允许测试会话；生产允许列表不包含测试包，不存在对外的假播放广播入口。公开接口受网络、地区和平台变更影响；网络测试失败时应检查日志，不能用演示数据替代成功结果。
+
+自动匹配与 LRCLIB 入口的后续修复、样本及限制见 [匹配专项](./android-qa/Automatic-Matching.md)。
+
+后续修正等待函数与校准设置同名的问题：校准默认保持 0 ms，首次升级清理误写的 300 ms，见 [校准修复记录](./android-qa/Calibration-Zero.md)。

@@ -1,0 +1,271 @@
+[
+  {
+    "window-title": "LyricsFlow",
+    "type": "APPLICATION",
+    "active": true,
+    "focused": true,
+    "layer": 0,
+    "bounds": "[0,0][1236,2664]",
+    "content": [
+      {
+        "class": "android.widget.TextView",
+        "text": "Lyrics",
+        "bounds": "[196,218][399,304]",
+        "center": "[297,261]"
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "Flow",
+        "bounds": "[399,216][596,306]",
+        "center": "[497,261]"
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "正在聆听",
+        "bounds": "[839,219][998,303]",
+        "center": "[918,261]"
+      },
+      {
+        "class": "android.widget.Button",
+        "content-desc": "关于 LyricsFlow",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[998,177][1166,345]",
+        "center": "[1082,261]"
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "Beautiful World",
+        "bounds": "[84,429][984,556]",
+        "center": "[534,492]"
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "宇多田光",
+        "bounds": "[84,588][253,672]",
+        "center": "[168,630]"
+      },
+      {
+        "class": "android.widget.Button",
+        "content-desc": "保存当前歌词",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[984,467][1152,635]",
+        "center": "[1068,551]"
+      },
+      {
+        "class": "android.view.View",
+        "content-desc": "同步歌词",
+        "interactions": [
+          "SCROLLABLE"
+        ],
+        "bounds": "[84,721][1152,1753]",
+        "center": "[618,1237]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "自分の美しさまだ知らないの",
+            "bounds": "[84,721][1152,828]",
+            "center": "[618,774]"
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "你尚未察觉到你自己的美丽",
+            "bounds": "[84,863][1152,940]",
+            "center": "[618,901]"
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "It's only love",
+            "bounds": "[84,1038][1152,1167]",
+            "center": "[618,1102]"
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "//",
+            "bounds": "[84,1202][1152,1279]",
+            "center": "[618,1240]"
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "寝ても覚めても少年マンガ",
+            "bounds": "[84,1377][1152,1645]",
+            "center": "[618,1511]"
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "无论是沉睡还是醒来",
+            "bounds": "[84,1680][1152,1753]",
+            "center": "[618,1716]"
+          }
+        ]
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "播放来自 Spotify",
+        "bounds": "[84,1781][378,1865]",
+        "center": "[231,1823]"
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[84,1893][385,2061]",
+        "center": "[234,1977]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "QQ 音乐",
+            "bounds": "[151,1942][317,2012]",
+            "center": "[234,1977]"
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "⌄",
+            "bounds": "[331,1942][357,2012]",
+            "center": "[344,1977]"
+          }
+        ]
+      },
+      {
+        "class": "android.widget.Button",
+        "content-desc": "刷新歌词",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[385,1893][546,2061]",
+        "center": "[465,1977]"
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[546,1893][707,2061]",
+        "center": "[626,1977]",
+        "children": [
+          {
+            "class": "android.view.View",
+            "content-desc": "显示或隐藏译文",
+            "bounds": "[553,1900][707,2054]",
+            "center": "[630,1977]"
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "译",
+            "bounds": "[602,1935][659,2019]",
+            "center": "[630,1977]"
+          }
+        ]
+      },
+      {
+        "class": "android.widget.Button",
+        "content-desc": "开启悬浮窗",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[707,1893][875,2061]",
+        "center": "[791,1977]"
+      },
+      {
+        "class": "android.widget.Button",
+        "content-desc": "歌曲评论 · 共鸣",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[949,1893][1152,2061]",
+        "center": "[1050,1977]"
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[84,2061][287,2194]",
+        "center": "[185,2127]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "300 ms",
+            "bounds": "[116,2110][256,2180]",
+            "center": "[186,2145]"
+          }
+        ]
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[949,2061][1152,2194]",
+        "center": "[1050,2127]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "歌曲匹配",
+            "bounds": "[973,2110][1128,2180]",
+            "center": "[1050,2145]"
+          }
+        ]
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "正在播放",
+        "bounds": "[84,2264][231,2348]",
+        "center": "[157,2306]"
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "00:57 / 05:17",
+        "bounds": "[896,2264][1152,2348]",
+        "center": "[1024,2306]"
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[261,2425][611,2601]",
+        "center": "[436,2513]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "首页",
+            "bounds": "[433,2471][534,2555]",
+            "center": "[483,2513]"
+          }
+        ]
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[625,2425][975,2601]",
+        "center": "[800,2513]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "我的",
+            "bounds": "[797,2471][898,2555]",
+            "center": "[847,2513]"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,265 @@
+[
+  {
+    "window-title": "LyricsFlow",
+    "type": "APPLICATION",
+    "active": true,
+    "focused": true,
+    "layer": 0,
+    "bounds": "[0,0][1236,2664]",
+    "content": [
+      {
+        "class": "android.widget.TextView",
+        "text": "Lyrics",
+        "bounds": "[196,218][399,304]",
+        "center": "[297,261]"
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "Flow",
+        "bounds": "[399,216][596,306]",
+        "center": "[497,261]"
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "正在聆听",
+        "bounds": "[839,219][998,303]",
+        "center": "[918,261]"
+      },
+      {
+        "class": "android.widget.Button",
+        "content-desc": "关于 LyricsFlow",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[998,177][1166,345]",
+        "center": "[1082,261]"
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "Voyager - Gravestone Without Date",
+        "bounds": "[84,429][984,682]",
+        "center": "[534,555]"
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "鷺巣詩郎",
+        "bounds": "[84,714][253,798]",
+        "center": "[168,756]"
+      },
+      {
+        "class": "android.widget.Button",
+        "content-desc": "保存当前歌词",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[984,530][1152,698]",
+        "center": "[1068,614]"
+      },
+      {
+        "class": "android.view.View",
+        "content-desc": "同步歌词",
+        "interactions": [
+          "SCROLLABLE"
+        ],
+        "bounds": "[84,847][1152,1753]",
+        "center": "[618,1300]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "私があなたと知り合えたことを",
+            "bounds": "[84,847][1152,922]",
+            "center": "[618,884]"
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "因为我想将那天与你的相识",
+            "bounds": "[84,957][1152,1034]",
+            "center": "[618,995]"
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "私があなたを愛してたことを",
+            "bounds": "[84,1132][1152,1400]",
+            "center": "[618,1266]"
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "因为我想将这份对你的爱恋",
+            "bounds": "[84,1435][1152,1512]",
+            "center": "[618,1473]"
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "死ぬまで死ぬまで",
+            "bounds": "[84,1610][1152,1749]",
+            "center": "[618,1679]"
+          }
+        ]
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "播放来自 Spotify",
+        "bounds": "[84,1781][378,1865]",
+        "center": "[231,1823]"
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[84,1893][432,2061]",
+        "center": "[258,1977]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "网易云音乐",
+            "bounds": "[151,1942][364,2012]",
+            "center": "[257,1977]"
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "⌄",
+            "bounds": "[378,1942][404,2012]",
+            "center": "[391,1977]"
+          }
+        ]
+      },
+      {
+        "class": "android.widget.Button",
+        "content-desc": "刷新歌词",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[432,1893][593,2061]",
+        "center": "[512,1977]"
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[593,1893][754,2061]",
+        "center": "[673,1977]",
+        "children": [
+          {
+            "class": "android.view.View",
+            "content-desc": "显示或隐藏译文",
+            "bounds": "[600,1900][754,2054]",
+            "center": "[677,1977]"
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "译",
+            "bounds": "[649,1935][706,2019]",
+            "center": "[677,1977]"
+          }
+        ]
+      },
+      {
+        "class": "android.widget.Button",
+        "content-desc": "开启悬浮窗",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[754,1893][922,2061]",
+        "center": "[838,1977]"
+      },
+      {
+        "class": "android.widget.Button",
+        "content-desc": "歌曲评论 · 共鸣",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[949,1893][1152,2061]",
+        "center": "[1050,1977]"
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[84,2061][287,2194]",
+        "center": "[185,2127]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "300 ms",
+            "bounds": "[116,2110][256,2180]",
+            "center": "[186,2145]"
+          }
+        ]
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[949,2061][1152,2194]",
+        "center": "[1050,2127]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "歌曲匹配",
+            "bounds": "[973,2110][1128,2180]",
+            "center": "[1050,2145]"
+          }
+        ]
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "正在播放",
+        "bounds": "[84,2264][231,2348]",
+        "center": "[157,2306]"
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "01:12 / 04:55",
+        "bounds": "[896,2264][1152,2348]",
+        "center": "[1024,2306]"
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[261,2425][611,2601]",
+        "center": "[436,2513]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "首页",
+            "bounds": "[433,2471][534,2555]",
+            "center": "[483,2513]"
+          }
+        ]
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[625,2425][975,2601]",
+        "center": "[800,2513]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "我的",
+            "bounds": "[797,2471][898,2555]",
+            "center": "[847,2513]"
+          }
+        ]
+      }
+    ]
+  }
+]

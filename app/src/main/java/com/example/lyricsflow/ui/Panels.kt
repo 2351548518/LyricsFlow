@@ -13,6 +13,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -80,7 +82,12 @@ private fun SettingRow(title: String, sub: String = "", onClick: () -> Unit) {
 }
 
 @Composable
-private fun Toggle(title: String, checked: Boolean, sub: String = "", onChange: (Boolean) -> Unit) {
+internal fun Toggle(
+    title: String,
+    checked: Boolean,
+    sub: String = "",
+    onChange: (Boolean) -> Unit,
+) {
     Row(
         Modifier.fillMaxWidth().padding(vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -165,31 +172,122 @@ fun MyScreen(s: ScreenState, navigate: (String) -> Unit, preview: () -> Unit, li
 }
 
 @Composable
-fun SearchSheet(graph: AppGraph, current: Track?, dismiss: () -> Unit, select: (Track) -> Unit) {
+fun SearchSheet(
+    graph: AppGraph,
+    current: Track?,
+    dismiss: () -> Unit,
+    providers: List<Provider> = LYRIC_PROVIDERS,
+    initialSource: Provider? = null,
+    select: (Track) -> Unit,
+) {
+    val keyboard = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
     var source by remember {
         mutableStateOf(
-            if (graph.state.value.source == Provider.QQ) Provider.QQ else Provider.NETEASE
+            (initialSource ?: graph.state.value.source).takeIf { it in providers }
+                ?: providers.first()
         )
     }
     var query by remember { mutableStateOf(current?.let { "${it.title} ${it.artist}" }.orEmpty()) }
     var id by remember { mutableStateOf("") }
+    var manual by remember { mutableStateOf(false) }
     var busy by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf("") }
     var rows by remember { mutableStateOf(emptyList<Track>()) }
+    var expanded by remember { mutableStateOf(true) }
+    var cursors by remember { mutableStateOf(emptyMap<String, Pair<Int, String>>()) }
+    var signatures by remember { mutableStateOf(emptyMap<String, String>()) }
+    var note by remember { mutableStateOf("") }
+    var total by remember { mutableStateOf<Int?>(null) }
+    var requestVersion by remember { mutableIntStateOf(0) }
+    var searchJob by remember { mutableStateOf<Job?>(null) }
     val scope = rememberCoroutineScope()
+    fun invalidate() {
+        requestVersion++
+        searchJob?.cancel()
+        busy = false
+        error = ""
+        rows = emptyList()
+        cursors = emptyMap()
+        signatures = emptyMap()
+        total = null
+        note = ""
+    }
     fun request(block: suspend () -> List<Track>) {
-        scope.launch {
+        keyboard?.hide()
+        focusManager.clearFocus()
+        invalidate()
+        val token = requestVersion
+        searchJob = scope.launch {
             busy = true
             error = ""
             rows = emptyList()
             try {
-                rows = block()
-                if (rows.isEmpty()) error = "未返回候选。QQ 搜索受限时，可填写歌曲 songmid 进行绑定。"
+                val found = block()
+                if (token != requestVersion) return@launch
+                rows = found
+                if (rows.isEmpty()) error = "未返回候选，可简化关键词或使用歌曲链接／ID。"
             } catch (e: Exception) {
                 if (e is CancellationException) throw e
-                error = e.message ?: "搜索失败"
+                if (token == requestVersion) error = e.message ?: "搜索失败"
             } finally {
-                busy = false
+                if (token == requestVersion) busy = false
+            }
+        }
+    }
+    fun search(append: Boolean = false) {
+        keyboard?.hide()
+        focusManager.clearFocus()
+        if (!append) invalidate()
+        val token = requestVersion
+        val provider = source
+        val text = query.trim()
+        val pending =
+            if (append) cursors
+            else SongSearch.queries(text, current, expanded).associateWith { 0 to "" }
+        val oldRows = if (append) rows else emptyList()
+        searchJob = scope.launch {
+            busy = true
+            error = ""
+            val collected = oldRows.toMutableList()
+            val next = pending.toMutableMap()
+            val nextSignatures = signatures.toMutableMap()
+            val notices = mutableListOf<String>()
+            val failures = mutableListOf<String>()
+            try {
+                for ((variant, cursor) in pending) {
+                    try {
+                        val result =
+                            graph.api.searchPage(
+                                provider,
+                                variant,
+                                cursor.first,
+                                channel = cursor.second,
+                            )
+                        if (token != requestVersion) return@launch
+                        val signature = result.tracks.joinToString("|") { SongSearch.identity(it) }
+                        val repeated = cursor.first > 0 && signature == nextSignatures[variant]
+                        if (!repeated) collected += result.tracks
+                        if (result.more && !repeated && cursor.first < 99)
+                            next[variant] = cursor.first + 1 to result.channel
+                        else next.remove(variant)
+                        nextSignatures[variant] = signature
+                        if (result.note.isNotBlank()) notices += result.note
+                        if (variant == pending.keys.first() && !append) total = result.total
+                    } catch (e: Exception) {
+                        if (e is CancellationException) throw e
+                        failures += e.message ?: "部分搜索失败，可重试"
+                    }
+                }
+                if (token != requestVersion) return@launch
+                rows = SongSearch.rank(collected, text, current).take(300)
+                cursors = if (rows.size >= 300) emptyMap() else next
+                signatures = nextSignatures
+                note = notices.distinct().joinToString("\n")
+                error = failures.distinct().joinToString("\n")
+                if (rows.isEmpty() && error.isBlank()) error = "未返回候选，可尝试歌名片段、歌手或歌曲链接。"
+            } finally {
+                if (token == requestVersion) busy = false
             }
         }
     }
@@ -210,69 +308,106 @@ fun SearchSheet(graph: AppGraph, current: Track?, dismiss: () -> Unit, select: (
                 fontSize = 12.sp,
                 modifier = Modifier.padding(top = 8.dp, bottom = 16.dp),
             )
-            Choice(listOf("QQ 音乐", "网易云音乐"), if (source == Provider.QQ) 0 else 1) {
-                source = if (it == 0) Provider.QQ else Provider.NETEASE
-                rows = emptyList()
-                error = ""
+            Choice(providers.map { it.label }, providers.indexOf(source).coerceAtLeast(0)) {
+                source = providers[it]
+                invalidate()
             }
+            if (source == Provider.LRCLIB)
+                Text("LRCLIB 提供原文歌词，可能没有中文译文；评论仍来自 QQ／网易云。", fontSize = 12.sp)
             OutlinedTextField(
                 query,
-                { query = it },
+                {
+                    query = it
+                    invalidate()
+                },
                 label = { Text("歌曲 / 歌手") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
             )
             Button(
-                onClick = { request { graph.api.search(source, query) } },
+                onClick = { search() },
                 enabled = !busy && query.isNotBlank(),
                 modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
             ) {
                 Text("搜索歌曲")
             }
-            Section("手动绑定")
-            Text(
-                if (source == Provider.QQ) "填写 QQ 音乐歌曲链接中的 songmid（例如 0039MnYb0qxYhV）"
-                else "填写网易云歌曲链接或数字 ID（例如 186016）",
-                fontSize = 12.sp,
-                lineHeight = 19.sp,
-            )
-            OutlinedTextField(
-                id,
-                { id = it },
-                label = { Text(if (source == Provider.QQ) "songmid / 歌曲链接" else "歌曲 ID / 链接") },
-                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-                singleLine = true,
-            )
-            OutlinedButton(
-                onClick = {
-                    request {
-                        val value = id.trim()
-                        val key =
-                            if (value.startsWith("http")) {
-                                val uri = Uri.parse(value)
-                                require(
-                                    uri.host in
-                                        listOf("y.qq.com", "music.163.com", "m.music.163.com")
-                                ) {
-                                    "仅支持平台歌曲链接"
-                                }
-                                if (source == Provider.QQ)
-                                    Regex("[A-Za-z0-9]{14}").find(value)?.value
-                                        ?: error("链接中未找到 songmid")
-                                else
-                                    Regex("(?:id=|song/)([0-9]+)").find(value)?.groupValues?.get(1)
-                                        ?: error("链接中未找到歌曲 ID")
-                            } else value
-                        listOf(
-                            if (source == Provider.QQ) graph.api.resolveQQ(key)
-                            else graph.api.resolveNet(key)
+            Toggle("扩展歌名与别名", expanded, "支持近似关键词并按相似度排序；开启后还会尝试去掉译名、仅搜当前歌名。") {
+                expanded = it
+                invalidate()
+            }
+            TextButton(onClick = { manual = !manual }) {
+                Text(if (manual) "收起手动绑定" else "使用歌曲链接／ID 绑定")
+            }
+            if (manual) {
+                Text(
+                    when (source) {
+                        Provider.QQ -> "填写 QQ 音乐歌曲链接中的 songmid（例如 0039MnYb0qxYhV）"
+                        Provider.NETEASE -> "填写网易云歌曲链接或数字 ID（例如 186016）"
+                        else -> "填写 LRCLIB 数字记录 ID 或 /api/get/<id> 链接"
+                    },
+                    fontSize = 12.sp,
+                    lineHeight = 19.sp,
+                )
+                OutlinedTextField(
+                    id,
+                    { id = it },
+                    label = {
+                        Text(
+                            when (source) {
+                                Provider.QQ -> "songmid / 歌曲链接"
+                                Provider.LRCLIB -> "LRCLIB 记录 ID / 链接"
+                                else -> "歌曲 ID / 链接"
+                            }
                         )
-                    }
-                },
-                enabled = !busy && id.isNotBlank(),
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text("读取歌曲信息")
+                    },
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                    singleLine = true,
+                )
+                OutlinedButton(
+                    onClick = {
+                        request {
+                            val value = id.trim()
+                            val key =
+                                if (value.startsWith("http")) {
+                                    val uri = Uri.parse(value)
+                                    val hosts =
+                                        when (source) {
+                                            Provider.QQ -> listOf("y.qq.com")
+                                            Provider.NETEASE ->
+                                                listOf("music.163.com", "m.music.163.com")
+                                            else -> listOf("lrclib.net", "www.lrclib.net")
+                                        }
+                                    require(uri.host in hosts) {
+                                        "仅支持平台歌曲链接"
+                                    }
+                                    if (source == Provider.QQ)
+                                        Regex("[A-Za-z0-9]{14}").find(value)?.value
+                                            ?: error("链接中未找到 songmid")
+                                    else if (source == Provider.NETEASE)
+                                        Regex("(?:id=|song/)([0-9]+)")
+                                            .find(value)
+                                            ?.groupValues
+                                            ?.get(1) ?: error("链接中未找到歌曲 ID")
+                                    else
+                                        Regex("/api/get/([0-9]+)")
+                                            .find(uri.path.orEmpty())
+                                            ?.groupValues
+                                            ?.get(1) ?: error("链接中未找到 LRCLIB 记录 ID")
+                                } else value
+                            listOf(
+                                when (source) {
+                                    Provider.QQ -> graph.api.resolveQQ(key)
+                                    Provider.NETEASE -> graph.api.resolveNet(key)
+                                    else -> graph.api.resolveLrc(key)
+                                }
+                            )
+                        }
+                    },
+                    enabled = !busy && id.isNotBlank(),
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text("读取歌曲信息")
+                }
             }
             if (busy) LinearProgressIndicator(Modifier.fillMaxWidth().padding(vertical = 12.dp))
             if (error.isNotBlank())
@@ -282,6 +417,22 @@ fun SearchSheet(graph: AppGraph, current: Track?, dismiss: () -> Unit, select: (
                     color = MaterialTheme.colorScheme.error,
                     fontSize = 13.sp,
                 )
+            if (note.isNotBlank())
+                Text(note, fontSize = 12.sp, modifier = Modifier.padding(vertical = 8.dp))
+            if (rows.isNotEmpty())
+                Text(
+                    "已显示 ${rows.size} 首" + (total?.let { " · 原关键词约 $it 首" } ?: ""),
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(vertical = 8.dp),
+                )
+            if (cursors.isNotEmpty())
+                OutlinedButton(
+                    onClick = { search(true) },
+                    enabled = !busy,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text("加载更多候选")
+                }
             rows.forEach { t ->
                 SettingRow(
                     t.title,
@@ -290,6 +441,15 @@ fun SearchSheet(graph: AppGraph, current: Track?, dismiss: () -> Unit, select: (
                     select(t)
                 }
             }
+            if (cursors.isNotEmpty())
+                OutlinedButton(
+                    onClick = { search(true) },
+                    enabled = !busy,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text("加载更多候选")
+                }
+            if (rows.size >= 300) Text("已显示 300 首，请缩小关键词继续查找。", fontSize = 12.sp)
             Spacer(Modifier.height(28.dp))
         }
     }
@@ -335,13 +495,14 @@ fun CommentsScreen(graph: AppGraph, pinned: Track?, initial: Track?, back: () ->
                                 readTrack(JSONObject(it))
                             }
                         }
-                            ?: graph.api
-                                .search(provider, "${pinned.title} ${pinned.artist}")
-                                .firstOrNull {
-                                    it.title.equals(pinned.title, true) &&
-                                        (pinned.artist.isBlank() ||
-                                            it.artist.contains(pinned.artist, true))
-                                }
+                            ?: SongSearch.automatic(
+                                pinned,
+                                graph.api.searchExpanded(
+                                    provider,
+                                    "${pinned.title} ${pinned.artist}",
+                                    pinned,
+                                ),
+                            )
                 }
                 if (t == null) throw ApiFailure("请先为此来源匹配歌曲。预览示例没有真实平台评论。")
                 if (token != version) return@launch
@@ -491,7 +652,13 @@ fun CommentsScreen(graph: AppGraph, pinned: Track?, initial: Track?, back: () ->
             }
     }
     if (search)
-        SearchSheet(graph, pinned, { search = false }) { t ->
+        SearchSheet(
+            graph,
+            pinned,
+            { search = false },
+            providers = listOf(Provider.QQ, Provider.NETEASE),
+            initialSource = provider,
+        ) { t ->
             if (t.provider != provider) {
                 provider = t.provider
             }

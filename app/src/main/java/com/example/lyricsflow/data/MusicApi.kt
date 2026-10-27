@@ -27,6 +27,7 @@ class MusicApi(private val store: Store) {
         bearer: String? = null,
         refresh: Boolean = false,
         readTimeoutMs: Int = 12000,
+        cacheMaxAgeMs: Long = 6 * 60 * 60 * 1000L,
     ): JSONObject =
         withContext(Dispatchers.IO) {
             require(URL(url).protocol == "https") { "服务地址必须使用 HTTPS" }
@@ -35,7 +36,7 @@ class MusicApi(private val store: Store) {
             if (remaining > 0) throw ApiFailure("服务要求限流等待，请在 ${(remaining/1000)+1} 秒后重试")
             val cacheId = digest(url + (body?.toString().orEmpty()))
             if (bearer == null && !refresh)
-                store.get("cache", cacheId, 6 * 60 * 60 * 1000L)?.let {
+                store.get("cache", cacheId, cacheMaxAgeMs)?.let {
                     return@withContext JSONObject(it)
                 }
             val c = URL(url).openConnection() as HttpURLConnection
@@ -86,10 +87,14 @@ class MusicApi(private val store: Store) {
         method: String,
         param: JSONObject,
         refresh: Boolean = false,
+        common: JSONObject? = null,
     ): JSONObject {
         val b =
             JSONObject()
-                .put("comm", JSONObject().put("ct", 24).put("cv", 0).put("format", "json"))
+                .put(
+                    "comm",
+                    common ?: JSONObject().put("ct", 24).put("cv", 0).put("format", "json"),
+                )
                 .put(
                     slot,
                     JSONObject().put("module", module).put("method", method).put("param", param),
@@ -100,42 +105,115 @@ class MusicApi(private val store: Store) {
         return root.getJSONObject(slot).getJSONObject("data")
     }
 
-    suspend fun search(provider: Provider, query: String): List<Track> {
+    suspend fun search(provider: Provider, query: String): List<Track> =
+        searchPage(provider, query).tracks
+
+    suspend fun searchExpanded(
+        provider: Provider,
+        query: String,
+        current: Track? = null,
+    ): List<Track> {
+        val all = mutableListOf<Track>()
+        var failure: Exception? = null
+        for (variant in SongSearch.queries(query, current)) {
+            try {
+                all += search(provider, variant)
+            } catch (e: Exception) {
+                if (e is kotlinx.coroutines.CancellationException) throw e
+                failure = e
+            }
+            if (current != null && SongSearch.automatic(current, all) != null) break
+        }
+        if (all.isEmpty() && failure != null) throw failure
+        return SongSearch.rank(all, query, current)
+    }
+
+    suspend fun searchPage(
+        provider: Provider,
+        query: String,
+        page: Int = 0,
+        size: Int = 30,
+        channel: String = "",
+    ): SearchPage {
         require(query.isNotBlank()) { "请输入歌名或歌手" }
+        require(query.length <= 500 && page in 0..99 && size in 1..50) { "搜索关键词或分页超出范围" }
         return when (provider) {
             Provider.NETEASE -> {
                 val url =
                     if (neteaseGateway.isBlank())
-                        "https://music.163.com/api/search/get/web?s=${enc(query)}&type=1&limit=20&offset=0"
+                        "https://music.163.com/api/search/get/web?s=${enc(query)}&type=1&limit=$size&offset=${page*size}"
                     else
-                        "${neteaseGateway.trimEnd('/')}/search?keywords=${enc(query)}&type=1&limit=20"
-                val r = request(url)
+                        "${neteaseGateway.trimEnd('/')}/search?keywords=${enc(query)}&type=1&limit=$size&offset=${page*size}"
+                val r = request(url, cacheMaxAgeMs = 5 * 60 * 1000L)
                 if (r.optInt("code") != 200) throw ApiFailure("网易云搜索返回 ${r.optInt("code")}")
                 val a = r.optJSONObject("result")?.optJSONArray("songs") ?: JSONArray()
-                (0 until a.length()).map { n ->
-                    val s = a.getJSONObject(n)
-                    val artists = s.optJSONArray("artists") ?: s.optJSONArray("ar") ?: JSONArray()
-                    Track(
-                        s.optString("name"),
-                        (0 until artists.length()).joinToString(" / ") {
-                            artists.getJSONObject(it).optString("name")
-                        },
-                        (s.optJSONObject("album") ?: s.optJSONObject("al"))
-                            ?.optString("name")
-                            .orEmpty(),
-                        s.optLong("duration", s.optLong("dt")),
-                        provider,
-                        s.optString("id"),
-                    )
-                }
+                val tracks =
+                    (0 until a.length().coerceAtMost(size)).map { n ->
+                        val s = a.getJSONObject(n)
+                        val artists =
+                            s.optJSONArray("artists") ?: s.optJSONArray("ar") ?: JSONArray()
+                        Track(
+                            s.optString("name"),
+                            (0 until artists.length()).joinToString(" / ") {
+                                artists.getJSONObject(it).optString("name")
+                            },
+                            (s.optJSONObject("album") ?: s.optJSONObject("al"))
+                                ?.optString("name")
+                                .orEmpty(),
+                            s.optLong("duration", s.optLong("dt")),
+                            provider,
+                            s.optString("id"),
+                        )
+                    }
+                val total = r.optJSONObject("result")?.optInt("songCount", -1)?.takeIf { it >= 0 }
+                SearchPage(
+                    tracks,
+                    if (total != null) (page + 1) * size < total else tracks.size == size,
+                    total,
+                    "netease",
+                )
             }
             Provider.QQ -> {
+                // Full search is different from Smartbox suggestions, which usually contain four
+                // songs.
+                if (channel.isBlank() || channel == "qq-full") {
+                    try {
+                        val r =
+                            request(
+                                "https://c.y.qq.com/soso/fcgi-bin/client_search_cp?w=${enc(query)}&format=json&n=$size&p=${page+1}&cr=1&t=0&g_tk=5381",
+                                cacheMaxAgeMs = 5 * 60 * 1000L,
+                            )
+                        if (r.optInt("code", -1) != 0) throw ApiFailure("QQ 完整搜索暂不可用")
+                        val song =
+                            r.optJSONObject("data")?.optJSONObject("song")
+                                ?: throw ApiFailure("QQ 搜索响应缺少歌曲列表")
+                        val a = song.optJSONArray("list") ?: JSONArray()
+                        val rows =
+                            (0 until a.length().coerceAtMost(size)).map {
+                                qqTrack(a.getJSONObject(it))
+                            }
+                        val total = song.optInt("totalnum", -1).takeIf { it >= 0 }
+                        if (rows.isNotEmpty() || page > 0 || channel == "qq-full")
+                            return SearchPage(
+                                rows,
+                                rows.isNotEmpty() &&
+                                    if (total != null) (page + 1) * size < total
+                                    else rows.size == size,
+                                total,
+                                "qq-full",
+                            )
+                    } catch (e: Exception) {
+                        if (e is kotlinx.coroutines.CancellationException) throw e
+                        if (page > 0 || channel == "qq-full") throw e
+                    }
+                }
+                if (page > 0 && channel != "qq-desktop") return SearchPage(emptyList())
                 val p =
                     JSONObject()
                         .put("query", query)
                         .put("search_type", 0)
-                        .put("num_per_page", 20)
-                        .put("page_num", 1)
+                        .put("num_per_page", size)
+                        .put("page_num", page + 1)
                         .put("highlight", false)
                         .put("grp", 1)
                 val d =
@@ -152,8 +230,16 @@ class MusicApi(private val store: Store) {
                 val a =
                     d.optJSONObject("body")?.optJSONObject("song")?.optJSONArray("list")
                         ?: JSONArray()
-                if (a.length() > 0) (0 until a.length()).map { n -> qqTrack(a.getJSONObject(n)) }
+                if (a.length() > 0)
+                    SearchPage(
+                        (0 until a.length().coerceAtMost(size)).map { n ->
+                            qqTrack(a.getJSONObject(n))
+                        },
+                        a.length() >= size,
+                        channel = "qq-desktop",
+                    )
                 else {
+                    if (page > 0) return SearchPage(emptyList(), channel = "qq-desktop")
                     // The desktop endpoint can report success with no songs. Smartbox is a separate
                     // public lookup.
                     val r =
@@ -165,7 +251,7 @@ class MusicApi(private val store: Store) {
                         r.optJSONObject("data")?.optJSONObject("song")?.optJSONArray("itemlist")
                             ?: JSONArray()
                     val tracks = mutableListOf<Track>()
-                    for (n in 0 until items.length().coerceAtMost(4)) {
+                    for (n in 0 until items.length().coerceAtMost(20)) {
                         val item = items.getJSONObject(n)
                         try {
                             tracks += resolveQQ(item.getString("mid"))
@@ -173,26 +259,38 @@ class MusicApi(private val store: Store) {
                             if (e is kotlinx.coroutines.CancellationException) throw e
                         }
                     }
-                    tracks
+                    SearchPage(
+                        tracks,
+                        channel = "qq-suggestions",
+                        note = "完整搜索未返回结果，当前为搜索建议；可尝试简化关键词或切换来源。",
+                    )
                 }
             }
             Provider.LRCLIB -> {
                 val a =
                     request("https://lrclib.net/api/search?q=${enc(query)}").optJSONArray("items")
                         ?: JSONArray()
-                (0 until a.length()).map {
-                    val r = a.getJSONObject(it)
-                    Track(
-                        r.optString("trackName"),
-                        r.optString("artistName"),
-                        r.optString("albumName"),
-                        (r.optDouble("duration") * 1000).toLong(),
-                        provider,
-                        r.optString("id"),
-                    )
-                }
+                SearchPage(
+                    (0 until a.length())
+                        .map {
+                            val r = a.getJSONObject(it)
+                            Track(
+                                r.optString("trackName"),
+                                r.optString("artistName"),
+                                r.optString("albumName"),
+                                (r.optDouble("duration") * 1000).toLong(),
+                                provider,
+                                r.optString("id"),
+                            )
+                        }
+                        .drop(page * size)
+                        .take(size),
+                    (page + 1) * size < a.length(),
+                    null, // LRCLIB returns an array, not the catalogue's total hit count.
+                    "lrclib",
+                )
             }
-            else -> emptyList()
+            else -> SearchPage(emptyList())
         }
     }
 
@@ -203,7 +301,7 @@ class MusicApi(private val store: Store) {
             (0 until singers.length()).joinToString(" / ") {
                 singers.getJSONObject(it).optString("name")
             },
-            s.optJSONObject("album")?.optString("name").orEmpty(),
+            s.optJSONObject("album")?.optString("name") ?: s.optString("albumname"),
             s.optLong("interval") * 1000,
             Provider.QQ,
             s.optString("id", s.optString("songid")),
@@ -238,6 +336,19 @@ class MusicApi(private val store: Store) {
         )
     }
 
+    suspend fun resolveLrc(id: String): Track {
+        require(Regex("[0-9]{1,20}").matches(id)) { "请输入 LRCLIB 数字记录 ID" }
+        val r = request("https://lrclib.net/api/get/$id")
+        return Track(
+            r.getString("trackName"),
+            r.optString("artistName"),
+            r.optString("albumName"),
+            (r.optDouble("duration") * 1000).toLong(),
+            Provider.LRCLIB,
+            r.get("id").toString(),
+        )
+    }
+
     suspend fun lyrics(t: Track, refresh: Boolean = false): Lyrics {
         return when (t.provider) {
             Provider.NETEASE -> {
@@ -265,27 +376,39 @@ class MusicApi(private val store: Store) {
             }
             Provider.QQ -> {
                 require(t.mid.isNotBlank()) { "QQ 歌词需要 songmid，请重新匹配" }
+                try {
+                    val data =
+                        qq(
+                            "lyric",
+                            "music.musichallSong.PlayLyricInfo",
+                            "GetPlayLyricInfo",
+                            JSONObject()
+                                .put("songMid", t.mid)
+                                .put("crypt", 0)
+                                .put("qrc", 0)
+                                .put("trans", 1)
+                                .put("roma", 0)
+                                .put("lrc_t", 0)
+                                .put("qrc_t", 0)
+                                .put("trans_t", 0)
+                                .put("roma_t", 0)
+                                .put("type", 1),
+                            refresh,
+                            JSONObject().put("ct", 24).put("cv", 4747474).put("format", "json"),
+                        )
+                    val lyrics = QqLyricCodec.lyrics(data, t.duration)
+                    if (lyrics.lines.isNotEmpty()) return lyrics
+                } catch (e: Exception) {
+                    if (e is kotlinx.coroutines.CancellationException) throw e
+                    // Preserve the legacy line-lyric path when the newer service is unavailable.
+                }
                 val r =
                     request(
                         "https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?songmid=${enc(t.mid)}&format=json&nobase64=1&g_tk=5381",
                         refresh = refresh,
                     )
                 if (r.optInt("code") != 0) throw ApiFailure("QQ 歌词暂不可用")
-                fun decode(s: String): String =
-                    if (s.contains('[') || s.contains('\n')) s
-                    else
-                        runCatching {
-                                String(
-                                    android.util.Base64.decode(s, android.util.Base64.DEFAULT),
-                                    Charsets.UTF_8,
-                                )
-                            }
-                            .getOrDefault(s)
-                val rows = LyricParser.lrc(decode(r.optString("lyric")), t.duration)
-                Lyrics(
-                    LyricParser.merge(rows, decode(r.optString("trans")), "", t.duration),
-                    t.provider,
-                )
+                QqLyricCodec.lyrics(r, t.duration, revision = 1)
             }
             Provider.LRCLIB -> {
                 val r = request("https://lrclib.net/api/get/${t.sourceId}", refresh = refresh)
@@ -294,7 +417,9 @@ class MusicApi(private val store: Store) {
                         r.optString("syncedLyrics")
                             .takeUnless { it == "null" }
                             .orEmpty()
-                            .ifBlank { r.optString("plainLyrics") },
+                            .ifBlank {
+                                r.optString("plainLyrics").takeUnless { it == "null" }.orEmpty()
+                            },
                         t.duration,
                     ),
                     t.provider,

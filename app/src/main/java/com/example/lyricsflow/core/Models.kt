@@ -65,7 +65,12 @@ data class Line(
     val translationModel: String = "",
 )
 
-data class Lyrics(val lines: List<Line>, val source: Provider, val instrumental: Boolean = false) {
+data class Lyrics(
+    val lines: List<Line>,
+    val source: Provider,
+    val instrumental: Boolean = false,
+    val providerRevision: Int = 0,
+) {
     val hash
         get() = digest(lines.joinToString("\n") { "${it.start}:${it.end}:${it.text}:${it.words}" })
 
