@@ -15,6 +15,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -24,6 +25,7 @@ import com.example.lyricsflow.data.*
 import com.example.lyricsflow.overlay.LyricsOverlayService
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.roundToInt
 import kotlinx.coroutines.*
 import org.json.JSONObject
 
@@ -107,8 +109,8 @@ internal fun Toggle(
 
 @Composable
 private fun Choice(labels: List<String>, selected: Int, change: (Int) -> Unit) {
-    Row(
-        Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+    FlowRow(
+        Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         labels.forEachIndexed { i, l ->
@@ -119,13 +121,17 @@ private fun Choice(labels: List<String>, selected: Int, change: (Int) -> Unit) {
 
 @Composable
 fun MyScreen(s: ScreenState, navigate: (String) -> Unit, preview: () -> Unit, live: () -> Unit) {
-    LazyColumn(Modifier.fillMaxSize()) {
-        item { PageTitle("我的", "把每一次聆听，调成喜欢的样子。") }
+    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(top = 16.dp)) {
         item {
             Surface(
                 Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(22.dp),
-                color = MaterialTheme.colorScheme.primary.copy(alpha = .08f),
+                color = MaterialTheme.colorScheme.surface.copy(alpha = .72f),
+                border =
+                    androidx.compose.foundation.BorderStroke(
+                        1.dp,
+                        MaterialTheme.colorScheme.primary.copy(alpha = .14f),
+                    ),
             ) {
                 Column(Modifier.padding(22.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -722,9 +728,16 @@ fun Appearance(
             graph.preferences(s.prefs.copy(romanization = it))
         }
         Section("色彩与显示")
-        Choice(listOf("苔绿", "陶土", "雾紫", "海蓝"), s.prefs.palette) {
+        Choice(listOf("苔绿", "陶土", "雾紫", "海蓝", "跟随封面"), s.prefs.palette) {
             graph.preferences(s.prefs.copy(palette = it))
         }
+        Text(
+            if (s.prefs.palette == 4 && s.playback.artwork == null) "暂无歌曲封面，暂用柔和海蓝。播放时自动更新。"
+            else "跟随封面：取图片 RGB 均值，生成柔和主题色。封面背景下歌词使用反色并调整可读性。",
+            fontSize = 12.sp,
+            lineHeight = 19.sp,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = .65f),
+        )
         Choice(
             listOf("跟随系统", "浅色", "深色"),
             listOf("system", "light", "dark").indexOf(s.prefs.dark),
@@ -740,6 +753,25 @@ fun Appearance(
             if (it == 2) background()
             else graph.preferences(s.prefs.copy(background = listOf("color", "cover")[it]))
         }
+        Text(
+            "封面模糊程度 · ${s.prefs.coverBlur.roundToInt()}",
+            Modifier.padding(top = 12.dp),
+            fontSize = 14.sp,
+        )
+        Slider(
+            value = s.prefs.coverBlur.coerceIn(0f, 24f),
+            onValueChange = { graph.preferences(s.prefs.copy(coverBlur = it)) },
+            valueRange = 0f..24f,
+            steps = 23,
+            modifier =
+                Modifier.testTag("cover-blur-slider").semantics { contentDescription = "封面模糊程度" },
+        )
+        Text(
+            "0 保留原图，数值越大越柔和；仅模糊封面和自定义图片，歌词保持清晰。",
+            fontSize = 12.sp,
+            lineHeight = 19.sp,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = .65f),
+        )
         Section("主题文件")
         Text(style?.let { "当前主题：${it.name}" } ?: "当前主题：内置柔和", fontSize = 13.sp)
         Row {
@@ -888,7 +920,7 @@ fun TranslationSettings(s: ScreenState, graph: AppGraph) {
         ) {
             Text("保存并${if(consent)"启用自动翻译" else "关闭翻译授权"}")
         }
-        Toggle("自动翻译缺失的译文", s.prefs.autoTranslate, "仅已授权时生效；每日最多 20,000 字符／20 次请求") {
+        Toggle("自动翻译缺失的译文", s.prefs.autoTranslate, "仅已授权时生效；应用内每日不限字符数与请求次数") {
             graph.preferences(s.prefs.copy(autoTranslate = it))
         }
         OutlinedButton(

@@ -1,0 +1,10 @@
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlaybackIntegrationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=10
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.PlaybackIntegrationTest:
+INSTRUMENTATION_STATUS: test=realSessionUpdatesSeekPauseAndSwitch
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_RESULT: shortMsg=Process crashed.
+INSTRUMENTATION_CODE: 0

@@ -28,6 +28,7 @@ data class Preferences(
     val background: String = "color",
     val autoTranslate: Boolean = false,
     val autoSources: Boolean = true,
+    val coverBlur: Float = 8f,
 )
 
 data class ScreenState(
@@ -168,9 +169,11 @@ class AppGraph(val app: Application) {
             prefs.getString("background", "color")!!,
             prefs.getBoolean("autoTranslate", false),
             prefs.getBoolean("autoSources", true),
+            prefs.getFloat("coverBlur", 8f).takeIf { it.isFinite() }?.coerceIn(0f, 24f) ?: 8f,
         )
 
     fun preferences(p: Preferences) {
+        val playbackSelectionChanged = state.value.prefs.playbackApp != p.playbackApp
         prefs
             .edit()
             .putBoolean("translation", p.translation)
@@ -189,13 +192,14 @@ class AppGraph(val app: Application) {
             .putString("gateway", p.gateway)
             .putString("playbackApp", p.playbackApp)
             .putString("background", p.background)
+            .putFloat("coverBlur", p.coverBlur)
             .apply()
         prefs.edit().putBoolean("autoTranslate", p.autoTranslate).apply()
         prefs.edit().putBoolean("autoSources", p.autoSources).apply()
         api.neteaseGateway = p.gateway
         mutable.update { it.copy(prefs = p) }
         playback.preferred = p.playbackApp
-        playback.refresh()
+        if (playbackSelectionChanged) playback.refresh()
     }
 
     fun message(value: String) {
@@ -701,7 +705,7 @@ class AppGraph(val app: Application) {
             val count = prefs.getInt("translation-chars:$day", 0)
             val chars = batch.sumOf { l.lines[it].text.length }
             val calls = prefs.getInt("translation-calls:$day", 0)
-            require(count + chars <= 20000 && calls < 20) { "已达到每日 20,000 字符或 20 次请求限制，请明天再试" }
+            // Usage statistics only: manual and automatic translation have no daily app quota.
             prefs
                 .edit()
                 .putInt("translation-chars:$day", count + chars)

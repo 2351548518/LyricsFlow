@@ -272,6 +272,7 @@ object Transfer {
                     .put("overlayAlpha", p.overlayAlpha)
                     .put("overlayTranslation", p.overlayTranslation)
                     .put("background", p.background)
+                    .put("coverBlur", p.coverBlur)
                     .put("trackPreferences", graph.trackPreferences())
             val image = File(graph.app.filesDir, "background.jpg")
             if (image.exists())

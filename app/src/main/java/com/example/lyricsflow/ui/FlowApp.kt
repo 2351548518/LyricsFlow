@@ -49,37 +49,55 @@ fun FlowApp(graph: AppGraph) {
             "light" -> false
             else -> isSystemInDarkTheme()
         }
-    val accents = listOf(Color(0xff596b58), Color(0xffa0715c), Color(0xff7b7892), Color(0xff507981))
-    val accent = if (dark) Color(0xffb8c5a6) else accents[s.prefs.palette.coerceIn(0, 3)]
-    val bg =
-        if (dark) Color(0xff222a25)
-        else
-            listOf(Color(0xffeeeae4), Color(0xfff0e8df), Color(0xffebe9ee), Color(0xffe7eceb))[
-                s.prefs.palette.coerceIn(0, 3)]
+    val average = rememberCoverAverage(s.playback.artwork)
+    val palette =
+        remember(s.prefs.palette, average, dark) { flowPalette(s.prefs.palette, average, dark) }
+    val accent = palette.accent
+    val bg = palette.background
+    val surfaceDark = CoverColors.luminance(bg.toArgb()) < .18
+    SideEffect {
+        (context as? android.app.Activity)?.window?.let { window ->
+            androidx.core.view.WindowCompat.getInsetsController(window, window.decorView).apply {
+                isAppearanceLightStatusBars = !surfaceDark
+                isAppearanceLightNavigationBars = !surfaceDark
+            }
+        }
+    }
+    val actionInk = Color(CoverColors.readable(palette.ink.toArgb(), accent.toArgb()))
+    val accentInk = Color(CoverColors.readable(accent.toArgb(), bg.toArgb()))
+    val primaryInk = Color(CoverColors.readable(Color.White.toArgb(), accentInk.toArgb()))
     val scheme =
-        if (dark)
+        if (surfaceDark)
             darkColorScheme(
-                primary = accent,
-                secondary = accent,
+                primary = accentInk,
+                secondary = accentInk,
+                primaryContainer = accent,
+                onPrimaryContainer = actionInk,
+                onSecondary = primaryInk,
                 secondaryContainer = accent.copy(alpha = .15f),
                 background = bg,
                 surface = bg,
-                onSurface = Color(0xffe2e6dc),
-                onBackground = Color(0xffe2e6dc),
-                onPrimary = bg,
-                surfaceVariant = Color(0xff303c33),
+                onSurface = palette.ink,
+                onBackground = palette.ink,
+                onPrimary = primaryInk,
+                onSecondaryContainer = accentInk,
+                surfaceVariant = palette.water.copy(alpha = .16f).compositeOver(bg),
             )
         else
             lightColorScheme(
-                primary = accent,
-                secondary = accent,
+                primary = accentInk,
+                secondary = accentInk,
+                primaryContainer = accent,
+                onPrimaryContainer = actionInk,
+                onSecondary = primaryInk,
                 secondaryContainer = accent.copy(alpha = .15f),
                 background = bg,
                 surface = bg,
-                onSurface = Color(0xff303b33),
-                onBackground = Color(0xff303b33),
-                onPrimary = Color.White,
-                surfaceVariant = Color(0xffe4e2d9),
+                onSurface = palette.ink,
+                onBackground = palette.ink,
+                onPrimary = primaryInk,
+                onSecondaryContainer = accentInk,
+                surfaceVariant = palette.water.copy(alpha = .12f).compositeOver(bg),
             )
     var page by rememberSaveable { mutableStateOf("home") }
     var sheet by rememberSaveable { mutableStateOf("") }
@@ -230,320 +248,341 @@ fun FlowApp(graph: AppGraph) {
                 else "home"
     }
     BackHandler(enabled = sheet.isNotEmpty() || page != "home") { back() }
-    MaterialTheme(colorScheme = scheme) {
-        Surface(Modifier.fillMaxSize(), color = bg) {
-            Scaffold(
-                containerColor = Color.Transparent,
-                snackbarHost = { SnackbarHost(snack) },
-                bottomBar = { if (page == "home" || page == "my") Dock(page) { page = it } },
-                modifier = Modifier.safeDrawingPadding(),
-            ) { pad ->
-                Column(Modifier.fillMaxSize().padding(pad).padding(horizontal = 24.dp)) {
-                    Header(
-                        page,
-                        when {
-                            s.demo -> "预览模式"
-                            s.browsing -> "手动浏览"
-                            s.playback.playing -> "正在聆听"
-                            else -> "让歌词，流动起来"
-                        },
-                        { back() },
-                    ) {
-                        sheet = "about"
-                    }
-                    when (page) {
-                        "home" ->
-                            Home(
-                                s,
-                                graph,
-                                style,
-                                { sheet = "search" },
-                                { sheet = "source" },
-                                {
-                                    commentsTrackData =
-                                        s.playback.track?.let { trackJson(it).toString() }.orEmpty()
-                                    page = "comments"
+    CompositionLocalProvider(LocalCoverAverage provides average) {
+        MaterialTheme(colorScheme = scheme) {
+            Surface(Modifier.fillMaxSize(), color = bg, contentColor = scheme.onBackground) {
+                FlowBackdrop(palette, dark)
+                Scaffold(
+                    containerColor = Color.Transparent,
+                    snackbarHost = { SnackbarHost(snack) },
+                    bottomBar = { if (page == "home" || page == "my") Dock(page) { page = it } },
+                    modifier = Modifier.safeDrawingPadding(),
+                ) { pad ->
+                    Column(Modifier.fillMaxSize().padding(pad).padding(horizontal = 24.dp)) {
+                        if (page != "home" && page != "my")
+                            Header(
+                                page,
+                                when {
+                                    s.demo -> "预览模式"
+                                    s.browsing -> "手动浏览"
+                                    s.playback.playing -> "正在聆听"
+                                    else -> "让歌词，流动起来"
                                 },
-                                { overlay() },
-                                { sheet = "delay" },
-                            )
-                        "comments" ->
-                            CommentsScreen(graph, commentsTrack, s.binding, { page = "home" })
-                        "my" ->
-                            MyScreen(
-                                s,
-                                { page = it },
-                                {
-                                    graph.preview()
-                                    page = "home"
-                                },
-                                {
-                                    graph.live()
-                                    page = "home"
-                                },
-                            )
-                        "library" ->
-                            Library(graph) { t, l ->
-                                graph.browseLocal(t, l)
-                                page = "home"
+                                { back() },
+                            ) {
+                                sheet = "about"
                             }
-                        "appearance" ->
-                            Appearance(
-                                s,
-                                graph,
-                                style,
-                                { import("style") },
-                                {
-                                    output(
-                                        "LyricsFlow-style.json",
-                                        (style?.raw ?: StyleCodec.preset(s.prefs.free))
-                                            .toByteArray(),
-                                    )
-                                },
-                                { new ->
-                                    graph.style(new.raw)
-                                },
-                                { import("image") },
-                            )
-                        "permissions" -> PermissionSettings(s, graph, { overlay() })
-                        "translation" -> TranslationSettings(s, graph)
-                        "sources" -> SourceSettings(s, graph) { sheet = "search" }
-                        "data" ->
-                            DataSettings(
-                                graph,
-                                { import("lyrics") },
-                                { import("backup") },
-                                {
-                                    scope.launch {
-                                        try {
-                                            val b =
-                                                withContext(Dispatchers.IO) {
-                                                    Transfer.backup(graph)
-                                                }
-                                            output("LyricsFlow.lfbackup.zip", b)
-                                        } catch (e: Exception) {
-                                            report(e)
-                                        }
-                                    }
-                                },
-                                { asLrc ->
-                                    val t = s.playback.track
-                                    val l = s.lyrics
-                                    if (t == null || l == null) graph.message("请先加载歌词")
-                                    else
+                        when (page) {
+                            "home" ->
+                                Home(
+                                    s,
+                                    graph,
+                                    style,
+                                    { sheet = "search" },
+                                    { sheet = "source" },
+                                    {
+                                        commentsTrackData =
+                                            s.playback.track
+                                                ?.let { trackJson(it).toString() }
+                                                .orEmpty()
+                                        page = "comments"
+                                    },
+                                    { overlay() },
+                                    { sheet = "delay" },
+                                )
+                            "comments" ->
+                                CommentsScreen(graph, commentsTrack, s.binding, { page = "home" })
+                            "my" ->
+                                MyScreen(
+                                    s,
+                                    { page = it },
+                                    {
+                                        graph.preview()
+                                        page = "home"
+                                    },
+                                    {
+                                        graph.live()
+                                        page = "home"
+                                    },
+                                )
+                            "library" ->
+                                Library(graph) { t, l ->
+                                    graph.browseLocal(t, l)
+                                    page = "home"
+                                }
+                            "appearance" ->
+                                Appearance(
+                                    s,
+                                    graph,
+                                    style,
+                                    { import("style") },
+                                    {
                                         output(
-                                            if (asLrc) "LyricsFlow.lrc"
-                                            else "LyricsFlow.lflyrics.json",
-                                            (if (asLrc) Transfer.lrc(l)
-                                                else Transfer.lyricPackage(t, l, s.delay))
+                                            "LyricsFlow-style.json",
+                                            (style?.raw ?: StyleCodec.preset(s.prefs.free))
                                                 .toByteArray(),
                                         )
-                                },
-                            )
-                        else -> HelpScreen(page)
+                                    },
+                                    { new ->
+                                        graph.style(new.raw)
+                                    },
+                                    { import("image") },
+                                )
+                            "permissions" -> PermissionSettings(s, graph, { overlay() })
+                            "translation" -> TranslationSettings(s, graph)
+                            "sources" -> SourceSettings(s, graph) { sheet = "search" }
+                            "data" ->
+                                DataSettings(
+                                    graph,
+                                    { import("lyrics") },
+                                    { import("backup") },
+                                    {
+                                        scope.launch {
+                                            try {
+                                                val b =
+                                                    withContext(Dispatchers.IO) {
+                                                        Transfer.backup(graph)
+                                                    }
+                                                output("LyricsFlow.lfbackup.zip", b)
+                                            } catch (e: Exception) {
+                                                report(e)
+                                            }
+                                        }
+                                    },
+                                    { asLrc ->
+                                        val t = s.playback.track
+                                        val l = s.lyrics
+                                        if (t == null || l == null) graph.message("请先加载歌词")
+                                        else
+                                            output(
+                                                if (asLrc) "LyricsFlow.lrc"
+                                                else "LyricsFlow.lflyrics.json",
+                                                (if (asLrc) Transfer.lrc(l)
+                                                    else Transfer.lyricPackage(t, l, s.delay))
+                                                    .toByteArray(),
+                                            )
+                                    },
+                                )
+                            else -> HelpScreen(page)
+                        }
                     }
                 }
             }
-        }
-        when (sheet) {
-            "search" ->
-                SearchSheet(graph, s.playback.track, { sheet = "" }) { t ->
-                    if (s.playback.track != null && !s.demo && !s.browsing) graph.bind(t)
-                    else graph.browse(t)
-                    sheet = ""
-                }
-            "source" ->
-                AlertDialog(
-                    onDismissRequest = { sheet = "" },
-                    title = { Text("选择歌词来源") },
-                    text = {
-                        Column {
-                            LYRIC_PROVIDERS.forEach { p ->
-                                TextButton(
-                                    onClick = {
-                                        graph.selectSource(p)
-                                        sheet = ""
-                                    }
-                                ) {
-                                    Text(p.label)
-                                }
-                            }
-                            Toggle(
-                                "自动尝试其他歌词源",
-                                s.prefs.autoSources,
-                                "匹配不到或接口不可用时，尝试其他来源。优先来源也用于新歌曲。",
-                            ) {
-                                graph.preferences(s.prefs.copy(autoSources = it))
-                            }
-                            Text("评论来源独立于歌词。可在歌曲匹配中手动确认候选。", fontSize = 13.sp)
-                        }
-                    },
-                    confirmButton = { TextButton(onClick = { sheet = "search" }) { Text("歌曲匹配") } },
-                )
-            "delay" ->
-                AlertDialog(
-                    onDismissRequest = { sheet = "" },
-                    title = { Text("校准歌词时间") },
-                    text = {
-                        Column {
-                            Text("${s.delay} ms")
-                            Text("默认 0 ms。正值让歌词稍后出现；只保存到这首歌与当前来源。", fontSize = 13.sp)
-                            Slider(
-                                value = s.delay.toFloat(),
-                                onValueChange = { graph.setLyricOffset((it / 100).toLong() * 100) },
-                                valueRange = -10000f..10000f,
-                            )
-                            Row {
-                                TextButton(onClick = { graph.setLyricOffset(s.delay - 100) }) {
-                                    Text("−100 ms")
-                                }
-                                TextButton(onClick = { graph.setLyricOffset(s.delay + 100) }) {
-                                    Text("+100 ms")
-                                }
-                                TextButton(onClick = { graph.setLyricOffset(0) }) { Text("归零") }
-                            }
-                        }
-                    },
-                    confirmButton = { TextButton(onClick = { sheet = "" }) { Text("完成") } },
-                )
-            "about" ->
-                AlertDialog(
-                    onDismissRequest = { sheet = "" },
-                    title = { Text("LyricsFlow") },
-                    text = {
-                        Text(
-                            "歌词随音乐流动，共鸣在字里行间。\n\n原生 Android · 1.0 开发版\nQQ / 网易云接口为非官方公开接口，可能变更。仅用于个人聆听辅助；不提供音乐下载、评论发布或平台账号登录。"
-                        )
-                    },
-                    confirmButton = { TextButton(onClick = { sheet = "" }) { Text("知道了") } },
-                )
-        }
-        pendingStyle?.let { p ->
-            AlertDialog(
-                onDismissRequest = { pendingStyle = null },
-                title = { Text("预览主题 · ${p.name}") },
-                text = {
-                    val spec = remember(p) { ThemeSpec.from(p.raw) }
-                    Column(
-                        Modifier.background(spec.backgroundColor?.let { Color(it) } ?: bg)
-                            .padding(16.dp)
-                    ) {
-                        Text(
-                            "${p.mode} · ${p.size.toInt()} sp",
-                            color = p.color?.let { Color(it) } ?: accent,
-                        )
-                        Text(
-                            "Leave a little room\nfor the light",
-                            fontSize = p.size.coerceAtMost(40f).sp,
-                            color = p.color?.let { Color(it) } ?: accent,
-                        )
-                        Text(
-                            "为光，留一点空隙",
-                            color = spec.translation.color?.let { Color(it) } ?: accent,
-                        )
-                        Spacer(Modifier.height(16.dp))
-                        Text(
-                            "声明式主题 · 原生排版与时间轴动画。悬浮窗采用单行组布局，独立应用目标覆盖。",
-                            fontSize = 12.sp,
-                            color = p.color?.let { Color(it) } ?: accent,
-                        )
+            when (sheet) {
+                "search" ->
+                    SearchSheet(graph, s.playback.track, { sheet = "" }) { t ->
+                        if (s.playback.track != null && !s.demo && !s.browsing) graph.bind(t)
+                        else graph.browse(t)
+                        sheet = ""
                     }
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            graph.style(p.raw)
-                            pendingStyle = null
-                        }
-                    ) {
-                        Text("应用主题")
-                    }
-                },
-                dismissButton = { TextButton(onClick = { pendingStyle = null }) { Text("取消") } },
-            )
-        }
-        pendingBackup?.let { backup ->
-            AlertDialog(
-                onDismissRequest = { pendingBackup = null },
-                title = { Text("恢复本地备份？") },
-                text = {
-                    Text("已校验 ${backup.first.size} 项数据。合并本地歌词、绑定和主题；同 ID 覆盖。API Key、系统权限和悬浮窗位置不恢复。")
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            scope.launch {
-                                try {
-                                    withContext(Dispatchers.IO) {
-                                        graph.store.restore(backup.first)
-                                    }
-                                    val o = backup.second
-                                    val p = s.prefs
-                                    o.optJSONObject("trackPreferences")?.let {
-                                        graph.restoreTrackPreferences(it)
-                                    }
-                                    if (o.has("backgroundImage"))
-                                        withContext(Dispatchers.IO) {
-                                            BackgroundFiles.importImage(
-                                                context,
-                                                android.util.Base64.decode(
-                                                    o.getString("backgroundImage"),
-                                                    android.util.Base64.DEFAULT,
-                                                ),
-                                            )
+                "source" ->
+                    AlertDialog(
+                        onDismissRequest = { sheet = "" },
+                        title = { Text("选择歌词来源") },
+                        text = {
+                            Column {
+                                LYRIC_PROVIDERS.forEach { p ->
+                                    TextButton(
+                                        onClick = {
+                                            graph.selectSource(p)
+                                            sheet = ""
                                         }
-                                    graph.preferences(
-                                        p.copy(
-                                            translation =
-                                                o.optBoolean("translation", p.translation),
-                                            romanization =
-                                                o.optBoolean("romanization", p.romanization),
-                                            free = o.optBoolean("free", p.free),
-                                            fontSize =
-                                                o.optDouble("fontSize", 30.0)
-                                                    .toFloat()
-                                                    .coerceIn(10f, 96f),
-                                            dark =
-                                                o.optString("dark", "system").takeIf {
-                                                    it in listOf("light", "dark", "system")
-                                                } ?: "system",
-                                            palette = o.optInt("palette", 0).coerceIn(0, 3),
-                                            reduced = o.optBoolean("reduced", false),
-                                            autoSources =
-                                                o.optBoolean("autoSources", p.autoSources),
-                                            overlaySize =
-                                                o.optDouble("overlaySize", 22.0)
-                                                    .toFloat()
-                                                    .coerceIn(12f, 48f),
-                                            overlayAlpha =
-                                                o.optDouble("overlayAlpha", .85)
-                                                    .toFloat()
-                                                    .coerceIn(.2f, 1f),
-                                            overlayTranslation =
-                                                o.optBoolean("overlayTranslation", true),
-                                            autoTranslate = false,
-                                            consent = false,
-                                            background =
-                                                o.optString("background", "color").takeIf {
-                                                    it in listOf("color", "cover", "custom")
-                                                } ?: "color",
-                                        )
-                                    )
-                                    graph.backgroundChanged()
-                                    graph.reloadStyles()
-                                    graph.message("备份已恢复")
-                                    pendingBackup = null
-                                } catch (e: Exception) {
-                                    report(e)
+                                    ) {
+                                        Text(p.label)
+                                    }
+                                }
+                                Toggle(
+                                    "自动尝试其他歌词源",
+                                    s.prefs.autoSources,
+                                    "匹配不到或接口不可用时，尝试其他来源。优先来源也用于新歌曲。",
+                                ) {
+                                    graph.preferences(s.prefs.copy(autoSources = it))
+                                }
+                                Text("评论来源独立于歌词。可在歌曲匹配中手动确认候选。", fontSize = 13.sp)
+                            }
+                        },
+                        confirmButton = {
+                            TextButton(onClick = { sheet = "search" }) { Text("歌曲匹配") }
+                        },
+                    )
+                "delay" ->
+                    AlertDialog(
+                        onDismissRequest = { sheet = "" },
+                        title = { Text("校准歌词时间") },
+                        text = {
+                            Column {
+                                Text("${s.delay} ms")
+                                Text("默认 0 ms。正值让歌词稍后出现；只保存到这首歌与当前来源。", fontSize = 13.sp)
+                                Slider(
+                                    value = s.delay.toFloat(),
+                                    onValueChange = {
+                                        graph.setLyricOffset((it / 100).toLong() * 100)
+                                    },
+                                    valueRange = -10000f..10000f,
+                                )
+                                Row {
+                                    TextButton(onClick = { graph.setLyricOffset(s.delay - 100) }) {
+                                        Text("−100 ms")
+                                    }
+                                    TextButton(onClick = { graph.setLyricOffset(s.delay + 100) }) {
+                                        Text("+100 ms")
+                                    }
+                                    TextButton(onClick = { graph.setLyricOffset(0) }) { Text("归零") }
                                 }
                             }
+                        },
+                        confirmButton = { TextButton(onClick = { sheet = "" }) { Text("完成") } },
+                    )
+                "about" ->
+                    AlertDialog(
+                        onDismissRequest = { sheet = "" },
+                        title = { Text("LyricsFlow") },
+                        text = {
+                            Text(
+                                "歌词随音乐流动，共鸣在字里行间。\n\n原生 Android · 1.0 开发版\nQQ / 网易云接口为非官方公开接口，可能变更。仅用于个人聆听辅助；不提供音乐下载、评论发布或平台账号登录。"
+                            )
+                        },
+                        confirmButton = { TextButton(onClick = { sheet = "" }) { Text("知道了") } },
+                    )
+            }
+            pendingStyle?.let { p ->
+                AlertDialog(
+                    onDismissRequest = { pendingStyle = null },
+                    title = { Text("预览主题 · ${p.name}") },
+                    text = {
+                        val spec = remember(p) { ThemeSpec.from(p.raw) }
+                        Column(
+                            Modifier.background(spec.backgroundColor?.let { Color(it) } ?: bg)
+                                .padding(16.dp)
+                        ) {
+                            Text(
+                                "${p.mode} · ${p.size.toInt()} sp",
+                                color = p.color?.let { Color(it) } ?: accent,
+                            )
+                            Text(
+                                "Leave a little room\nfor the light",
+                                fontSize = p.size.coerceAtMost(40f).sp,
+                                color = p.color?.let { Color(it) } ?: accent,
+                            )
+                            Text(
+                                "为光，留一点空隙",
+                                color = spec.translation.color?.let { Color(it) } ?: accent,
+                            )
+                            Spacer(Modifier.height(16.dp))
+                            Text(
+                                "声明式主题 · 原生排版与时间轴动画。悬浮窗采用单行组布局，独立应用目标覆盖。",
+                                fontSize = 12.sp,
+                                color = p.color?.let { Color(it) } ?: accent,
+                            )
                         }
-                    ) {
-                        Text("确认恢复")
-                    }
-                },
-                dismissButton = { TextButton(onClick = { pendingBackup = null }) { Text("取消") } },
-            )
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                graph.style(p.raw)
+                                pendingStyle = null
+                            }
+                        ) {
+                            Text("应用主题")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { pendingStyle = null }) { Text("取消") }
+                    },
+                )
+            }
+            pendingBackup?.let { backup ->
+                AlertDialog(
+                    onDismissRequest = { pendingBackup = null },
+                    title = { Text("恢复本地备份？") },
+                    text = {
+                        Text(
+                            "已校验 ${backup.first.size} 项数据。合并本地歌词、绑定和主题；同 ID 覆盖。API Key、系统权限和悬浮窗位置不恢复。"
+                        )
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                scope.launch {
+                                    try {
+                                        withContext(Dispatchers.IO) {
+                                            graph.store.restore(backup.first)
+                                        }
+                                        val o = backup.second
+                                        val p = s.prefs
+                                        o.optJSONObject("trackPreferences")?.let {
+                                            graph.restoreTrackPreferences(it)
+                                        }
+                                        if (o.has("backgroundImage"))
+                                            withContext(Dispatchers.IO) {
+                                                BackgroundFiles.importImage(
+                                                    context,
+                                                    android.util.Base64.decode(
+                                                        o.getString("backgroundImage"),
+                                                        android.util.Base64.DEFAULT,
+                                                    ),
+                                                )
+                                            }
+                                        graph.preferences(
+                                            p.copy(
+                                                translation =
+                                                    o.optBoolean("translation", p.translation),
+                                                romanization =
+                                                    o.optBoolean("romanization", p.romanization),
+                                                free = o.optBoolean("free", p.free),
+                                                fontSize =
+                                                    o.optDouble("fontSize", 30.0)
+                                                        .toFloat()
+                                                        .coerceIn(10f, 96f),
+                                                dark =
+                                                    o.optString("dark", "system").takeIf {
+                                                        it in listOf("light", "dark", "system")
+                                                    } ?: "system",
+                                                palette = o.optInt("palette", 0).coerceIn(0, 4),
+                                                reduced = o.optBoolean("reduced", false),
+                                                autoSources =
+                                                    o.optBoolean("autoSources", p.autoSources),
+                                                overlaySize =
+                                                    o.optDouble("overlaySize", 22.0)
+                                                        .toFloat()
+                                                        .coerceIn(12f, 48f),
+                                                overlayAlpha =
+                                                    o.optDouble("overlayAlpha", .85)
+                                                        .toFloat()
+                                                        .coerceIn(.2f, 1f),
+                                                overlayTranslation =
+                                                    o.optBoolean("overlayTranslation", true),
+                                                autoTranslate = false,
+                                                consent = false,
+                                                coverBlur =
+                                                    o.optDouble("coverBlur", p.coverBlur.toDouble())
+                                                        .toFloat()
+                                                        .takeIf { it.isFinite() }
+                                                        ?.coerceIn(0f, 24f) ?: 8f,
+                                                background =
+                                                    o.optString("background", "color").takeIf {
+                                                        it in listOf("color", "cover", "custom")
+                                                    } ?: "color",
+                                            )
+                                        )
+                                        graph.backgroundChanged()
+                                        graph.reloadStyles()
+                                        graph.message("备份已恢复")
+                                        pendingBackup = null
+                                    } catch (e: Exception) {
+                                        report(e)
+                                    }
+                                }
+                            }
+                        ) {
+                            Text("确认恢复")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { pendingBackup = null }) { Text("取消") }
+                    },
+                )
+            }
         }
     }
 }
@@ -590,9 +629,9 @@ private fun Dock(page: String, onSelect: (String) -> Unit) {
     ) {
         Surface(
             shape = RoundedCornerShape(50),
-            color = MaterialTheme.colorScheme.surface.copy(alpha = .96f),
-            shadowElevation = 6.dp,
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = .07f)),
+            color = MaterialTheme.colorScheme.surface.copy(alpha = .88f),
+            shadowElevation = 3.dp,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = .16f)),
         ) {
             Row(Modifier.padding(6.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 listOf("home" to "首页", "my" to "我的").forEach { (id, label) ->
@@ -603,7 +642,7 @@ private fun Dock(page: String, onSelect: (String) -> Unit) {
                                 else Color.Transparent
                             )
                             .clickable { onSelect(id) }
-                            .padding(horizontal = 22.dp, vertical = 13.dp),
+                            .padding(horizontal = 24.dp, vertical = 12.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Glyph(if (id == "home") "home" else "user", Modifier.size(19.dp))
@@ -830,24 +869,12 @@ private fun Home(
             graph.demoPlay()
     }
     Column(Modifier.fillMaxSize()) {
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(16.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
-                Text(
-                    t.title,
-                    fontFamily = FontFamily.Serif,
-                    fontSize = 31.sp,
-                    lineHeight = 36.sp,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Text(
-                    t.artist.ifBlank { "未知歌手" },
-                    Modifier.padding(top = 9.dp),
-                    fontSize = 11.sp,
-                    letterSpacing = 1.5.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = .55f),
-                )
+                TrackMarquee(t.title, s.prefs.reduced, title = true)
+                Spacer(Modifier.height(7.dp))
+                TrackMarquee(t.artist.ifBlank { "未知歌手" }, s.prefs.reduced, title = false)
             }
             IconButton(
                 onClick = { graph.saveCurrent() },
@@ -865,26 +892,30 @@ private fun Home(
                 horizontalArrangement = Arrangement.spacedBy(60.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Box(Modifier.weight(1f).fillMaxHeight().clip(RoundedCornerShape(16.dp))) {
-                    LyricBackground(s)
-                    if (s.lyrics != null && s.lyrics.lines.isNotEmpty())
-                        LyricStage(s, style, active, position - s.delay)
-                    else
-                        Column(
-                            Modifier.align(Alignment.Center),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                            if (s.busy)
-                                CircularProgressIndicator(Modifier.size(28.dp), strokeWidth = 2.dp)
-                            Text(
-                                if (s.busy) "正在寻找这首歌的文字…"
-                                else s.message.ifBlank { "暂无歌词，请搜索匹配或导入本地文件" },
-                                Modifier.padding(24.dp),
-                                textAlign = TextAlign.Center,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = .5f),
-                            )
-                            OutlinedButton(onClick = search) { Text("歌曲匹配") }
-                        }
+                Box(Modifier.weight(1f).fillMaxHeight()) {
+                    LyricBackground(s, bleed = if (wide) 0.dp else 24.dp) {
+                        if (s.lyrics != null && s.lyrics.lines.isNotEmpty())
+                            LyricStage(s, style, active, position - s.delay)
+                        else
+                            Column(
+                                Modifier.align(Alignment.Center),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                if (s.busy)
+                                    CircularProgressIndicator(
+                                        Modifier.size(28.dp),
+                                        strokeWidth = 2.dp,
+                                    )
+                                Text(
+                                    if (s.busy) "正在寻找这首歌的文字…"
+                                    else s.message.ifBlank { "暂无歌词，请搜索匹配或导入本地文件" },
+                                    Modifier.padding(24.dp),
+                                    textAlign = TextAlign.Center,
+                                    color = LocalLyricInk.current.color,
+                                )
+                                OutlinedButton(onClick = search) { Text("歌曲匹配") }
+                            }
+                    }
                 }
                 if (wide)
                     Column(
@@ -953,7 +984,6 @@ private fun Home(
                     )
                     Spacer(Modifier.width(6.dp))
                     Text(s.source.label, fontSize = 12.sp)
-                    Text("⌄", Modifier.padding(start = 4.dp))
                 }
                 IconButton(
                     onClick = { graph.refresh() },
@@ -992,8 +1022,8 @@ private fun Home(
                     contentPadding = PaddingValues(horizontal = if (compact) 10.dp else 14.dp),
                     colors =
                         ButtonDefaults.filledTonalButtonColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         ),
                 ) {
                     Glyph("comment", Modifier.size(17.dp))
@@ -1062,6 +1092,85 @@ private fun time(ms: Long) =
     "%02d:%02d".format(ms.coerceAtLeast(0) / 60000, ms.coerceAtLeast(0) / 1000 % 60)
 
 @Composable
+private fun TrackMarquee(text: String, reduced: Boolean, title: Boolean) {
+    // Positive marquee velocity in an LTR container always travels from right to left.
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        Text(
+            text,
+            Modifier.fillMaxWidth()
+                .basicMarquee(
+                    iterations = if (reduced) 0 else Int.MAX_VALUE,
+                    initialDelayMillis = 1600,
+                    repeatDelayMillis = 1600,
+                    spacing = MarqueeSpacing(40.dp),
+                    velocity = 26.dp,
+                )
+                .testTag(if (title) "track-title" else "track-artist"),
+            fontFamily = if (title) FontFamily.Serif else FontFamily.SansSerif,
+            fontSize = if (title) 25.sp else 15.sp,
+            lineHeight = if (title) 31.sp else 22.sp,
+            fontWeight = if (title) FontWeight.SemiBold else FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (title) 1f else .76f),
+            maxLines = 1,
+            softWrap = false,
+            overflow = TextOverflow.Clip,
+        )
+    }
+}
+
+@Composable
+private fun LyricText(
+    text: AnnotatedString,
+    modifier: Modifier = Modifier,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    lineHeight: TextUnit = TextUnit.Unspecified,
+    fontFamily: FontFamily? = null,
+    fontWeight: FontWeight? = null,
+    color: Color = Color.Unspecified,
+    textAlign: TextAlign = TextAlign.Start,
+    maxLines: Int = Int.MAX_VALUE,
+    overflow: TextOverflow = TextOverflow.Clip,
+    style: TextStyle = LocalTextStyle.current,
+) {
+    val ink = LocalLyricInk.current
+    val resolved =
+        style.merge(
+            TextStyle(
+                color = color,
+                fontSize = fontSize,
+                lineHeight = lineHeight,
+                fontFamily = fontFamily,
+                fontWeight = fontWeight,
+                textAlign = textAlign,
+            )
+        )
+    Box(modifier) {
+        if (ink.overImage) {
+            val width = with(LocalDensity.current) { 1.2.dp.toPx() }
+            Text(
+                AnnotatedString(text.text),
+                Modifier.fillMaxWidth().clearAndSetSemantics {},
+                style =
+                    resolved.copy(
+                        color = ink.scrim.copy(alpha = .9f),
+                        drawStyle = Stroke(width = width),
+                        shadow = Shadow.None,
+                    ),
+                maxLines = maxLines,
+                overflow = overflow,
+            )
+        }
+        Text(
+            text,
+            Modifier.fillMaxWidth(),
+            style = resolved,
+            maxLines = maxLines,
+            overflow = overflow,
+        )
+    }
+}
+
+@Composable
 private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position: Long) {
     val lines = s.lyrics!!.lines
     val list = rememberLazyListState()
@@ -1069,7 +1178,9 @@ private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position:
     val scope = rememberCoroutineScope()
     val dragged by list.interactionSource.collectIsDraggedAsState()
     val theme = remember(style?.raw) { style?.raw?.let { ThemeSpec.from(it) } }
-    val color = style?.color?.let { Color(it) } ?: MaterialTheme.colorScheme.onSurface
+    val ink = LocalLyricInk.current
+    val color = if (ink.overImage) ink.color else style?.color?.let { Color(it) } ?: ink.color
+    val shadow = Shadow.None
     val align =
         when (style?.alignment) {
             "center" -> TextAlign.Center
@@ -1080,7 +1191,11 @@ private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position:
         if (current && s.playback.positionKnown && row.words.isNotEmpty()) {
             row.words.forEach { w ->
                 withStyle(
-                    SpanStyle(color = if (position >= w.start) color else color.copy(alpha = .3f))
+                    SpanStyle(
+                        color =
+                            if (position >= w.start) color
+                            else color.copy(alpha = if (ink.overImage) .6f else .3f)
+                    )
                 ) {
                     append(w.text)
                 }
@@ -1117,11 +1232,16 @@ private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position:
             if (partitionHeight != null)
                 minOf(s.prefs.fontSize, ((partitionHeight - 36f) / 2.5f).coerceAtLeast(10f))
             else s.prefs.fontSize
+        val translationSize =
+            if (partitionHeight != null) (textSize * .6f).coerceAtLeast(12f)
+            else (theme?.translation?.size ?: (s.prefs.fontSize * .6f)).coerceAtLeast(16f)
         Column(
             modifier
                 .fillMaxWidth()
                 .graphicsLayer {
-                    alpha = (if (current) 1f else theme?.inactive ?: .32f) * motion.opacity
+                    alpha =
+                        (if (current) 1f
+                        else if (ink.overImage) .82f else theme?.inactive ?: .36f) * motion.opacity
                     scaleX = motion.scale
                     scaleY = motion.scale
                     rotationZ = motion.rotation
@@ -1138,55 +1258,60 @@ private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position:
                     ((partitionHeight - 36f) / (textSize * 1.12f)).toInt().coerceIn(2, 20)
                 Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
                     graphemes(row.text).chunked(charsPerColumn).take(10).forEach { chars ->
-                        Text(
-                            chars.joinToString("\n"),
+                        LyricText(
+                            AnnotatedString(chars.joinToString("\n")),
                             fontSize = textSize.sp,
                             lineHeight = (textSize * 1.12f).sp,
                             fontWeight = FontWeight.Bold,
                             color = color,
+                            style = LocalTextStyle.current.copy(shadow = shadow),
                         )
                     }
                 }
             } else
-                Text(
+                LyricText(
                     rowText(row, current),
                     fontSize = textSize.sp,
                     lineHeight = (textSize * 1.22f).sp,
                     fontFamily = font,
                     fontWeight = FontWeight(theme?.original?.weight ?: if (current) 700 else 600),
                     color = color,
+                    style = LocalTextStyle.current.copy(shadow = shadow),
                     textAlign = align,
                     maxLines = if (partitionHeight != null) 2 else Int.MAX_VALUE,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.fillMaxWidth(),
                 )
             if (s.prefs.translation && row.translation.isNotBlank())
-                Text(
-                    row.translation,
+                LyricText(
+                    AnnotatedString(row.translation),
                     Modifier.fillMaxWidth()
                         .padding(top = if (partitionHeight != null) 4.dp else 10.dp),
-                    fontSize =
-                        (if (partitionHeight != null) (textSize * .5f).coerceAtLeast(10f)
-                            else
-                                theme?.translation?.size
-                                    ?: (s.prefs.fontSize * .48f).coerceAtLeast(13f))
-                            .sp,
-                    lineHeight = if (partitionHeight != null) 14.sp else 22.sp,
+                    fontSize = translationSize.sp,
+                    lineHeight = (translationSize * 1.4f).sp,
                     maxLines = if (partitionHeight != null) 1 else Int.MAX_VALUE,
                     overflow = TextOverflow.Ellipsis,
                     fontFamily = font,
                     color =
-                        theme?.translation?.color?.let { Color(it) } ?: color.copy(alpha = .64f),
+                        if (ink.overImage) color.copy(alpha = .9f)
+                        else
+                            theme?.translation?.color?.let { Color(it) }
+                                ?: color.copy(alpha = .68f),
+                    style = LocalTextStyle.current.copy(shadow = shadow),
                     textAlign = align,
                 )
             if (s.prefs.romanization && row.romanization.isNotBlank())
-                Text(
-                    row.romanization,
+                LyricText(
+                    AnnotatedString(row.romanization),
                     Modifier.fillMaxWidth().padding(top = 5.dp),
                     fontSize = (theme?.romanization?.size ?: 13f).sp,
                     fontFamily = font,
                     color =
-                        theme?.romanization?.color?.let { Color(it) } ?: color.copy(alpha = .6f),
+                        if (ink.overImage) color.copy(alpha = .85f)
+                        else
+                            theme?.romanization?.color?.let { Color(it) }
+                                ?: color.copy(alpha = .64f),
+                    style = LocalTextStyle.current.copy(shadow = shadow),
                     textAlign = align,
                 )
         }

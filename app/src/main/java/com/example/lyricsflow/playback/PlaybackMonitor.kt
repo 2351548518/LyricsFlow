@@ -45,6 +45,26 @@ class PlaybackMonitor(
     var preferred = ""
     private var registered = false
     private var selected: MediaController? = null
+    private val artworkMemory = ArtworkMemory()
+    private var emptyScheduled = false
+    private val emptyPlayback = Runnable {
+        emptyScheduled = false
+        artworkMemory.clear()
+        publish(Playback())
+    }
+
+    private fun cancelEmptyPlayback() {
+        handler.removeCallbacks(emptyPlayback)
+        emptyScheduled = false
+    }
+
+    private fun scheduleEmptyPlayback() {
+        if (!emptyScheduled) {
+            emptyScheduled = true
+            handler.postDelayed(emptyPlayback, 500)
+        }
+    }
+
     private val callback =
         object : MediaController.Callback() {
             override fun onMetadataChanged(metadata: MediaMetadata?) {
@@ -73,6 +93,8 @@ class PlaybackMonitor(
     }
 
     fun disconnect() {
+        cancelEmptyPlayback()
+        artworkMemory.clear()
         controllers.forEach { it.unregisterCallback(callback) }
         controllers.clear()
         selected = null
@@ -110,7 +132,7 @@ class PlaybackMonitor(
         val c =
             selected
                 ?: run {
-                    publish(Playback())
+                    scheduleEmptyPlayback()
                     return
                 }
         val m = c.metadata
@@ -118,12 +140,12 @@ class PlaybackMonitor(
         val t =
             PlayerMetadata.track(c.packageName, m)
                 ?: run {
-                    publish(Playback())
+                    scheduleEmptyPlayback()
                     return
                 }
-        val artwork =
-            m?.getBitmap(MediaMetadata.METADATA_KEY_ART)
-                ?: m?.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART)
+        // ART can be a small thumbnail even when ALBUM_ART holds the full cover.
+        cancelEmptyPlayback()
+        val artwork = artworkMemory.select(t.key, PlayerMetadata.artwork(m))
         publish(
             Playback(
                 t,

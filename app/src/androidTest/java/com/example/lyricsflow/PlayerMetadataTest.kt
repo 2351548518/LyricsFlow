@@ -29,6 +29,25 @@ class PlayerMetadataTest {
 
     @Test
     fun spotifyAndNormalQqKeepStandardFields() {
+        val small =
+            android.graphics.Bitmap.createBitmap(32, 32, android.graphics.Bitmap.Config.ARGB_8888)
+        val large =
+            android.graphics.Bitmap.createBitmap(640, 640, android.graphics.Bitmap.Config.ARGB_8888)
+        val art =
+            MediaMetadata.Builder()
+                .putBitmap(MediaMetadata.METADATA_KEY_ART, small)
+                .putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, large)
+                .build()
+        assertEquals(640, PlayerMetadata.artwork(art)?.width)
+        assertNull(PlayerMetadata.artwork(null))
+        val memory = com.example.lyricsflow.playback.ArtworkMemory()
+        assertSame(large, memory.select("song-a", large))
+        assertSame(large, memory.select("song-a", null))
+        assertSame(large, memory.select("song-a", small))
+        assertNull(memory.select("song-b", null))
+        assertSame(small, memory.select("song-b", small))
+        memory.clear()
+        assertNull(memory.select("song-b", null))
         val metadata =
             MediaMetadata.Builder()
                 .putString(MediaMetadata.METADATA_KEY_TITLE, "Actual song")
