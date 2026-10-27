@@ -1,0 +1,70 @@
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.PlayerMetadataTest:
+INSTRUMENTATION_STATUS: test=spotifyAndNormalQqKeepStandardFields
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=spotifyAndNormalQqKeepStandardFields
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=qqBluetoothLyricUpdatesKeepTheSameSong
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=qqBluetoothLyricUpdatesKeepTheSameSong
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.RealPlayerIntegrationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.RealPlayerIntegrationTest:
+INSTRUMENTATION_STATUS: test=inspectPlayerMetadata
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: metadata=android.media.metadata.TITLE=アイロニ; android.media.metadata.ARTIST=majiko; android.media.metadata.ALBUM=アイロニ; android.media.metadata.DISPLAY_TITLE=null; android.media.metadata.DISPLAY_SUBTITLE=null; android.media.metadata.DISPLAY_DESCRIPTION=null; android.media.metadata.ALBUM_ARTIST=majiko; ucar.media.metadata.UCAR_TITLE=null; ucar.media.metadata.UCAR_ARTIST=null; keys=[android.media.IS_EXPLICIT, android.media.extra.DOWNLOAD_STATUS, android.media.metadata.ADVERTISEMENT, android.media.metadata.ALBUM, android.media.metadata.ALBUM_ART, android.media.metadata.ALBUM_ARTIST, android.media.metadata.ALBUM_ART_URI, android.media.metadata.ARTIST, android.media.metadata.DURATION, android.media.metadata.MEDIA_ID, android.media.metadata.TITLE, com.spotify.music.extra.ART_HTTPS_URI, com.spotify.music.extra.CONTEXT_DESCRIPTION, com.spotify.music.extra.CONTEXT_SHARE_URL, com.spotify.music.extra.CONTEXT_TITLE, com.spotify.music.extra.CONTEXT_URI, com.spotify.music.extra.EXTRA_EXTRACTED_COLOR_DARK_HIGH_CONTRAST_BACKGROUND_BASE, com.spotify.music.extra.IS_19_PLUS]
+INSTRUMENTATION_STATUS_CODE: 2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.RealPlayerIntegrationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=inspectPlayerMetadata
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.RealPlayerIntegrationTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=existingPlayerPublishesLivePlayback
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: result=REAL_PLAYER package=com.spotify.music title=アイロニ local=true automatic=true advancing=true pause=true seek=true resume=true positionDeltaMs=0 lyrics=70 source=NETEASE message=已载入本地歌词
+INSTRUMENTATION_STATUS_CODE: 2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.RealPlayerIntegrationTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=existingPlayerPublishesLivePlayback
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 26.443
+
+OK (4 tests)
+
+
+INSTRUMENTATION_CODE: -1

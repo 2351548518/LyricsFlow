@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:lyricsflow:style:1.0",
+  "title": "LyricsFlow declarative native style 1.0",
+  "type": "object",
+  "required": ["format", "schemaVersion", "id", "name", "targets", "mode"],
+  "properties": {
+    "format": { "const": "lyricsflow.style" },
+    "schemaVersion": { "const": "1.0" },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9_-]{1,80}$" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "targets": { "type": "array", "minItems": 1, "maxItems": 2, "uniqueItems": true, "items": { "enum": ["home", "overlay"] } },
+    "mode": { "enum": ["classic", "free"] },
+    "capabilities": { "type": "object", "properties": { "wordHighlight": { "type": "boolean" } }, "additionalProperties": false },
+    "background": { "$ref": "#/$defs/background" },
+    "layout": { "$ref": "#/$defs/layout" },
+    "text": { "$ref": "#/$defs/text" },
+    "animation": { "$ref": "#/$defs/animation" },
+    "freeLayout": { "$ref": "#/$defs/freeLayout" },
+    "targetOverrides": { "type": "object", "properties": { "home": { "$ref": "#/$defs/override" }, "overlay": { "$ref": "#/$defs/override" } }, "additionalProperties": false }
+  },
+  "additionalProperties": false,
+  "allOf": [{ "if": { "properties": { "mode": { "const": "free" } } }, "then": { "required": ["freeLayout"] } }],
+  "$defs": {
+    "color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{8}$" },
+    "textRun": { "type": "object", "properties": { "textSizeSp": { "type": "number", "minimum": 10, "maximum": 96 }, "weight": { "type": "integer", "minimum": 100, "maximum": 900 }, "color": { "$ref": "#/$defs/color" } }, "additionalProperties": false },
+    "text": { "type": "object", "properties": { "fontAlias": { "enum": ["sans-serif", "serif", "monospace"] }, "original": { "$ref": "#/$defs/textRun" }, "translation": { "$ref": "#/$defs/textRun" }, "romanization": { "$ref": "#/$defs/textRun" }, "inactiveOpacity": { "type": "number", "minimum": 0, "maximum": 1 } }, "additionalProperties": false },
+    "background": { "type": "object", "properties": { "type": { "enum": ["coverColor", "cover", "customImage", "solid"] }, "color": { "$ref": "#/$defs/color" }, "fallbackColor": { "$ref": "#/$defs/color" }, "dimAmount": { "type": "number", "minimum": 0, "maximum": 1 }, "assetId": { "type": "string", "pattern": "^[A-Za-z0-9_-]{1,80}$" } }, "additionalProperties": false },
+    "layout": { "type": "object", "properties": { "paddingDp": { "type": "number", "minimum": 0, "maximum": 96 }, "alignment": { "enum": ["start", "center", "end"] }, "activeAnchorY": { "type": "number", "minimum": 0, "maximum": 1 }, "lineGapDp": { "type": "number", "minimum": 0, "maximum": 96 } }, "additionalProperties": false },
+    "keyframe": { "type": "object", "required": ["value"], "properties": { "atMs": { "type": "number", "minimum": 0, "maximum": 10000 }, "atProgress": { "type": "number", "minimum": 0, "maximum": 1 }, "value": { "type": "number" } }, "oneOf": [{ "required": ["atMs"], "not": { "required": ["atProgress"] } }, { "required": ["atProgress"], "not": { "required": ["atMs"] } }], "additionalProperties": false },
+    "track": { "type": "object", "required": ["property", "keyframes"], "properties": { "anchor": { "enum": ["lineStart"] }, "property": { "enum": ["opacity", "scale", "rotation", "translationXRatio", "translationYRatio"] }, "keyframes": { "type": "array", "minItems": 1, "maxItems": 16, "items": { "$ref": "#/$defs/keyframe" } } }, "additionalProperties": false },
+    "animation": { "type": "object", "properties": { "scrollDurationMs": { "type": "integer", "minimum": 0, "maximum": 1000 }, "easing": { "enum": ["linear", "easeIn", "easeOut", "easeInOut"] }, "enter": { "$ref": "#/$defs/track" }, "tracks": { "type": "array", "maxItems": 7, "items": { "$ref": "#/$defs/track" } } }, "additionalProperties": false },
+    "freeLayout": { "type": "object", "required": ["seedMode", "maxVisibleGroups", "minTextSizeSp", "orientation", "collisionPolicy"], "properties": { "seedMode": { "const": "trackLineStyle" }, "maxVisibleGroups": { "type": "integer", "minimum": 1, "maximum": 8 }, "minTextSizeSp": { "type": "number", "minimum": 10, "maximum": 48 }, "orientation": { "enum": ["horizontal", "vertical", "mixed"] }, "collisionPolicy": { "const": "avoidThenPartition" } }, "additionalProperties": false },
+    "override": { "type": "object", "properties": { "background": { "$ref": "#/$defs/background" }, "layout": { "$ref": "#/$defs/layout" }, "text": { "$ref": "#/$defs/text" }, "animation": { "$ref": "#/$defs/animation" } }, "additionalProperties": false }
+  }
+}

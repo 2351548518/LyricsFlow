@@ -36,6 +36,33 @@ android {
     }
 }
 
+abstract class BundleStyleSchema : DefaultTask() {
+    @get:InputFile abstract val schemaFile: RegularFileProperty
+    @get:OutputDirectory abstract val outputDirectory: DirectoryProperty
+
+    @TaskAction
+    fun bundle() {
+        val output = outputDirectory.file("lyricsflow.style.schema.json").get().asFile
+        output.parentFile.mkdirs()
+        schemaFile.get().asFile.copyTo(output, overwrite = true)
+    }
+}
+
+val bundleStyleSchema =
+    tasks.register<BundleStyleSchema>("bundleStyleSchema") {
+        schemaFile.set(
+            rootProject.layout.projectDirectory.file("docs/lyricsflow.style.schema.json")
+        )
+        outputDirectory.set(layout.buildDirectory.dir("generated/styleSchemaAssets"))
+    }
+
+androidComponents.onVariants { variant ->
+    variant.sources.assets?.addGeneratedSourceDirectory(
+        bundleStyleSchema,
+        BundleStyleSchema::outputDirectory,
+    )
+}
+
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)

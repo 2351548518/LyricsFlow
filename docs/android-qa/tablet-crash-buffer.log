@@ -1,0 +1,17 @@
+--------- beginning of crash
+10-26 14:11:44.054  3246  3261 E AndroidRuntime: FATAL EXCEPTION: Thread-2
+10-26 14:11:44.054  3246  3261 E AndroidRuntime: Process: com.android.hotwordenrollment.okgoogle, PID: 3246
+10-26 14:11:44.054  3246  3261 E AndroidRuntime: java.lang.NoClassDefFoundError: Failed resolution of: Lcom/android/hotwordenrollment/common/EnrollmentUtil;
+10-26 14:11:44.054  3246  3261 E AndroidRuntime: 	at com.android.hotwordenrollment.common.StartupReceiver.updateSoundModel(StartupReceiver.java:56)
+10-26 14:11:44.054  3246  3261 E AndroidRuntime: 	at com.android.hotwordenrollment.common.StartupReceiver.-$$Nest$smupdateSoundModel(StartupReceiver.java:0)
+10-26 14:11:44.054  3246  3261 E AndroidRuntime: 	at com.android.hotwordenrollment.common.StartupReceiver$1.run(StartupReceiver.java:48)
+10-26 14:11:44.054  3246  3261 E AndroidRuntime: Caused by: java.lang.ClassNotFoundException: com.android.hotwordenrollment.common.EnrollmentUtil
+10-26 14:11:44.054  3246  3261 E AndroidRuntime: 	... 3 more
+10-26 14:11:44.212  3263  3284 E AndroidRuntime: FATAL EXCEPTION: Thread-2
+10-26 14:11:44.212  3263  3284 E AndroidRuntime: Process: com.android.hotwordenrollment.xgoogle, PID: 3263
+10-26 14:11:44.212  3263  3284 E AndroidRuntime: java.lang.NoClassDefFoundError: Failed resolution of: Lcom/android/hotwordenrollment/common/EnrollmentUtil;
+10-26 14:11:44.212  3263  3284 E AndroidRuntime: 	at com.android.hotwordenrollment.common.StartupReceiver.updateSoundModel(StartupReceiver.java:56)
+10-26 14:11:44.212  3263  3284 E AndroidRuntime: 	at com.android.hotwordenrollment.common.StartupReceiver.-$$Nest$smupdateSoundModel(StartupReceiver.java:0)
+10-26 14:11:44.212  3263  3284 E AndroidRuntime: 	at com.android.hotwordenrollment.common.StartupReceiver$1.run(StartupReceiver.java:48)
+10-26 14:11:44.212  3263  3284 E AndroidRuntime: Caused by: java.lang.ClassNotFoundException: com.android.hotwordenrollment.common.EnrollmentUtil
+10-26 14:11:44.212  3263  3284 E AndroidRuntime: 	... 3 more

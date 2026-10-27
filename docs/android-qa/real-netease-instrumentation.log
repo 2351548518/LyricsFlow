@@ -1,0 +1,70 @@
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.PlayerMetadataTest:
+INSTRUMENTATION_STATUS: test=spotifyAndNormalQqKeepStandardFields
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=spotifyAndNormalQqKeepStandardFields
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=qqBluetoothLyricUpdatesKeepTheSameSong
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=qqBluetoothLyricUpdatesKeepTheSameSong
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.RealPlayerIntegrationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.RealPlayerIntegrationTest:
+INSTRUMENTATION_STATUS: test=inspectPlayerMetadata
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: metadata=android.media.metadata.TITLE=海底; android.media.metadata.ARTIST=一支榴莲; android.media.metadata.ALBUM=海底; android.media.metadata.DISPLAY_TITLE=海底; android.media.metadata.DISPLAY_SUBTITLE=一支榴莲; android.media.metadata.DISPLAY_DESCRIPTION=null; android.media.metadata.ALBUM_ARTIST=null; ucar.media.metadata.UCAR_TITLE=null; ucar.media.metadata.UCAR_ARTIST=null; keys=[android.media.metadata.ALBUM, android.media.metadata.ALBUM_ART, android.media.metadata.ART, android.media.metadata.ARTIST, android.media.metadata.DISPLAY_ICON, android.media.metadata.DISPLAY_SUBTITLE, android.media.metadata.DISPLAY_TITLE, android.media.metadata.DURATION, android.media.metadata.MEDIA_ID, android.media.metadata.TITLE, android.media.metadata.USER_RATING, hicar.media.metadata.FAVORITE_STATE, hicar.media.metadata.LIKE_BUTTON_ENABLE, hicar.media.metadata.LYRICS, hicar.media.metadata.NEXT_BUTTON_ENABLE, hicar.media.metadata.PARENT_ID, hicar.media.metadata.PLAY_FUNCTION, hicar.media.metadata.PLAY_FUNCTION_BUTTON_ENABLE, hicar.media.metadata.PREV_BUTTON_ENABLE, hicar.media.metadata.PROGRESS_ENABLE, hicar.media.metadata.VIP, lyricInfo]
+INSTRUMENTATION_STATUS_CODE: 2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.RealPlayerIntegrationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=inspectPlayerMetadata
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.RealPlayerIntegrationTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=existingPlayerPublishesLivePlayback
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: result=REAL_PLAYER package=com.netease.cloudmusic title=海底 local=true automatic=true advancing=true pause=true seek=true resume=true positionDeltaMs=0 lyrics=49 source=QQ message=已载入本地歌词
+INSTRUMENTATION_STATUS_CODE: 2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.RealPlayerIntegrationTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=existingPlayerPublishesLivePlayback
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 23.716
+
+OK (4 tests)
+
+
+INSTRUMENTATION_CODE: -1

@@ -1,0 +1,241 @@
+[
+  {
+    "window-title": "LyricsFlow",
+    "type": "APPLICATION",
+    "active": true,
+    "focused": true,
+    "layer": 0,
+    "bounds": "[0,0][1236,2664]",
+    "content": [
+      {
+        "class": "android.widget.TextView",
+        "text": "Lyrics",
+        "bounds": "[196,218][399,304]",
+        "center": "[297,261]"
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "Flow",
+        "bounds": "[399,216][596,306]",
+        "center": "[497,261]"
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "让歌词，流动起来",
+        "bounds": "[680,219][998,303]",
+        "center": "[839,261]"
+      },
+      {
+        "class": "android.widget.Button",
+        "content-desc": "关于 LyricsFlow",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[998,177][1166,345]",
+        "center": "[1082,261]"
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "アイロニ",
+        "bounds": "[84,429][523,571]",
+        "center": "[303,500]"
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "majiko",
+        "bounds": "[84,603][239,687]",
+        "center": "[161,645]"
+      },
+      {
+        "class": "android.widget.Button",
+        "content-desc": "保存当前歌词",
+        "interactions": [
+          "CLICKABLE"
+        ],
+        "bounds": "[984,474][1152,642]",
+        "center": "[1068,558]"
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "未找到可靠匹配，请在歌曲匹配中搜索或手动绑定",
+        "bounds": "[168,1119][1068,1287]",
+        "center": "[618,1203]"
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[435,1371][802,1539]",
+        "center": "[618,1455]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "歌曲匹配",
+            "bounds": "[519,1420][718,1490]",
+            "center": "[618,1455]"
+          }
+        ]
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[84,1893][385,2061]",
+        "center": "[234,1977]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "QQ 音乐",
+            "bounds": "[151,1942][317,2012]",
+            "center": "[234,1977]"
+          },
+          {
+            "class": "android.widget.TextView",
+            "text": "⌄",
+            "bounds": "[331,1942][357,2012]",
+            "center": "[344,1977]"
+          }
+        ]
+      },
+      {
+        "class": "android.widget.Button",
+        "content-desc": "刷新歌词",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[385,1893][553,2061]",
+        "center": "[469,1977]"
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[553,1893][756,2061]",
+        "center": "[654,1977]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "译",
+            "bounds": "[626,1940][683,2014]",
+            "center": "[654,1977]"
+          }
+        ]
+      },
+      {
+        "class": "android.widget.Button",
+        "content-desc": "开启悬浮窗",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[756,1893][924,2061]",
+        "center": "[840,1977]"
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[924,1893][1152,2061]",
+        "center": "[1038,1977]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "共鸣",
+            "bounds": "[1054,1907][1103,2047]",
+            "center": "[1078,1977]"
+          }
+        ]
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[84,2061][287,2194]",
+        "center": "[185,2127]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "时间校准",
+            "bounds": "[108,2110][263,2180]",
+            "center": "[185,2145]"
+          }
+        ]
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[949,2061][1152,2194]",
+        "center": "[1050,2127]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "歌曲匹配",
+            "bounds": "[973,2110][1128,2180]",
+            "center": "[1050,2145]"
+          }
+        ]
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "已暂停",
+        "bounds": "[84,2264][194,2348]",
+        "center": "[139,2306]"
+      },
+      {
+        "class": "android.widget.TextView",
+        "text": "01:10 / 04:06",
+        "bounds": "[896,2264][1152,2348]",
+        "center": "[1024,2306]"
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[261,2425][611,2601]",
+        "center": "[436,2513]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "首页",
+            "bounds": "[433,2471][534,2555]",
+            "center": "[483,2513]"
+          }
+        ]
+      },
+      {
+        "class": "android.view.View",
+        "interactions": [
+          "CLICKABLE",
+          "FOCUSABLE"
+        ],
+        "bounds": "[625,2425][975,2601]",
+        "center": "[800,2513]",
+        "children": [
+          {
+            "class": "android.widget.TextView",
+            "text": "我的",
+            "bounds": "[797,2471][898,2555]",
+            "center": "[847,2513]"
+          }
+        ]
+      }
+    ]
+  }
+]

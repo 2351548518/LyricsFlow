@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.lyricsflow.TimelineTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-26T15:16:39.661Z" hostname="ZERO" time="0.096">
+  <properties/>
+  <testcase name="clockFreezesPausedClampsAndScales" classname="com.example.lyricsflow.TimelineTest" time="0.003"/>
+  <testcase name="ttmlTimingAndWhitespace" classname="com.example.lyricsflow.TimelineTest" time="0.061"/>
+  <testcase name="xmlRejectsEntities" classname="com.example.lyricsflow.TimelineTest" time="0.001"/>
+  <testcase name="positiveDelayMeansLaterAndNoEarlyLine" classname="com.example.lyricsflow.TimelineTest" time="0.017"/>
+  <testcase name="qrcUsesRealTrailingWordTimestamps" classname="com.example.lyricsflow.TimelineTest" time="0.002"/>
+  <testcase name="overlayPauseBoundaryLockAndResume" classname="com.example.lyricsflow.TimelineTest" time="0.001"/>
+  <testcase name="translationLanguageAndGraphemes" classname="com.example.lyricsflow.TimelineTest" time="0.003"/>
+  <testcase name="lrcOffsetsMultipleTimestampsAndPlaintext" classname="com.example.lyricsflow.TimelineTest" time="0.001"/>
+  <testcase name="yrcWordStartIsAbsolute" classname="com.example.lyricsflow.TimelineTest" time="0.005"/>
+  <testcase name="enhancedLrcKeepsActualWordTimes" classname="com.example.lyricsflow.TimelineTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
