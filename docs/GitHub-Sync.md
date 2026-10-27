@@ -2,6 +2,8 @@
 
 日期：2026-10-27。实现为可选登录、手动快照同步，无自建服务。入口：**我的 → GitHub 同步**。
 
+开发者已提供公开 Client ID `Ov23liBtXrG7lSZomxKz`，当前 APK 默认填入，可直接登录，无需每位用户另行注册。支持手动换成自己注册的 Client ID；下文注册步骤用于自建应用或未来开源分发。真机已完成真实登录、私有仓库连接、上传和下载预览，见 [真机验证记录](./android-qa/Real-Device-GitHub.md)。
+
 ## 首次注册（只需注册 OAuth App，无需提供 Secret）
 
 1. 登录 GitHub，进入 [注册 OAuth App](https://github.com/settings/applications/new)。菜单路径：Settings → Developer settings → OAuth Apps → New OAuth App。
@@ -14,7 +16,7 @@
 
 注册依据：[Creating an OAuth app](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app)。Device Flow 的服务端要求、轮询和错误处理依据：[Authorizing OAuth apps](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps)。
 
-本轮尚无真实 Client ID，因此尚未完成真实账户授权、真实建仓和真实远端读写验证。离线测试通过不等同于真实 GitHub 联调通过。
+最初开发阶段仅有假服务测试；后续用户提供 Client ID 并在真机完成浏览器授权，已补测真实远端读写。真实账户授权由用户操作，不代输 GitHub 密码或验证码。
 
 ## 授权范围与凭证
 
@@ -23,6 +25,7 @@
 - 公开资料通过 `GET /user` 校验身份；不申请 email、组织管理、删除仓库等额外 scope。`repo` 自身较广的权限不能被本机使用约束抵消。
 - Token 与 refresh token 通过 Android Keystore AES-GCM 加密，独立于翻译 Key 保存；两种 Key 的清除互不影响。凭证文件和本机 GitHub 同步状态同时排除 Android 云备份和设备迁移。
 - Device Flow 不包含 Client Secret。轮询遵循服务返回 interval，`slow_down` 后至少增加 5 秒；拒绝、取消、到期停止。进程终止后重新登录，不持久化设备码。
+- 每个 HTTP 请求有 45 秒总截止时间，包含排队、DNS、连接、写入与读取。取消通过可取消 continuation 立即返回 UI，并在后台中断/断开连接，迟到响应不再交付。申请验证码的初始阶段也能取消；并不要求先收到验证码才允许取消。已发送的上传请求超时不代表服务端一定没提交，应重新检查云端。
 - 对短期 Token，在操作前提前刷新，刷新接口省略 Secret；校验返回 Token 的账号 ID，再替换加密凭证。操作串行，不会并发刷新。刷新失效需退出重新登录；HTTP 401 清除本机凭证并提示重新授权。
 - 退出只清本机授权，保留本地资料、恢复副本和远端仓库。可通过 App 内“查看或撤销 GitHub 授权”在 GitHub 撤销；App 不调用删仓、改可见性或远端文件删除接口。
 

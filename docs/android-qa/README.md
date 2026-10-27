@@ -6,7 +6,7 @@
 
 后续的按钮选中状态、开关、卡片与弹窗配色统一，见 [控件可读性专项](./Control-Readability.md)。
 
-2026-10-27 新增 GitHub 登录与个人私有仓库手动快照：手机 23 项本地回归、平板 10 项专项通过；尚无真实 Client ID，真实账号云端链路待联调，见 [GitHub 同步专项](./GitHub-Sync.md) 与 [注册指引](../GitHub-Sync.md)。
+2026-10-27 新增 GitHub 登录与个人私有仓库手动快照：初始模拟器记录见 [GitHub 同步专项](./GitHub-Sync.md)。后续已在 HONOR 真机补测真实登录、私有仓库上传与下载预览，以及 12 项协议/界面/超时测试；最新记录见 [GitHub 真机验证](./Real-Device-GitHub.md)。当前 Android CLI 脚本默认 25 项设备测试，额外网络专项共 39 项。
 
 ## 环境
 

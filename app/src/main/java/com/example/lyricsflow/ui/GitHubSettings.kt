@@ -157,6 +157,8 @@ fun GitHubSettings(sync: GitHubSync, export: (String, ByteArray) -> Unit) {
                     Text("复制验证码并打开 GitHub 授权")
                 }
                 Text("授权后返回 App 等待结果。验证码过期或取消后，重新登录即可。", fontSize = 13.sp, lineHeight = 20.sp)
+            }
+            if (s.busy && s.login.isBlank()) {
                 FlowOutlinedButton(
                     onClick = sync::cancelSignIn,
                     modifier = Modifier.fillMaxWidth(),

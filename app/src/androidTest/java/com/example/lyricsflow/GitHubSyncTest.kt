@@ -407,6 +407,10 @@ class GitHubSyncTest {
             idle(sync)
             assertEquals(listOf(5000L, 5000L, 10000L), waits)
             assertEquals("qa-user", sync.state.value.login)
+            val restarted = GitHubSync(graph, GitHubApi(server), slot)
+            assertEquals("qa-user", restarted.state.value.login)
+            assertTrue(restarted.state.value.message.contains("已登录 @qa-user"))
+            assertFalse(restarted.state.value.connected)
             assertFalse(
                 context
                     .getSharedPreferences("credentials", 0)

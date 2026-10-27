@@ -62,16 +62,16 @@ APK：[app-debug.apk](../app/build/outputs/apk/debug/app-debug.apk)。安装使�
 6. 网络响应缓存按容量清理，歌词库与导入资料保留。备份包有 20 MB 读取限制，数据正文最多 16 MB／3000 项；采用 `manifest.json`、`data.json`、`settings.json` 的开发版布局，不能当作 PRD 中完整互操作备份规范的最终定稿。
 7. 已在用户提供的 HONOR 真机完成 Spotify／QQ／网易云真实本机播放器联调，初次修复见 [真机记录](./android-qa/Real-Device-Playback.md)。后续补齐完整搜索和 QQ 来源译文，之前未匹配的 QQ 日语歌已匹配成功；最终 QQ 时间歌词及 Spotify 连接回归通过，见 [QQ 专项记录](./android-qa/QQ-Lyrics-Search.md)。十首真歌、厂商后台策略和 60 分钟压力验收仍未完成。
 8. Android 35 平板模拟器、Android 37 手机模拟器和一台上报 API 37 的 HONOR 真机已测试；Android 24–34、36 和其他实体机型尚未覆盖。应用包名、正式签名和公开发布配置仍待发布阶段确定。
-9. GitHub 可选登录及私有仓库手动快照已按 2026-10-27 新要求实现，详见 [注册与同步说明](./GitHub-Sync.md) 和 [专项验收](./android-qa/GitHub-Sync.md)。尚无真实 Client ID，真实 GitHub 登录/建仓/远端读写未联调；自动双向合并仍为后续范围。远程 Spotify、自动生成罗马音仍未提供。
+9. GitHub 可选登录及私有仓库手动快照已按 2026-10-27 新要求实现，详见 [同步说明](./GitHub-Sync.md)、[协议验收](./android-qa/GitHub-Sync.md) 与 [真机验证](./android-qa/Real-Device-GitHub.md)。用户已提供公开 Client ID，真机完成真实登录、私有仓库连接、上传和下载预览；自动双向合并仍为后续范围。远程 Spotify、自动生成罗马音仍未提供。
 
 本次没有把 PRD 的 44 条发布验收全部标为通过。准确证据见 [Android 验收记录](./android-qa/README.md)。
 
 ## 重复验证
 
 ```powershell
-# 默认运行 23 项不依赖第三方网络的设备测试，并执行单元测试、Lint 和构建。
+# 默认运行 25 项不依赖第三方网络的设备测试，并执行单元测试、Lint 和构建。
 .\scripts\Run-AndroidQa.ps1 -Device emulator-5554
-# 额外运行来源接口、译文、分页、缓存、自动匹配和 LRCLIB 界面，共 37 项设备测试。
+# 额外运行来源接口、译文、分页、缓存、自动匹配和 LRCLIB 界面，共 39 项设备测试。
 .\scripts\Run-AndroidQa.ps1 -Device emulator-5556 -IncludeNetwork
 ```
 

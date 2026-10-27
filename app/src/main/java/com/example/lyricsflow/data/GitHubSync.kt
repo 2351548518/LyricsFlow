@@ -12,6 +12,9 @@ import kotlinx.coroutines.flow.update
 import org.json.JSONException
 import org.json.JSONObject
 
+// Public OAuth application identifier; never put a Client Secret in the APK.
+internal const val DEFAULT_GITHUB_CLIENT_ID = "Ov23liBtXrG7lSZomxKz"
+
 data class GitHubState(
     val clientId: String = "",
     val login: String = "",
@@ -33,17 +36,24 @@ internal constructor(
     private val graph: AppGraph,
     private val api: GitHubApi = GitHubApi(),
     storageName: String = "github-sync",
+    defaultClientId: String = DEFAULT_GITHUB_CLIENT_ID,
     private val pollWait: suspend (Long) -> Unit = { delay(it) },
 ) {
     private val prefs = graph.app.getSharedPreferences(storageName, 0)
     private val secrets = Secrets(graph.app, storageName)
     private val recovery = File(graph.app.noBackupFilesDir, "$storageName-recovery.zip")
+    private val storedLogin =
+        if (secrets.read().isNotBlank()) prefs.getString("login", "").orEmpty() else ""
     private val mutable =
         MutableStateFlow(
             GitHubState(
-                clientId = prefs.getString("clientId", "").orEmpty(),
-                login =
-                    if (secrets.read().isNotBlank()) prefs.getString("login", "").orEmpty() else "",
+                clientId =
+                    prefs.getString("clientId", defaultClientId).orEmpty().ifBlank {
+                        defaultClientId
+                    },
+                login = storedLogin,
+                message =
+                    if (storedLogin.isBlank()) "尚未登录；本地功能可正常使用" else "已登录 @$storedLogin；请重新连接私有仓库",
                 repository = prefs.getString("repository", "lyricsflow-sync").orEmpty(),
                 hasRecovery = recovery.isFile,
                 lastSync = prefs.getLong("lastSync", 0),
@@ -109,6 +119,15 @@ internal constructor(
             graph.scope.launch {
                 try {
                     block()
+                } catch (_: TimeoutCancellationException) {
+                    change {
+                        it.copy(
+                            message =
+                                "GitHub 请求超时，请检查手机能否访问 github.com 和 api.github.com 后重试；若正在上传，请先重新检查云端版本",
+                            failed = true,
+                            userCode = "",
+                        )
+                    }
                 } catch (e: CancellationException) {
                     throw e
                 } catch (e: Exception) {
@@ -210,7 +229,7 @@ internal constructor(
         }
 
     fun cancelSignIn() {
-        if (state.value.userCode.isBlank()) return
+        if (!state.value.busy || state.value.login.isNotBlank()) return
         operation?.cancel()
         // Leave the cancelled job assigned until its finally block has finished.
         change { it.copy(userCode = "", message = "已取消登录") }

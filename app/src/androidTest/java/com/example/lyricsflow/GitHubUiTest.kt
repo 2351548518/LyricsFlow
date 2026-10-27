@@ -4,6 +4,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.unit.dp
@@ -23,7 +24,7 @@ class GitHubUiTest {
     fun registrationGuideAndUnavailableLoginAreClear() {
         val graph = AppGraph(compose.activity.application)
         val slot = "github-ui-guide-test"
-        val sync = GitHubSync(graph, GitHubApi(MemoryGitHub()), slot) {}
+        val sync = GitHubSync(graph, GitHubApi(MemoryGitHub()), slot, defaultClientId = "") {}
         try {
             compose.activityRule.scenario.onActivity {
                 it.setContent {
@@ -103,10 +104,14 @@ class GitHubUiTest {
         compose.waitForIdle()
         Thread.sleep(280)
         val root = File(compose.activity.getExternalFilesDir(null), "github-qa").apply { mkdirs() }
+        // PixelCopy captures the Compose window without taking over the device-wide
+        // UiAutomation service already used by Android CLI on some physical devices.
         val bitmap =
-            androidx.test.platform.app.InstrumentationRegistry.getInstrumentation()
-                .uiAutomation
-                .takeScreenshot()
+            compose
+                .onAllNodes(isRoot(), useUnmergedTree = true)
+                .onLast()
+                .captureToImage()
+                .asAndroidBitmap()
         File(root, "$name.png").outputStream().use {
             bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, it)
         }

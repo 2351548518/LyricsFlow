@@ -6,11 +6,17 @@ import java.io.ByteArrayOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
+import java.util.concurrent.Executors
+import java.util.concurrent.atomic.AtomicReference
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -23,75 +29,118 @@ internal fun interface GitHubTransport {
     suspend fun send(method: String, path: String, body: JSONObject?, token: String): GitHubReply
 }
 
-internal class GitHubHttp : GitHubTransport {
+internal class GitHubHttp(
+    private val timeoutMs: Long = 45_000,
+    private val open: (URL) -> HttpURLConnection = { it.openConnection() as HttpURLConnection },
+) : GitHubTransport {
+    private companion object {
+        val requests =
+            Executors.newFixedThreadPool(2) { task ->
+                Thread(task, "GitHub-request").apply { isDaemon = true }
+            }
+        val disconnects =
+            Executors.newFixedThreadPool(2) { task ->
+                Thread(task, "GitHub-disconnect").apply { isDaemon = true }
+            }
+    }
+
     override suspend fun send(method: String, path: String, body: JSONObject?, token: String) =
-        withContext(Dispatchers.IO) {
-            require(path.startsWith("/") && !path.startsWith("//"))
-            val oauth = path in setOf("/login/device/code", "/login/oauth/access_token")
-            require(!oauth || token.isEmpty())
-            val c =
-                URL((if (oauth) "https://github.com" else "https://api.github.com") + path)
-                    .openConnection() as HttpURLConnection
-            try {
-                c.requestMethod = method
-                c.instanceFollowRedirects = false
-                c.connectTimeout = 10000
-                c.readTimeout = 30000
-                c.setRequestProperty("User-Agent", "LyricsFlow-Android/1.0")
-                c.setRequestProperty(
-                    "Accept",
-                    if (oauth) "application/json" else "application/vnd.github+json",
-                )
-                if (!oauth) c.setRequestProperty("X-GitHub-Api-Version", "2026-03-10")
-                if (token.isNotEmpty()) c.setRequestProperty("Authorization", "Bearer $token")
-                if (body != null) {
-                    val bytes =
-                        if (oauth)
-                            body
-                                .keys()
-                                .asSequence()
-                                .joinToString("&") {
-                                    enc(it) + "=" + enc(body.getString(it))
-                                }
-                                .toByteArray()
-                        else body.toString().toByteArray()
-                    c.doOutput = true
-                    c.setRequestProperty(
-                        "Content-Type",
-                        if (oauth) "application/x-www-form-urlencoded" else "application/json",
-                    )
-                    c.setFixedLengthStreamingMode(bytes.size)
-                    c.outputStream.use { it.write(bytes) }
-                }
-                val code = c.responseCode
-                if (oauth && code == 400) {
-                    // OAuth protocol errors may use HTTP 400 instead of a 200 JSON response.
-                    val raw = c.errorStream?.use { it.readBytesLimited(64_000) }
-                    val error = raw?.let {
-                        runCatching { JSONObject(String(it, Charsets.UTF_8)) }.getOrNull()
+        withTimeout(timeoutMs) {
+            suspendCancellableCoroutine { continuation ->
+                val connection = AtomicReference<HttpURLConnection>()
+                val request = requests.submit {
+                    try {
+                        val reply =
+                            exchange(method, path, body, token) { c ->
+                                connection.set(c)
+                                if (!continuation.isActive) throw java.io.InterruptedIOException()
+                            }
+                        continuation.resume(reply)
+                    } catch (e: Exception) {
+                        continuation.resumeWithException(e)
                     }
-                    if (error?.has("error") == true) return@withContext GitHubReply(code, error)
                 }
-                if (code !in 200..299)
-                    throw GitHubFailure(
-                        code,
-                        when (code) {
-                            401 -> "GitHub 登录已失效，请重新登录"
-                            403,
-                            429 -> "GitHub 拒绝请求或正在限流，请检查仓库权限并稍后重试"
-                            404 -> "找不到仓库或没有访问权限"
-                            409,
-                            422 -> "远端发生冲突或仓库规则阻止提交，请重新下载检查；未强制覆盖"
-                            in 300..399 -> "GitHub 地址已变更，请检查仓库名称；不会转发凭证到重定向地址"
-                            else -> "GitHub 请求失败（HTTP $code），请稍后重试"
-                        },
-                    )
-                val bytes = c.inputStream.use { it.readBytesLimited(30_000_000) }
-                GitHubReply(code, JSONObject(String(bytes, Charsets.UTF_8)))
-            } finally {
-                c.disconnect()
+                continuation.invokeOnCancellation {
+                    request.cancel(true)
+                    // Some vendor HTTP/DNS implementations ignore thread interruption. Return
+                    // control immediately and disconnect off the UI thread; discard late replies.
+                    connection.get()?.let { c -> disconnects.execute { c.disconnect() } }
+                }
             }
         }
+
+    private fun exchange(
+        method: String,
+        path: String,
+        body: JSONObject?,
+        token: String,
+        connected: (HttpURLConnection) -> Unit,
+    ): GitHubReply {
+        require(path.startsWith("/") && !path.startsWith("//"))
+        val oauth = path in setOf("/login/device/code", "/login/oauth/access_token")
+        require(!oauth || token.isEmpty())
+        val c = open(URL((if (oauth) "https://github.com" else "https://api.github.com") + path))
+        try {
+            connected(c)
+            c.requestMethod = method
+            c.instanceFollowRedirects = false
+            c.connectTimeout = 10000
+            c.readTimeout = 30000
+            c.setRequestProperty("User-Agent", "LyricsFlow-Android/1.0")
+            c.setRequestProperty(
+                "Accept",
+                if (oauth) "application/json" else "application/vnd.github+json",
+            )
+            if (!oauth) c.setRequestProperty("X-GitHub-Api-Version", "2026-03-10")
+            if (token.isNotEmpty()) c.setRequestProperty("Authorization", "Bearer $token")
+            if (body != null) {
+                val bytes =
+                    if (oauth)
+                        body
+                            .keys()
+                            .asSequence()
+                            .joinToString("&") {
+                                enc(it) + "=" + enc(body.getString(it))
+                            }
+                            .toByteArray()
+                    else body.toString().toByteArray()
+                c.doOutput = true
+                c.setRequestProperty(
+                    "Content-Type",
+                    if (oauth) "application/x-www-form-urlencoded" else "application/json",
+                )
+                c.setFixedLengthStreamingMode(bytes.size)
+                c.outputStream.use { it.write(bytes) }
+            }
+            val code = c.responseCode
+            if (oauth && code == 400) {
+                // OAuth protocol errors may use HTTP 400 instead of a 200 JSON response.
+                val raw = c.errorStream?.use { it.readBytesLimited(64_000) }
+                val error = raw?.let {
+                    runCatching { JSONObject(String(it, Charsets.UTF_8)) }.getOrNull()
+                }
+                if (error?.has("error") == true) return GitHubReply(code, error)
+            }
+            if (code !in 200..299)
+                throw GitHubFailure(
+                    code,
+                    when (code) {
+                        401 -> "GitHub 登录已失效，请重新登录"
+                        403,
+                        429 -> "GitHub 拒绝请求或正在限流，请检查仓库权限并稍后重试"
+                        404 -> "找不到仓库或没有访问权限"
+                        409,
+                        422 -> "远端发生冲突或仓库规则阻止提交，请重新下载检查；未强制覆盖"
+                        in 300..399 -> "GitHub 地址已变更，请检查仓库名称；不会转发凭证到重定向地址"
+                        else -> "GitHub 请求失败（HTTP $code），请稍后重试"
+                    },
+                )
+            val bytes = c.inputStream.use { it.readBytesLimited(30_000_000) }
+            return GitHubReply(code, JSONObject(String(bytes, Charsets.UTF_8)))
+        } finally {
+            c.disconnect()
+        }
+    }
 }
 
 internal fun enc(value: String): String = URLEncoder.encode(value, "UTF-8").replace("+", "%20")

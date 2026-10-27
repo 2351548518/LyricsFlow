@@ -1,0 +1,219 @@
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubNetworkPolicyTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.GitHubNetworkPolicyTest:
+INSTRUMENTATION_STATUS: test=initialDeviceCodeRequestCanBeCancelledBeforeAnyCodeIsReturned
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubNetworkPolicyTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=initialDeviceCodeRequestCanBeCancelledBeforeAnyCodeIsReturned
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubNetworkPolicyTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=hardDeadlineReturnsWithoutWaitingForBlockedVendorIoAndDropsLateReply
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubNetworkPolicyTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=hardDeadlineReturnsWithoutWaitingForBlockedVendorIoAndDropsLateReply
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.GitHubSyncTest:
+INSTRUMENTATION_STATUS: test=deniedDeviceAuthorizationStopsPolling
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=deniedDeviceAuthorizationStopsPolling
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=refusesUnseenSnapshotAndConcurrentBranchUpdate
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=refusesUnseenSnapshotAndConcurrentBranchUpdate
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cloudUpdateAfterDownloadPreviewLeavesLocalStateUntouched
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cloudUpdateAfterDownloadPreviewLeavesLocalStateUntouched
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=createsPrivateRepositoryAndRejectsPublicExistingRepository
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=createsPrivateRepositoryAndRejectsPublicExistingRepository
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=7
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=restoreKeepsLocalOnlyRowsCreatesRecoveryAndDisablesPaidTranslation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=7
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=restoreKeepsLocalOnlyRowsCreatesRecoveryAndDisablesPaidTranslation
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=8
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=atomicUploadRoundtripPreservesOtherPathsAndSkipsUnchangedSnapshot
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=8
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=atomicUploadRoundtripPreservesOtherPathsAndSkipsUnchangedSnapshot
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=9
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=rejectsUnknownCloudFilesAndUnsupportedSchemaBeforeRestore
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=9
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=rejectsUnknownCloudFilesAndUnsupportedSchemaBeforeRestore
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=10
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=deviceFlowWaitsSlowsDownRefreshesAndSeparatesEncryptedCredentialSlots
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=10
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=deviceFlowWaitsSlowsDownRefreshesAndSeparatesEncryptedCredentialSlots
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubUiTest
+INSTRUMENTATION_STATUS: current=11
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.GitHubUiTest:
+INSTRUMENTATION_STATUS: test=registrationGuideAndUnavailableLoginAreClear
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubUiTest
+INSTRUMENTATION_STATUS: current=11
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalStateException: UiAutomationService android.accessibilityservice.IAccessibilityServiceClient$Stub$Proxy@a030c03already registered!
+	at android.os.Parcel.createExceptionOrNull(Parcel.java:3432)
+	at android.os.Parcel.createException(Parcel.java:3408)
+	at android.os.Parcel.readException(Parcel.java:3391)
+	at android.os.Parcel.readException(Parcel.java:3333)
+	at android.app.IUiAutomationConnection$Stub$Proxy.connect(IUiAutomationConnection.java:550)
+	at android.app.UiAutomation.connectWithTimeout(UiAutomation.java:396)
+	at android.app.Instrumentation.getUiAutomation(Instrumentation.java:2717)
+	at android.app.Instrumentation.getUiAutomation(Instrumentation.java:2661)
+	at com.example.lyricsflow.GitHubUiTest.capture(GitHubUiTest.kt:108)
+	at com.example.lyricsflow.GitHubUiTest.registrationGuideAndUnavailableLoginAreClear(GitHubUiTest.kt:44)
+
+INSTRUMENTATION_STATUS: stream=
+Error in registrationGuideAndUnavailableLoginAreClear(com.example.lyricsflow.GitHubUiTest):
+java.lang.IllegalStateException: UiAutomationService android.accessibilityservice.IAccessibilityServiceClient$Stub$Proxy@a030c03already registered!
+	at android.os.Parcel.createExceptionOrNull(Parcel.java:3432)
+	at android.os.Parcel.createException(Parcel.java:3408)
+	at android.os.Parcel.readException(Parcel.java:3391)
+	at android.os.Parcel.readException(Parcel.java:3333)
+	at android.app.IUiAutomationConnection$Stub$Proxy.connect(IUiAutomationConnection.java:550)
+	at android.app.UiAutomation.connectWithTimeout(UiAutomation.java:396)
+	at android.app.Instrumentation.getUiAutomation(Instrumentation.java:2717)
+	at android.app.Instrumentation.getUiAutomation(Instrumentation.java:2661)
+	at com.example.lyricsflow.GitHubUiTest.capture(GitHubUiTest.kt:108)
+	at com.example.lyricsflow.GitHubUiTest.registrationGuideAndUnavailableLoginAreClear(GitHubUiTest.kt:44)
+
+INSTRUMENTATION_STATUS: test=registrationGuideAndUnavailableLoginAreClear
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubUiTest
+INSTRUMENTATION_STATUS: current=12
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=uploadNeedsPreviewAndDownloadNeedsExplicitRestore
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubUiTest
+INSTRUMENTATION_STATUS: current=12
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalStateException: Not connected!
+	at android.os.Parcel.createExceptionOrNull(Parcel.java:3432)
+	at android.os.Parcel.createException(Parcel.java:3408)
+	at android.os.Parcel.readException(Parcel.java:3391)
+	at android.os.Parcel.readException(Parcel.java:3333)
+	at android.app.IUiAutomationConnection$Stub$Proxy.takeScreenshot(IUiAutomationConnection.java:650)
+	at android.app.UiAutomation.takeScreenshot(UiAutomation.java:1340)
+	at com.example.lyricsflow.GitHubUiTest.capture(GitHubUiTest.kt:109)
+	at com.example.lyricsflow.GitHubUiTest.uploadNeedsPreviewAndDownloadNeedsExplicitRestore(GitHubUiTest.kt:85)
+
+INSTRUMENTATION_STATUS: stream=
+Error in uploadNeedsPreviewAndDownloadNeedsExplicitRestore(com.example.lyricsflow.GitHubUiTest):
+java.lang.IllegalStateException: Not connected!
+	at android.os.Parcel.createExceptionOrNull(Parcel.java:3432)
+	at android.os.Parcel.createException(Parcel.java:3408)
+	at android.os.Parcel.readException(Parcel.java:3391)
+	at android.os.Parcel.readException(Parcel.java:3333)
+	at android.app.IUiAutomationConnection$Stub$Proxy.takeScreenshot(IUiAutomationConnection.java:650)
+	at android.app.UiAutomation.takeScreenshot(UiAutomation.java:1340)
+	at com.example.lyricsflow.GitHubUiTest.capture(GitHubUiTest.kt:109)
+	at com.example.lyricsflow.GitHubUiTest.uploadNeedsPreviewAndDownloadNeedsExplicitRestore(GitHubUiTest.kt:85)
+
+INSTRUMENTATION_STATUS: test=uploadNeedsPreviewAndDownloadNeedsExplicitRestore
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: shortMsg=Process crashed.
+INSTRUMENTATION_CODE: 0
