@@ -11,7 +11,7 @@ import org.json.JSONObject
 
 class ApiFailure(message: String) : Exception(message)
 
-class MusicApi(private val store: Store) {
+class MusicApi(private val store: Store) : LyricsLookup {
     var neteaseGateway = ""
     private val amll =
         AmllClient(
@@ -122,22 +122,14 @@ class MusicApi(private val store: Store) {
     suspend fun search(provider: Provider, query: String): List<Track> =
         searchPage(provider, query).tracks
 
-    suspend fun searchExpanded(
+    override suspend fun searchExpanded(
         provider: Provider,
         query: String,
-        current: Track? = null,
+        current: Track?,
     ): List<Track> {
         if (provider == Provider.AMLL) return amll.search(query, current, size = 50).tracks
         if (provider == Provider.LRCLIB && current != null) {
-            val first = lrc.search(query, current)
-            val candidates = lrc.preferOriginal(current, first.rows)
-            if (SongSearch.automatic(current, candidates) != null) return candidates
-            // One broader title-only lookup; never fan out three full-text queries on overload.
-            val broad = lrc.search(SongSearch.withoutAliases(current.title))
-            return lrc.preferOriginal(
-                current,
-                (first.rows + broad.rows).distinctBy { it.optString("id") },
-            )
+            return lrc.preferOriginal(current, lrc.searchOriginal(current).rows)
         }
         val all = mutableListOf<Track>()
         var failure: Exception? = null
@@ -299,13 +291,12 @@ class MusicApi(private val store: Store) {
                     SongSearch.normalized(query) ==
                         SongSearch.normalized("${it.title} ${it.artist}")
                 }
-                val first = lrc.search(query, context)
-                val result =
-                    if (context != null && first.rows.isEmpty())
-                        lrc.search(SongSearch.withoutAliases(context.title))
-                    else first
+                val result = if (context != null) lrc.searchOriginal(context) else lrc.search(query)
+                val tracks =
+                    if (context != null) lrc.orderedSearch(context, result.rows)
+                    else result.rows.map(lrc::track)
                 SearchPage(
-                    result.rows.map(lrc::track).drop(page * size).take(size),
+                    tracks.drop(page * size).take(size),
                     (page + 1) * size < result.rows.size,
                     null, // LRCLIB returns an array, not the catalogue's total hit count.
                     "lrclib",
@@ -364,7 +355,7 @@ class MusicApi(private val store: Store) {
 
     suspend fun resolveAmll(value: String): Track = amll.resolve(value)
 
-    suspend fun lyrics(t: Track, refresh: Boolean = false): Lyrics {
+    override suspend fun lyrics(t: Track, refresh: Boolean): Lyrics {
         return when (t.provider) {
             Provider.AMLL -> amll.lyrics(t, refresh)
             Provider.NETEASE -> {

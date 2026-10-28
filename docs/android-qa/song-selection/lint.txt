@@ -1,0 +1,243 @@
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\data\CalibrationOffsets.kt:23: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+            .commit()
+             ~~~~~~~~
+
+   Explanation for issues of type "ApplySharedPref":
+   Consider using apply() instead of commit on shared preferences. Whereas
+   commit blocks and writes its data to persistent storage immediately, apply
+   will handle it in the background.
+
+D:\AndroidStudioProjects\LyricsFlow\gradle\libs.versions.toml:3: Warning: A newer version of androidx.core:core-ktx than 1.10.1 is available: 1.19.1 [GradleDependency]
+coreKtx = "1.10.1"
+          ~~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\gradle\libs.versions.toml:7: Warning: A newer version of androidx.lifecycle:lifecycle-runtime-ktx than 2.6.1 is available: 2.11.0 [GradleDependency]
+lifecycleRuntimeKtx = "2.6.1"
+                      ~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\gradle\libs.versions.toml:8: Warning: A newer version of androidx.activity:activity-compose than 1.8.0 is available: 1.13.0 [GradleDependency]
+activityCompose = "1.8.0"
+                  ~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\gradle\libs.versions.toml:10: Warning: A newer version of androidx.compose:compose-bom than 2026.02.01 is available: 2026.09.00 [GradleDependency]
+composeBom = "2026.02.01"
+             ~~~~~~~~~~~~
+
+   Explanation for issues of type "GradleDependency":
+   This detector looks for usages of libraries where the version you are using
+   is not the current stable release. Using older versions is fine, and there
+   are cases where you deliberately want to stick with an older version.
+   However, you may simply not be aware that a more recent version is
+   available, and that is what this lint check helps find.
+
+D:\AndroidStudioProjects\LyricsFlow\gradle\libs.versions.toml:9: Warning: A newer version of org.jetbrains.kotlin.plugin.compose than 2.2.10 is available: 2.4.21 [NewerVersionAvailable]
+kotlin = "2.2.10"
+         ~~~~~~~~
+
+   Explanation for issues of type "NewerVersionAvailable":
+   This detector checks with a central repository to see if there are newer
+   versions available for the dependencies used by this project. This is
+   similar to the GradleDependency check, which checks for newer versions
+   available in the Android SDK tools and libraries, but this works with any
+   MavenCentral dependency, and connects to the library every time, which
+   makes it more flexible but also much slower.
+
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\res\values\colors.xml:3: Warning: The resource R.color.purple_200 appears to be unused [UnusedResources]
+    <color name="purple_200">#FFBB86FC</color>
+           ~~~~~~~~~~~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\res\values\colors.xml:4: Warning: The resource R.color.purple_500 appears to be unused [UnusedResources]
+    <color name="purple_500">#FF6200EE</color>
+           ~~~~~~~~~~~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\res\values\colors.xml:5: Warning: The resource R.color.purple_700 appears to be unused [UnusedResources]
+    <color name="purple_700">#FF3700B3</color>
+           ~~~~~~~~~~~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\res\values\colors.xml:6: Warning: The resource R.color.teal_200 appears to be unused [UnusedResources]
+    <color name="teal_200">#FF03DAC5</color>
+           ~~~~~~~~~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\res\values\colors.xml:7: Warning: The resource R.color.teal_700 appears to be unused [UnusedResources]
+    <color name="teal_700">#FF018786</color>
+           ~~~~~~~~~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\res\values\colors.xml:8: Warning: The resource R.color.black appears to be unused [UnusedResources]
+    <color name="black">#FF000000</color>
+           ~~~~~~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\res\values\colors.xml:9: Warning: The resource R.color.white appears to be unused [UnusedResources]
+    <color name="white">#FFFFFFFF</color>
+           ~~~~~~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\res\mipmap-hdpi\ic_launcher.webp: Warning: The resource R.mipmap.ic_launcher appears to be unused [UnusedResources]
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\res\drawable\ic_launcher_background.xml:2: Warning: The resource R.drawable.ic_launcher_background appears to be unused [UnusedResources]
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+^
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\res\drawable\ic_launcher_foreground.xml:1: Warning: The resource R.drawable.ic_launcher_foreground appears to be unused [UnusedResources]
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+^
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\res\mipmap-hdpi\ic_launcher_round.webp: Warning: The resource R.mipmap.ic_launcher_round appears to be unused [UnusedResources]
+
+   Explanation for issues of type "UnusedResources":
+   Unused resources make applications larger and slow down builds.
+
+
+   The unused resource check can ignore tests. If you want to include
+   resources that are only referenced from tests, consider packaging them in a
+   test source set instead.
+
+   You can include test sources in the unused resource check by setting the
+   system property lint.unused-resources.include-tests=true, and to exclude
+   them (usually for performance reasons), use
+   lint.unused-resources.exclude-tests=true.
+
+   Available options:
+
+   **skip-libraries** (default is true):
+   Whether the unused resource check should skip reporting unused resources in libraries.
+
+   Many libraries will declare resources that are part of the library surface; other modules depending on the library will also reference the resources. To avoid reporting all these resources as unused (in the context of a library), the unused resource check normally skips reporting unused resources in libraries. Instead, run the unused resource check on the consuming app module (along with `checkDependencies=true`).
+
+   However, there are cases where you want to check that all the resources declared in a library are used; in that case, you can disable the skip option.
+
+   To configure this option, use a `lint.xml` file with an <option> like this:
+
+   ```xml
+   <lint>
+       <issue id="UnusedResources">
+           <option name="skip-libraries" value="true" />
+       </issue>
+   </lint>
+   ```
+
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\core\AppState.kt:212: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+        prefs.edit().putBoolean("autoSources", p.autoSources).apply()
+        ~~~~~~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\core\AppState.kt:548: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+                prefs
+                ^
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\core\AppState.kt:617: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+            prefs.edit().putLong("delay:${it.key}:${state.value.source}", v).apply()
+            ~~~~~~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\core\AppState.kt:656: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+                    prefs.edit().putString("source:${t.key}", "LOCAL").apply()
+                    ~~~~~~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\core\AppState.kt:681: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+        prefs.edit().putString("comments:$key", value).apply()
+        ~~~~~~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\core\AppState.kt:693: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+        val edit = prefs.edit()
+                   ~~~~~~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\core\AppState.kt:791: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+            prefs
+            ^
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\ui\ArtworkBlur.kt:78: Warning: Use the KTX extension function Bitmap.scale instead? [UseKtx]
+        val readable = Bitmap.createScaledBitmap(software, width, height, true)
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\data\CalibrationOffsets.kt:17: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+        prefs
+        ^
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\ui\FlowApp.kt:186: Warning: Use the KTX extension function String.toUri instead? [UseKtx]
+                    Uri.parse("package:${context.packageName}"),
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\overlay\LyricsOverlayService.kt:260: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+        getSharedPreferences("overlay-position", 0)
+        ^
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\ui\Panels.kt:485: Warning: Use the KTX extension function String.toUri instead? [UseKtx]
+                                    val uri = Uri.parse(value)
+                                              ~~~~~~~~~~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\ui\Panels.kt:987: Warning: Use the KTX extension function String.toUri instead? [UseKtx]
+                    require(url.isBlank() || Uri.parse(url).scheme == "https") { "仅支持 HTTPS" }
+                                             ~~~~~~~~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\ui\Panels.kt:1075: Warning: Use the KTX extension function String.toUri instead? [UseKtx]
+                if (url.isBlank() || Uri.parse(url).scheme == "https") {
+                                     ~~~~~~~~~~~~~~
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\data\Store.kt:105: Warning: Use the KTX extension function SQLiteDatabase.transaction instead? [UseKtx]
+        db.beginTransaction()
+        ~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "UseKtx":
+   The Android KTX libraries decorates the Android platform SDK as well as
+   various libraries with more convenient extension functions available from
+   Kotlin, allowing you to use default parameters, named parameters, and
+   more.
+
+   Available options:
+
+   **remove-defaults** (default is true):
+   Whether to skip arguments that match the defaults provided by the extension.
+
+   Extensions often provide default values for some of the parameters. For example:
+   ```kotlin
+   fun Path.readLines(charset: Charset = Charsets.UTF_8): List<String> { return Files.readAllLines(this, charset) }
+   ```
+   This lint check will by default automatically omit parameters that match the default, so if your code was calling
+
+   ```kotlin
+   Files.readAllLines(file, Charset.UTF_8)
+   ```
+   lint would replace this with
+   ```kotlin
+   file.readLines()
+   ```
+   rather than
+
+   ```kotlin
+   file.readLines(Charset.UTF_8
+   ```
+   You can turn this behavior off using this option.
+
+   To configure this option, use a `lint.xml` file with an <option> like this:
+
+   ```xml
+   <lint>
+       <issue id="UseKtx">
+           <option name="remove-defaults" value="true" />
+       </issue>
+   </lint>
+   ```
+
+   **require-present** (default is true):
+   Whether to only offer extensions already available.
+
+   This option lets you only have lint suggest extension replacements if those extensions are already available on the class path (in other words, you're already depending on the library containing the extension method.)
+
+   To configure this option, use a `lint.xml` file with an <option> like this:
+
+   ```xml
+   <lint>
+       <issue id="UseKtx">
+           <option name="require-present" value="true" />
+       </issue>
+   </lint>
+   ```
+
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\overlay\LyricsOverlayService.kt:197: Warning: Custom view `TextView` has setOnTouchListener called on it but does not override performClick [ClickableViewAccessibility]
+        handle!!.setOnTouchListener { _, e ->
+        ^
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\overlay\LyricsOverlayService.kt:197: Warning: onTouch lambda should call View#performClick when a click is detected [ClickableViewAccessibility]
+        handle!!.setOnTouchListener { _, e ->
+                                    ^
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\overlay\LyricsOverlayService.kt:225: Warning: Custom view `TextView` has setOnTouchListener called on it but does not override performClick [ClickableViewAccessibility]
+        resize.setOnTouchListener { _, e ->
+        ^
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\overlay\LyricsOverlayService.kt:225: Warning: onTouch lambda should call View#performClick when a click is detected [ClickableViewAccessibility]
+        resize.setOnTouchListener { _, e ->
+                                  ^
+
+   Explanation for issues of type "ClickableViewAccessibility":
+   If a View that overrides onTouchEvent or uses an OnTouchListener does not
+   also implement performClick and call it when clicks are detected, the View
+   may not handle accessibility actions properly. Logic handling the click
+   actions should ideally be placed in View#performClick as some accessibility
+   services invoke performClick when a click action should occur.
+
+D:\AndroidStudioProjects\LyricsFlow\app\src\main\java\com\example\lyricsflow\overlay\LyricsOverlayService.kt:148: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+                text = "⠿  LyricsFlow"
+                        ~~~~~~~~~~~~~
+
+   Explanation for issues of type "SetTextI18n":
+   When calling TextView#setText
+   * Never call Number#toString() to format numbers; it will not handle
+   fraction separators and locale-specific digits properly. Consider using
+   String#format with proper format specifications (%d or %f) instead.
+   * Do not pass a string literal (e.g. "Hello") to display text. Hardcoded
+   text can not be properly translated to other languages. Consider using
+   Android resource strings instead.
+   * Do not build messages by concatenating text chunks. Such messages can not
+   be properly translated.
+
+   https://developer.android.com/guide/topics/resources/localization.html
+
+0 errors, 37 warnings

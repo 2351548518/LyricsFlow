@@ -7,7 +7,12 @@ val LYRIC_PROVIDERS = listOf(Provider.QQ, Provider.NETEASE, Provider.AMLL, Provi
 
 data class SourceAttempt(val source: Provider, val reason: String, val candidates: Int = 0)
 
-data class ResolvedLyrics(val binding: Track?, val lyrics: Lyrics, val cached: Boolean = false)
+data class ResolvedLyrics(
+    val binding: Track?,
+    val lyrics: Lyrics,
+    val cached: Boolean = false,
+    val notice: String = "",
+)
 
 data class SourceLookup(
     val resolved: ResolvedLyrics? = null,

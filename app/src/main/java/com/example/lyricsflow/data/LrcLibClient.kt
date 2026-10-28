@@ -118,7 +118,7 @@ internal class LrcLibClient(
     private val known = java.util.concurrent.ConcurrentHashMap<String, JSONObject>()
 
     companion object {
-        const val REVISION = 2
+        const val REVISION = 3
         const val FRESH = 6 * 60 * 60 * 1000L
         const val STALE = 7 * 24 * 60 * 60 * 1000L
     }
@@ -164,10 +164,15 @@ internal class LrcLibClient(
 
     suspend fun search(query: String, current: Track? = null): LrcResult =
         withContext(Dispatchers.IO) {
+            val title = current?.let { SongSearch.withoutAliases(it.title) }
+            val discovery = current?.let { SongSearch.discoveryTitle(it.title) }
+            val artist = current?.artist?.split(Regex("[,，/、;&]"))?.first()?.trim().orEmpty()
             val path =
                 if (current == null) "/api/search?q=${enc(query)}"
-                else
-                    "/api/search?track_name=${enc(SongSearch.withoutAliases(current.title))}&artist_name=${enc(current.artist.split(Regex("[,，/、;&]")).first().trim())}"
+                // Exact version abbreviations can exclude native uploads named '(Movie Version)'.
+                // Discover the base title once, then enforce the full recording identity below.
+                else if (title != discovery) "/api/search?q=${enc("$discovery $artist".trim())}"
+                else "/api/search?track_name=${enc(title.orEmpty())}&artist_name=${enc(artist)}"
             val (json, stale) = fetch(path)
             val a = json.optJSONArray("items") ?: JSONArray()
             val rows = (0 until a.length().coerceAtMost(200)).map { a.getJSONObject(it) }
@@ -182,6 +187,44 @@ internal class LrcLibClient(
             if (known.size > 600) known.keys.take(known.size - 400).forEach { known.remove(it) }
             LrcResult(rows, stale)
         }
+
+    /** A valid Latin upload must not stop discovery of a native upload of the same recording. */
+    suspend fun searchOriginal(current: Track): LrcResult {
+        val first = search("${current.title} ${current.artist}", current)
+        val preferred = preferOriginal(current, first.rows)
+        val match = SongSearch.automatic(current, preferred)
+        val selected = first.rows.firstOrNull { it.optString("id") == match?.sourceId }
+        val needsOriginal =
+            selected != null &&
+                latinOnly(text(selected)) &&
+                !hasKana(text(selected, "plainLyrics")) &&
+                !englishVersion(current.title)
+        if (match != null && !needsOriginal) return first
+        val base = SongSearch.discoveryTitle(current.title)
+        // This version already used the broader request. Do not repeat it or fan out searches.
+        if (base != SongSearch.withoutAliases(current.title)) return first
+        val artist = current.artist.split(Regex("[,，/、;&]")).first().trim()
+        val broad =
+            try {
+                withTimeoutOrNull(4500) { search("$base $artist".trim()) }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                if (first.rows.isEmpty()) throw e
+                null // A failed optional discovery must not discard a successful first response.
+            }
+        return if (broad == null) first
+        else
+            LrcResult(
+                (first.rows + broad.rows).distinctBy { it.optString("id") },
+                first.stale || broad.stale,
+            )
+    }
+
+    fun orderedSearch(current: Track, rows: List<JSONObject>): List<Track> {
+        val preferred = preferOriginal(current, rows).map { it.sourceId }.toSet()
+        return rows.map(::track).sortedByDescending { it.sourceId in preferred }
+    }
 
     suspend fun record(id: String, refresh: Boolean = false): JSONObject {
         require(id.matches(Regex("\\d{1,20}"))) { "请输入 LRCLIB 数字记录 ID" }
@@ -203,7 +246,8 @@ internal class LrcLibClient(
             ?.let {
                 when {
                     it.optBoolean("instrumental") -> "纯音乐"
-                    hasKana(text(it)) || hasKana(text(it, "plainLyrics")) -> "含日文原文"
+                    hasKana(text(it, "syncedLyrics")) -> "含日文同步原文"
+                    hasKana(text(it, "plainLyrics")) -> "含日文原文（无同步时间）"
                     latinOnly(text(it)) -> "拉丁字母歌词（可能为罗马音）"
                     else -> ""
                 }
@@ -215,11 +259,10 @@ internal class LrcLibClient(
         // Language preference never bypasses title, credit, version or duration checks.
         val eligible = rows.filter { SongSearch.automatic(current, listOf(track(it))) != null }
         if (englishVersion(current.title)) return tracks
-        val japanese = eligible.filter {
-            hasKana(text(it)) && text(it, "syncedLyrics").isNotBlank()
-        }
+        val japanese = eligible.filter { hasKana(text(it)) || hasKana(text(it, "plainLyrics")) }
         if (japanese.isEmpty()) return tracks
-        val native = japanese.map(::track)
+        val synced = japanese.filter { hasKana(text(it, "syncedLyrics")) }
+        val native = synced.ifEmpty { japanese }.map(::track)
         val album = native.filter {
             current.album.isNotBlank() &&
                 SongSearch.normalized(it.album) == SongSearch.normalized(current.album)
@@ -238,7 +281,10 @@ internal class LrcLibClient(
         val plain = text(r, "plainLyrics")
         // Some community uploads put romaji in syncedLyrics and native lyrics in plainLyrics.
         // Do not fabricate line timestamps by zipping two unrelated texts.
-        val original = if (latinOnly(synced) && hasKana(plain)) plain else synced.ifBlank { plain }
+        val original =
+            if (!englishVersion(r.optString("trackName")) && latinOnly(synced) && hasKana(plain))
+                plain
+            else synced.ifBlank { plain }
         return Lyrics(
             LyricParser.lrc(original.removePrefix("\uFEFF"), duration),
             Provider.LRCLIB,

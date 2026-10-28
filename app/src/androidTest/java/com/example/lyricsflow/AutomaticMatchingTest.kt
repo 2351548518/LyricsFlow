@@ -92,11 +92,11 @@ class AutomaticMatchingTest {
             instrumentation.runOnMainSync {
                 graph.preferences(graph.state.value.prefs.copy(autoSources = true))
                 graph.onPlayback(Playback(fixture.copy(duration = 249000), "com.spotify.music"))
-                graph.refresh()
+                graph.matchAutomatically()
             }
             await { !graph.state.value.busy && graph.state.value.lyrics != null }
             assertEquals(Provider.NETEASE, graph.state.value.source)
-            assertTrue(graph.state.value.matchNotice.contains("已自动使用 网易云音乐"))
+            assertTrue(graph.state.value.matchNotice.contains("已重新自动匹配到 网易云音乐"))
             report(
                 "Preferred QQ rejected unknown mizuki alias; AppGraph automatically used NetEase and displayed fallback notice"
             )
@@ -132,7 +132,8 @@ class AutomaticMatchingTest {
             graph.store.put(
                 "binding",
                 track.key + ":QQ",
-                trackJson(track.copy(provider = Provider.QQ)).toString(),
+                trackJson(track.copy(provider = Provider.QQ, sourceId = "qa-${track.key}"))
+                    .toString(),
             )
             graph.store.put(
                 "lyrics",

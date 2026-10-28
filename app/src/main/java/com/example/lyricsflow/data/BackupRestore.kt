@@ -55,4 +55,5 @@ suspend fun restoreBackup(
     )
     graph.backgroundChanged()
     graph.reloadStyles()
+    graph.reloadRememberedLyrics()
 }

@@ -262,8 +262,8 @@ fun SearchSheet(
     val focusManager = LocalFocusManager.current
     var source by remember {
         mutableStateOf(
-            (initialSource ?: graph.state.value.source).takeIf { it in providers }
-                ?: providers.first()
+            (initialSource ?: graph.state.value.requestedSource ?: graph.state.value.source)
+                .takeIf { it in providers } ?: providers.first()
         )
     }
     var query by remember { mutableStateOf(current?.let { "${it.title} ${it.artist}" }.orEmpty()) }

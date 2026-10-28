@@ -100,11 +100,13 @@ class Store(context: Context) : SQLiteOpenHelper(context, "lyricsflow.db", null,
     }
 
     @Synchronized
-    fun restore(rows: List<Triple<String, String, String>>) {
+    fun restore(rows: List<Triple<String, String, String>>, guard: () -> Boolean = { true }) {
         val db = writableDatabase
         db.beginTransaction()
         try {
-            rows.forEach { (k, id, b) -> put(k, id, b) }
+            if (!guard()) throw kotlinx.coroutines.CancellationException("Song changed")
+            rows.forEach { (k, id, b) -> if (get(k, id) != b) put(k, id, b) }
+            if (!guard()) throw kotlinx.coroutines.CancellationException("Song changed")
             db.setTransactionSuccessful()
         } finally {
             db.endTransaction()

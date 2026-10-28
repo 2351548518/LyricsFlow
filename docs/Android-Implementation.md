@@ -93,6 +93,10 @@ APK：[app-debug.apk](../app/build/outputs/apk/debug/app-debug.apk)。安装使�
 
 2026-10-28 封面融合：歌词图片中心沿用模糊设置，向周围混合更强模糊并以平滑遮罩融入同一页面背景；去掉独立均色底层，保持文字清晰。网状渐变改为按封面四区域取色、宽权重混色和小幅位移。参数、截图及 47 项回归见 [封面过渡专项](./android-qa/Artwork-Blend.md)。
 
+2026-10-28 LRCLIB 原文：统一可靠版本缩写，带限定标题用基本歌名发现后按完整录音验收，拉丁字母精确结果继续有限查找日文稿；LRCLIB revision=3 触发旧缓存重选并保护译文边界。以 Sparkle 的实际罗马音绑定与日文 Movie Version 记录验证，见 [原文选择专项](./android-qa/LRCLIB-Original.md)。
+
+2026-10-28 逐曲选择：`SongLyrics` 统一来源查找/缓存规则，`SongSelection` 保存来源/具体记录及自动模式，`AppGraph` 在成功后事务确认，刷新固定当前记录，重新自动匹配单独执行。`Transfer`/GitHub 快照携带选择并恢复运行时行为，旧来源偏好按有效绑定迁移。详见 [切源、选择与同步专项](./android-qa/Song-Selection.md)。
+
 2026-10-28：LRCLIB 使用可取消客户端，增加结构化检索、复用搜索歌词、有限重试/退避、缓存回退；身份检查后优先日文同步记录，升级旧拉丁字母缓存。歌词描边复用文字布局，当前行采用图层缩放，时钟/高亮分离并按固定目标滚动。JVM 29 项、模拟器 38 项通过；真机样本 P95 从 21 ms 降至 8–9 ms。证据及真机测试 APK 升级限制见 [LRCLIB 与渲染专项](./android-qa/LRCLIB-Rendering.md)。
 
 2026-10-27 GitHub 增量：`GitHubApi` 负责固定官方端点、私有仓库检查和完整 Git 提交；`GitHubSync` 负责设备授权、刷新、预览、基线与恢复副本；`BackupRestore` 统一本地与云端恢复，`GitHubSettings` 接入我的页面。Token 与翻译 Key 使用独立加密槽，GitHub 状态排除系统备份。详见 [GitHub 同步说明](./GitHub-Sync.md)。

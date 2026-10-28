@@ -1,0 +1,1174 @@
+Standard Install: Sent 11.96 MB (1 APK)
+Standard Install: Sent 1.25 MB (1 APK)
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlaybackIntegrationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.PlaybackIntegrationTest:
+INSTRUMENTATION_STATUS: test=realSessionUpdatesSeekPauseAndSwitch
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlaybackIntegrationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realSessionUpdatesSeekPauseAndSwitch
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.PlayerMetadataTest:
+INSTRUMENTATION_STATUS: test=spotifyAndNormalQqKeepStandardFields
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=spotifyAndNormalQqKeepStandardFields
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=qqBluetoothLyricUpdatesKeepTheSameSong
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=qqBluetoothLyricUpdatesKeepTheSameSong
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.UiFlowTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.UiFlowTest:
+INSTRUMENTATION_STATUS: test=previewSettingsLibraryAndBack
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.UiFlowTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=previewSettingsLibraryAndBack
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ImportSecurityTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.ImportSecurityTest:
+INSTRUMENTATION_STATUS: test=androidXmlParserAndLosslessLyricRoundtrip
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ImportSecurityTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=androidXmlParserAndLosslessLyricRoundtrip
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ImportSecurityTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=schemaUnknownFieldsRangesAndNativeMotion
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ImportSecurityTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=schemaUnknownFieldsRangesAndNativeMotion
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.CalibrationOffsetTest
+INSTRUMENTATION_STATUS: current=7
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.CalibrationOffsetTest:
+INSTRUMENTATION_STATUS: test=oneTimeRepairPreservesOtherOffsetsAndFutureManual300
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.CalibrationOffsetTest
+INSTRUMENTATION_STATUS: current=7
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=oneTimeRepairPreservesOtherOffsetsAndFutureManual300
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.CalibrationOffsetTest
+INSTRUMENTATION_STATUS: current=8
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=automaticMatchingWaitsWithoutWritingCalibration
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.CalibrationOffsetTest
+INSTRUMENTATION_STATUS: current=8
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=automaticMatchingWaitsWithoutWritingCalibration
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.FlowAppearanceTest
+INSTRUMENTATION_STATUS: current=9
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.FlowAppearanceTest:
+INSTRUMENTATION_STATUS: test=repeatedMetadataBitmapsNeverResetTheDisplayedColor
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.FlowAppearanceTest
+INSTRUMENTATION_STATUS: current=9
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=repeatedMetadataBitmapsNeverResetTheDisplayedColor
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.FlowAppearanceTest
+INSTRUMENTATION_STATUS: current=10
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=coverAverageIsExactCachedAndHandlesTransparentPixels
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: cover-timing=2048x2048 full scan=45.1253ms; cached mean=0.0016733333333333333ms
+INSTRUMENTATION_STATUS_CODE: 2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.FlowAppearanceTest
+INSTRUMENTATION_STATUS: current=10
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=coverAverageIsExactCachedAndHandlesTransparentPixels
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.FlowAppearanceTest
+INSTRUMENTATION_STATUS: current=11
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=fluidHomeAndAppearanceJourney
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.FlowAppearanceTest
+INSTRUMENTATION_STATUS: current=11
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=fluidHomeAndAppearanceJourney
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.TranslationPolicyTest
+INSTRUMENTATION_STATUS: current=12
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.TranslationPolicyTest:
+INSTRUMENTATION_STATUS: test=legacyDailyCountersDoNotBlockTranslation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.TranslationPolicyTest
+INSTRUMENTATION_STATUS: current=12
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=legacyDailyCountersDoNotBlockTranslation
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ControlReadabilityTest
+INSTRUMENTATION_STATUS: current=13
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.ControlReadabilityTest:
+INSTRUMENTATION_STATUS: test=brownCoverSettingsAndMatchingKeepExplicitSelection
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ControlReadabilityTest
+INSTRUMENTATION_STATUS: current=13
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=brownCoverSettingsAndMatchingKeepExplicitSelection
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=14
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.GitHubSyncTest:
+INSTRUMENTATION_STATUS: test=deniedDeviceAuthorizationStopsPolling
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=14
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=deniedDeviceAuthorizationStopsPolling
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=15
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=refusesUnseenSnapshotAndConcurrentBranchUpdate
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=15
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=refusesUnseenSnapshotAndConcurrentBranchUpdate
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=16
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cloudUpdateAfterDownloadPreviewLeavesLocalStateUntouched
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=16
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cloudUpdateAfterDownloadPreviewLeavesLocalStateUntouched
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=17
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=createsPrivateRepositoryAndRejectsPublicExistingRepository
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=17
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=createsPrivateRepositoryAndRejectsPublicExistingRepository
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=18
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=restoreKeepsLocalOnlyRowsCreatesRecoveryAndDisablesPaidTranslation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=18
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.GitHubSyncTest$restoreKeepsLocalOnlyRowsCreatesRecoveryAndDisablesPaidTranslation$1.invokeSuspend(GitHubSyncTest.kt:341)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at com.example.lyricsflow.GitHubSyncTest.restoreKeepsLocalOnlyRowsCreatesRecoveryAndDisablesPaidTranslation(GitHubSyncTest.kt:293)
+
+INSTRUMENTATION_STATUS: stream=
+Error in restoreKeepsLocalOnlyRowsCreatesRecoveryAndDisablesPaidTranslation(com.example.lyricsflow.GitHubSyncTest):
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.GitHubSyncTest$restoreKeepsLocalOnlyRowsCreatesRecoveryAndDisablesPaidTranslation$1.invokeSuspend(GitHubSyncTest.kt:341)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at com.example.lyricsflow.GitHubSyncTest.restoreKeepsLocalOnlyRowsCreatesRecoveryAndDisablesPaidTranslation(GitHubSyncTest.kt:293)
+
+INSTRUMENTATION_STATUS: test=restoreKeepsLocalOnlyRowsCreatesRecoveryAndDisablesPaidTranslation
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=19
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=atomicUploadRoundtripPreservesOtherPathsAndSkipsUnchangedSnapshot
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=19
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=atomicUploadRoundtripPreservesOtherPathsAndSkipsUnchangedSnapshot
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=20
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=rejectsUnknownCloudFilesAndUnsupportedSchemaBeforeRestore
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=20
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=rejectsUnknownCloudFilesAndUnsupportedSchemaBeforeRestore
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=21
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=deviceFlowWaitsSlowsDownRefreshesAndSeparatesEncryptedCredentialSlots
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=21
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.data.SnapshotFiles.unzip(GitHubApi.kt:347)
+	at com.example.lyricsflow.GitHubSyncTest$deviceFlowWaitsSlowsDownRefreshesAndSeparatesEncryptedCredentialSlots$1.invokeSuspend(GitHubSyncTest.kt:425)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.ScopeCoroutine.afterResume(Scopes.kt:28)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTaskKt.resume(DispatchedTask.kt:221)
+	at kotlinx.coroutines.DispatchedTaskKt.dispatch(DispatchedTask.kt:154)
+	at kotlinx.coroutines.CancellableContinuationImpl.dispatchResume(CancellableContinuationImpl.kt:470)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core(CancellableContinuationImpl.kt:504)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core$default(CancellableContinuationImpl.kt:493)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeUndispatched(CancellableContinuationImpl.kt:596)
+	at kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask.run(EventLoop.common.kt:497)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at com.example.lyricsflow.GitHubSyncTest.deviceFlowWaitsSlowsDownRefreshesAndSeparatesEncryptedCredentialSlots(GitHubSyncTest.kt:387)
+
+INSTRUMENTATION_STATUS: stream=
+Error in deviceFlowWaitsSlowsDownRefreshesAndSeparatesEncryptedCredentialSlots(com.example.lyricsflow.GitHubSyncTest):
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.data.SnapshotFiles.unzip(GitHubApi.kt:347)
+	at com.example.lyricsflow.GitHubSyncTest$deviceFlowWaitsSlowsDownRefreshesAndSeparatesEncryptedCredentialSlots$1.invokeSuspend(GitHubSyncTest.kt:425)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.ScopeCoroutine.afterResume(Scopes.kt:28)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTaskKt.resume(DispatchedTask.kt:221)
+	at kotlinx.coroutines.DispatchedTaskKt.dispatch(DispatchedTask.kt:154)
+	at kotlinx.coroutines.CancellableContinuationImpl.dispatchResume(CancellableContinuationImpl.kt:470)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core(CancellableContinuationImpl.kt:504)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core$default(CancellableContinuationImpl.kt:493)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeUndispatched(CancellableContinuationImpl.kt:596)
+	at kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask.run(EventLoop.common.kt:497)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at com.example.lyricsflow.GitHubSyncTest.deviceFlowWaitsSlowsDownRefreshesAndSeparatesEncryptedCredentialSlots(GitHubSyncTest.kt:387)
+
+INSTRUMENTATION_STATUS: test=deviceFlowWaitsSlowsDownRefreshesAndSeparatesEncryptedCredentialSlots
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubUiTest
+INSTRUMENTATION_STATUS: current=22
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.GitHubUiTest:
+INSTRUMENTATION_STATUS: test=registrationGuideAndUnavailableLoginAreClear
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubUiTest
+INSTRUMENTATION_STATUS: current=22
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=registrationGuideAndUnavailableLoginAreClear
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubUiTest
+INSTRUMENTATION_STATUS: current=23
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=uploadNeedsPreviewAndDownloadNeedsExplicitRestore
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubUiTest
+INSTRUMENTATION_STATUS: current=23
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + InputText + EditableText contains '上传到私有仓库？' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.example.lyricsflow.GitHubUiTest.uploadNeedsPreviewAndDownloadNeedsExplicitRestore(GitHubUiTest.kt:84)
+
+INSTRUMENTATION_STATUS: stream=
+Error in uploadNeedsPreviewAndDownloadNeedsExplicitRestore(com.example.lyricsflow.GitHubUiTest):
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + InputText + EditableText contains '上传到私有仓库？' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.example.lyricsflow.GitHubUiTest.uploadNeedsPreviewAndDownloadNeedsExplicitRestore(GitHubUiTest.kt:84)
+
+INSTRUMENTATION_STATUS: test=uploadNeedsPreviewAndDownloadNeedsExplicitRestore
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubNetworkPolicyTest
+INSTRUMENTATION_STATUS: current=24
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.GitHubNetworkPolicyTest:
+INSTRUMENTATION_STATUS: test=initialDeviceCodeRequestCanBeCancelledBeforeAnyCodeIsReturned
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubNetworkPolicyTest
+INSTRUMENTATION_STATUS: current=24
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=initialDeviceCodeRequestCanBeCancelledBeforeAnyCodeIsReturned
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubNetworkPolicyTest
+INSTRUMENTATION_STATUS: current=25
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=hardDeadlineReturnsWithoutWaitingForBlockedVendorIoAndDropsLateReply
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubNetworkPolicyTest
+INSTRUMENTATION_STATUS: current=25
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=hardDeadlineReturnsWithoutWaitingForBlockedVendorIoAndDropsLateReply
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ReaderPolishTest
+INSTRUMENTATION_STATUS: current=26
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.ReaderPolishTest:
+INSTRUMENTATION_STATUS: test=currentLineIsLargerAndUnknownPositionDoesNotHighlightEveryLine
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ReaderPolishTest
+INSTRUMENTATION_STATUS: current=26
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=currentLineIsLargerAndUnknownPositionDoesNotHighlightEveryLine
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ReaderPolishTest
+INSTRUMENTATION_STATUS: current=27
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=opacityCanReachBothEndpointsAndZeroSurvivesBackupRestore
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ReaderPolishTest
+INSTRUMENTATION_STATUS: current=27
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.ReaderPolishTest.opacityCanReachBothEndpointsAndZeroSurvivesBackupRestore(ReaderPolishTest.kt:112)
+
+INSTRUMENTATION_STATUS: stream=
+Error in opacityCanReachBothEndpointsAndZeroSurvivesBackupRestore(com.example.lyricsflow.ReaderPolishTest):
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.ReaderPolishTest.opacityCanReachBothEndpointsAndZeroSurvivesBackupRestore(ReaderPolishTest.kt:112)
+
+INSTRUMENTATION_STATUS: test=opacityCanReachBothEndpointsAndZeroSurvivesBackupRestore
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ReaderPolishTest
+INSTRUMENTATION_STATUS: current=28
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=colorPickerRejectsInvalidDraftAndColorSurvivesBackupRestore
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ReaderPolishTest
+INSTRUMENTATION_STATUS: current=28
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.ReaderPolishTest.colorPickerRejectsInvalidDraftAndColorSurvivesBackupRestore(ReaderPolishTest.kt:164)
+
+INSTRUMENTATION_STATUS: stream=
+Error in colorPickerRejectsInvalidDraftAndColorSurvivesBackupRestore(com.example.lyricsflow.ReaderPolishTest):
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.ReaderPolishTest.colorPickerRejectsInvalidDraftAndColorSurvivesBackupRestore(ReaderPolishTest.kt:164)
+
+INSTRUMENTATION_STATUS: test=colorPickerRejectsInvalidDraftAndColorSurvivesBackupRestore
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=29
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.LrcLibClientTest:
+INSTRUMENTATION_STATUS: test=movieVersionDiscoversJapaneseBeforeAcceptingTheExactRomajiTitle
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=29
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=movieVersionDiscoversJapaneseBeforeAcceptingTheExactRomajiTitle
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=30
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=prefersNativeLyricsOnlyWithinMatchingRecording
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=30
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=prefersNativeLyricsOnlyWithinMatchingRecording
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=31
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=respectsLongRetryAfterAndDoesNotRetry404
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=31
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=respectsLongRetryAfterAndDoesNotRetry404
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=32
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=unavailableNativeDiscoveryKeepsTheResponseAndEnglishDoesNotForceJapanese
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=32
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=unavailableNativeDiscoveryKeepsTheResponseAndEnglishDoesNotForceJapanese
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=33
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=latinExactMatchStillTriesOneBroaderDiscoveryAndReusesItsPayload
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=33
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=latinExactMatchStillTriesOneBroaderDiscoveryAndReusesItsPayload
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=34
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=httpDeadlineDisconnectsAStalledConnection
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=34
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=httpDeadlineDisconnectsAStalledConnection
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=35
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=doesNotCallRomanizedTextOriginalWhenNativePlainIsAvailable
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=35
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=doesNotCallRomanizedTextOriginalWhenNativePlainIsAvailable
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=36
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=retriesOne503AndReusesLyricsInSearchResponse
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=36
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=retriesOne503AndReusesLyricsInSearchResponse
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=37
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cancelledRequestDoesNotRetryOrCacheAndReleasesLock
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=37
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cancelledRequestDoesNotRetryOrCacheAndReleasesLock
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=38
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=repeated503UsesStaleCacheAndBackoffButFreshCacheStillWorks
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=38
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=repeated503UsesStaleCacheAndBackoffButFreshCacheStillWorks
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=39
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=duplicateConcurrentRequestsShareTheSuccessfulCache
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=39
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=duplicateConcurrentRequestsShareTheSuccessfulCache
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LyricScrollTest
+INSTRUMENTATION_STATUS: current=40
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.LyricScrollTest:
+INSTRUMENTATION_STATUS: test=wordColorsStillAdvanceAfterCachedOutlineRendering
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LyricScrollTest
+INSTRUMENTATION_STATUS: current=40
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=wordColorsStillAdvanceAfterCachedOutlineRendering
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LyricScrollTest
+INSTRUMENTATION_STATUS: current=41
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=followsNewLineAndSeekButRespectsManualBrowsing
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LyricScrollTest
+INSTRUMENTATION_STATUS: current=41
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=followsNewLineAndSeekButRespectsManualBrowsing
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=42
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.AmllClientTest:
+INSTRUMENTATION_STATUS: test=metadataAliasesMatchCompleteCreditsAndSearchIsFuzzy
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=42
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=metadataAliasesMatchCompleteCreditsAndSearchIsFuzzy
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=43
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=offlineUsesValidatedCacheAndInvalidXmlCannotPoisonIt
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=43
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=offlineUsesValidatedCacheAndInvalidXmlCannotPoisonIt
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=44
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cancellationDoesNotTurnIntoStaleSuccessAndIndexPathsAreValidated
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=44
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cancellationDoesNotTurnIntoStaleSuccessAndIndexPathsAreValidated
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=45
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=resolvesPlatformIdsAndRejectsUntrustedLinks
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=45
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=resolvesPlatformIdsAndRejectsUntrustedLinks
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=46
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cachesIndexAndLyricsWithoutMixingTranslationIntoOriginal
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=46
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cachesIndexAndLyricsWithoutMixingTranslationIntoOriginal
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.MeshUiTest
+INSTRUMENTATION_STATUS: current=47
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.MeshUiTest:
+INSTRUMENTATION_STATUS: test=animatedMeshChangesPixelsWithoutRecomposingAndFreezesWhenPaused
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.MeshUiTest
+INSTRUMENTATION_STATUS: current=47
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=animatedMeshChangesPixelsWithoutRecomposingAndFreezesWhenPaused
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.MeshUiTest
+INSTRUMENTATION_STATUS: current=48
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=meshPreferenceAndBackgroundSurviveBackupRestore
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.MeshUiTest
+INSTRUMENTATION_STATUS: current=48
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.MeshUiTest.meshPreferenceAndBackgroundSurviveBackupRestore(MeshUiTest.kt:42)
+
+INSTRUMENTATION_STATUS: stream=
+Error in meshPreferenceAndBackgroundSurviveBackupRestore(com.example.lyricsflow.MeshUiTest):
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.MeshUiTest.meshPreferenceAndBackgroundSurviveBackupRestore(MeshUiTest.kt:42)
+
+INSTRUMENTATION_STATUS: test=meshPreferenceAndBackgroundSurviveBackupRestore
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ArtworkBlendTest
+INSTRUMENTATION_STATUS: current=49
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.ArtworkBlendTest:
+INSTRUMENTATION_STATUS: test=whiteColourfulAndDarkCoversHaveReadableFullBleedHomePreviews
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ArtworkBlendTest
+INSTRUMENTATION_STATUS: current=49
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=whiteColourfulAndDarkCoversHaveReadableFullBleedHomePreviews
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ArtworkBlendTest
+INSTRUMENTATION_STATUS: current=50
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=brightArtworkMeetsSurroundingsWithoutASeamAndKeepsItsCentre
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ArtworkBlendTest
+INSTRUMENTATION_STATUS: current=50
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=brightArtworkMeetsSurroundingsWithoutASeamAndKeepsItsCentre
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcOriginalCacheTest
+INSTRUMENTATION_STATUS: current=51
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.LrcOriginalCacheTest:
+INSTRUMENTATION_STATUS: test=revisionTwoRomajiBindingIsReselectedWithoutAssigningItsTranslationToJapanese
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcOriginalCacheTest
+INSTRUMENTATION_STATUS: current=51
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=revisionTwoRomajiBindingIsReselectedWithoutAssigningItsTranslationToJapanese
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SongSelectionTest
+INSTRUMENTATION_STATUS: current=52
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.SongSelectionTest:
+INSTRUMENTATION_STATUS: test=localImportIsRememberedAndReloadsWithoutAnyProviderRequest
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SongSelectionTest
+INSTRUMENTATION_STATUS: current=52
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=localImportIsRememberedAndReloadsWithoutAnyProviderRequest
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SongSelectionTest
+INSTRUMENTATION_STATUS: current=53
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=privateGitHubSnapshotRoundtripRestoresTheSpecificRecordAndCalibrationOffline
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SongSelectionTest
+INSTRUMENTATION_STATUS: current=53
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.data.SnapshotFiles.unzip(GitHubApi.kt:347)
+	at com.example.lyricsflow.SongSelectionTest$privateGitHubSnapshotRoundtripRestoresTheSpecificRecordAndCalibrationOffline$1.invokeSuspend(SongSelectionTest.kt:273)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at com.example.lyricsflow.SongSelectionTest.privateGitHubSnapshotRoundtripRestoresTheSpecificRecordAndCalibrationOffline(SongSelectionTest.kt:259)
+
+INSTRUMENTATION_STATUS: stream=
+Error in privateGitHubSnapshotRoundtripRestoresTheSpecificRecordAndCalibrationOffline(com.example.lyricsflow.SongSelectionTest):
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.data.SnapshotFiles.unzip(GitHubApi.kt:347)
+	at com.example.lyricsflow.SongSelectionTest$privateGitHubSnapshotRoundtripRestoresTheSpecificRecordAndCalibrationOffline$1.invokeSuspend(SongSelectionTest.kt:273)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at com.example.lyricsflow.SongSelectionTest.privateGitHubSnapshotRoundtripRestoresTheSpecificRecordAndCalibrationOffline(SongSelectionTest.kt:259)
+
+INSTRUMENTATION_STATUS: test=privateGitHubSnapshotRoundtripRestoresTheSpecificRecordAndCalibrationOffline
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SongSelectionTest
+INSTRUMENTATION_STATUS: current=54
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=switchingUsesOfflineTargetCacheAndRestoresItBeforeGlobalAutoOrder
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SongSelectionTest
+INSTRUMENTATION_STATUS: current=54
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=switchingUsesOfflineTargetCacheAndRestoresItBeforeGlobalAutoOrder
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SongSelectionTest
+INSTRUMENTATION_STATUS: current=55
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=restoreRejectsChoiceWithForeignSongKeyOrProvider
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SongSelectionTest
+INSTRUMENTATION_STATUS: current=55
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.data.SnapshotFiles.unzip(GitHubApi.kt:347)
+	at com.example.lyricsflow.SongSelectionTest.restoreRejectsChoiceWithForeignSongKeyOrProvider(SongSelectionTest.kt:338)
+
+INSTRUMENTATION_STATUS: stream=
+Error in restoreRejectsChoiceWithForeignSongKeyOrProvider(com.example.lyricsflow.SongSelectionTest):
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.data.SnapshotFiles.unzip(GitHubApi.kt:347)
+	at com.example.lyricsflow.SongSelectionTest.restoreRejectsChoiceWithForeignSongKeyOrProvider(SongSelectionTest.kt:338)
+
+INSTRUMENTATION_STATUS: test=restoreRejectsChoiceWithForeignSongKeyOrProvider
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SongSelectionTest
+INSTRUMENTATION_STATUS: current=56
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=failedSwitchKeepsActualSourceBindingAndPreviousSavedChoice
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SongSelectionTest
+INSTRUMENTATION_STATUS: current=56
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=failedSwitchKeepsActualSourceBindingAndPreviousSavedChoice
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SongSelectionTest
+INSTRUMENTATION_STATUS: current=57
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=exactBindingAndRefreshKeepTheRecordAndFailedRefreshPreservesIt
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SongSelectionTest
+INSTRUMENTATION_STATUS: current=57
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=exactBindingAndRefreshKeepTheRecordAndFailedRefreshPreservesIt
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SongSelectionTest
+INSTRUMENTATION_STATUS: current=58
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=explicitAutoRematchStoresAnAutoMarkerThatCanReplaceAnOlderPinOnRestore
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SongSelectionTest
+INSTRUMENTATION_STATUS: current=58
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.SongSelectionTest$explicitAutoRematchStoresAnAutoMarkerThatCanReplaceAnOlderPinOnRestore$1.invokeSuspend(SongSelectionTest.kt:213)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at com.example.lyricsflow.SongSelectionTest.explicitAutoRematchStoresAnAutoMarkerThatCanReplaceAnOlderPinOnRestore(SongSelectionTest.kt:200)
+
+INSTRUMENTATION_STATUS: stream=
+Error in explicitAutoRematchStoresAnAutoMarkerThatCanReplaceAnOlderPinOnRestore(com.example.lyricsflow.SongSelectionTest):
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.SongSelectionTest$explicitAutoRematchStoresAnAutoMarkerThatCanReplaceAnOlderPinOnRestore$1.invokeSuspend(SongSelectionTest.kt:213)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at com.example.lyricsflow.SongSelectionTest.explicitAutoRematchStoresAnAutoMarkerThatCanReplaceAnOlderPinOnRestore(SongSelectionTest.kt:200)
+
+INSTRUMENTATION_STATUS: test=explicitAutoRematchStoresAnAutoMarkerThatCanReplaceAnOlderPinOnRestore
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SongSelectionTest
+INSTRUMENTATION_STATUS: current=59
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=rapidSwitchCannotCommitAnOlderRequestAfterTheLatestChoice
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SongSelectionTest
+INSTRUMENTATION_STATUS: current=59
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=rapidSwitchCannotCommitAnOlderRequestAfterTheLatestChoice
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SongSelectionUiTest
+INSTRUMENTATION_STATUS: current=60
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.SongSelectionUiTest:
+INSTRUMENTATION_STATUS: test=sourceDialogExplainsRefreshAndFailedSwitchOpensTheRequestedProvider
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.SongSelectionUiTest
+INSTRUMENTATION_STATUS: current=60
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=60
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=sourceDialogExplainsRefreshAndFailedSwitchOpensTheRequestedProvider
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 70.385
+There were 9 failures:
+1) restoreKeepsLocalOnlyRowsCreatesRecoveryAndDisablesPaidTranslation(com.example.lyricsflow.GitHubSyncTest)
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.GitHubSyncTest$restoreKeepsLocalOnlyRowsCreatesRecoveryAndDisablesPaidTranslation$1.invokeSuspend(GitHubSyncTest.kt:341)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at com.example.lyricsflow.GitHubSyncTest.restoreKeepsLocalOnlyRowsCreatesRecoveryAndDisablesPaidTranslation(GitHubSyncTest.kt:293)
+2) deviceFlowWaitsSlowsDownRefreshesAndSeparatesEncryptedCredentialSlots(com.example.lyricsflow.GitHubSyncTest)
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.data.SnapshotFiles.unzip(GitHubApi.kt:347)
+	at com.example.lyricsflow.GitHubSyncTest$deviceFlowWaitsSlowsDownRefreshesAndSeparatesEncryptedCredentialSlots$1.invokeSuspend(GitHubSyncTest.kt:425)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.ScopeCoroutine.afterResume(Scopes.kt:28)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTaskKt.resume(DispatchedTask.kt:221)
+	at kotlinx.coroutines.DispatchedTaskKt.dispatch(DispatchedTask.kt:154)
+	at kotlinx.coroutines.CancellableContinuationImpl.dispatchResume(CancellableContinuationImpl.kt:470)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core(CancellableContinuationImpl.kt:504)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core$default(CancellableContinuationImpl.kt:493)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeUndispatched(CancellableContinuationImpl.kt:596)
+	at kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask.run(EventLoop.common.kt:497)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at com.example.lyricsflow.GitHubSyncTest.deviceFlowWaitsSlowsDownRefreshesAndSeparatesEncryptedCredentialSlots(GitHubSyncTest.kt:387)
+3) uploadNeedsPreviewAndDownloadNeedsExplicitRestore(com.example.lyricsflow.GitHubUiTest)
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + InputText + EditableText contains '上传到私有仓库？' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.example.lyricsflow.GitHubUiTest.uploadNeedsPreviewAndDownloadNeedsExplicitRestore(GitHubUiTest.kt:84)
+4) opacityCanReachBothEndpointsAndZeroSurvivesBackupRestore(com.example.lyricsflow.ReaderPolishTest)
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.ReaderPolishTest.opacityCanReachBothEndpointsAndZeroSurvivesBackupRestore(ReaderPolishTest.kt:112)
+5) colorPickerRejectsInvalidDraftAndColorSurvivesBackupRestore(com.example.lyricsflow.ReaderPolishTest)
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.ReaderPolishTest.colorPickerRejectsInvalidDraftAndColorSurvivesBackupRestore(ReaderPolishTest.kt:164)
+6) meshPreferenceAndBackgroundSurviveBackupRestore(com.example.lyricsflow.MeshUiTest)
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.MeshUiTest.meshPreferenceAndBackgroundSurviveBackupRestore(MeshUiTest.kt:42)
+7) privateGitHubSnapshotRoundtripRestoresTheSpecificRecordAndCalibrationOffline(com.example.lyricsflow.SongSelectionTest)
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.data.SnapshotFiles.unzip(GitHubApi.kt:347)
+	at com.example.lyricsflow.SongSelectionTest$privateGitHubSnapshotRoundtripRestoresTheSpecificRecordAndCalibrationOffline$1.invokeSuspend(SongSelectionTest.kt:273)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at com.example.lyricsflow.SongSelectionTest.privateGitHubSnapshotRoundtripRestoresTheSpecificRecordAndCalibrationOffline(SongSelectionTest.kt:259)
+8) restoreRejectsChoiceWithForeignSongKeyOrProvider(com.example.lyricsflow.SongSelectionTest)
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.data.SnapshotFiles.unzip(GitHubApi.kt:347)
+	at com.example.lyricsflow.SongSelectionTest.restoreRejectsChoiceWithForeignSongKeyOrProvider(SongSelectionTest.kt:338)
+9) explicitAutoRematchStoresAnAutoMarkerThatCanReplaceAnOlderPinOnRestore(com.example.lyricsflow.SongSelectionTest)
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.SongSelection$Companion.read(SongSelection.kt:40)
+	at com.example.lyricsflow.data.Transfer.validateBackup(Transfer.kt:331)
+	at com.example.lyricsflow.SongSelectionTest$explicitAutoRematchStoresAnAutoMarkerThatCanReplaceAnOlderPinOnRestore$1.invokeSuspend(SongSelectionTest.kt:213)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at com.example.lyricsflow.SongSelectionTest.explicitAutoRematchStoresAnAutoMarkerThatCanReplaceAnOlderPinOnRestore(SongSelectionTest.kt:200)
+
+FAILURES!!!
+Tests run: 60,  Failures: 9
+
+
+INSTRUMENTATION_CODE: -1

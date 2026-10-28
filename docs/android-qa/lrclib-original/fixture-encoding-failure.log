@@ -1,0 +1,829 @@
+Standard Install: Sent 11.95 MB (1 APK)
+Standard Install: Sent 1.23 MB (1 APK)
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlaybackIntegrationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.PlaybackIntegrationTest:
+INSTRUMENTATION_STATUS: test=realSessionUpdatesSeekPauseAndSwitch
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlaybackIntegrationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realSessionUpdatesSeekPauseAndSwitch
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.PlayerMetadataTest:
+INSTRUMENTATION_STATUS: test=spotifyAndNormalQqKeepStandardFields
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=spotifyAndNormalQqKeepStandardFields
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=qqBluetoothLyricUpdatesKeepTheSameSong
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.PlayerMetadataTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=qqBluetoothLyricUpdatesKeepTheSameSong
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.UiFlowTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.UiFlowTest:
+INSTRUMENTATION_STATUS: test=previewSettingsLibraryAndBack
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.UiFlowTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=previewSettingsLibraryAndBack
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ImportSecurityTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.ImportSecurityTest:
+INSTRUMENTATION_STATUS: test=androidXmlParserAndLosslessLyricRoundtrip
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ImportSecurityTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=androidXmlParserAndLosslessLyricRoundtrip
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ImportSecurityTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=schemaUnknownFieldsRangesAndNativeMotion
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ImportSecurityTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=schemaUnknownFieldsRangesAndNativeMotion
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.CalibrationOffsetTest
+INSTRUMENTATION_STATUS: current=7
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.CalibrationOffsetTest:
+INSTRUMENTATION_STATUS: test=oneTimeRepairPreservesOtherOffsetsAndFutureManual300
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.CalibrationOffsetTest
+INSTRUMENTATION_STATUS: current=7
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=oneTimeRepairPreservesOtherOffsetsAndFutureManual300
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.CalibrationOffsetTest
+INSTRUMENTATION_STATUS: current=8
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=automaticMatchingWaitsWithoutWritingCalibration
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.CalibrationOffsetTest
+INSTRUMENTATION_STATUS: current=8
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=automaticMatchingWaitsWithoutWritingCalibration
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.FlowAppearanceTest
+INSTRUMENTATION_STATUS: current=9
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.FlowAppearanceTest:
+INSTRUMENTATION_STATUS: test=repeatedMetadataBitmapsNeverResetTheDisplayedColor
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.FlowAppearanceTest
+INSTRUMENTATION_STATUS: current=9
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=repeatedMetadataBitmapsNeverResetTheDisplayedColor
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.FlowAppearanceTest
+INSTRUMENTATION_STATUS: current=10
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=coverAverageIsExactCachedAndHandlesTransparentPixels
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: cover-timing=2048x2048 full scan=48.8849ms; cached mean=0.008336666666666666ms
+INSTRUMENTATION_STATUS_CODE: 2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.FlowAppearanceTest
+INSTRUMENTATION_STATUS: current=10
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=coverAverageIsExactCachedAndHandlesTransparentPixels
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.FlowAppearanceTest
+INSTRUMENTATION_STATUS: current=11
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=fluidHomeAndAppearanceJourney
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.FlowAppearanceTest
+INSTRUMENTATION_STATUS: current=11
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=fluidHomeAndAppearanceJourney
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.TranslationPolicyTest
+INSTRUMENTATION_STATUS: current=12
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.TranslationPolicyTest:
+INSTRUMENTATION_STATUS: test=legacyDailyCountersDoNotBlockTranslation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.TranslationPolicyTest
+INSTRUMENTATION_STATUS: current=12
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=legacyDailyCountersDoNotBlockTranslation
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ControlReadabilityTest
+INSTRUMENTATION_STATUS: current=13
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.ControlReadabilityTest:
+INSTRUMENTATION_STATUS: test=brownCoverSettingsAndMatchingKeepExplicitSelection
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ControlReadabilityTest
+INSTRUMENTATION_STATUS: current=13
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=brownCoverSettingsAndMatchingKeepExplicitSelection
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=14
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.GitHubSyncTest:
+INSTRUMENTATION_STATUS: test=deniedDeviceAuthorizationStopsPolling
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=14
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=deniedDeviceAuthorizationStopsPolling
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=15
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=refusesUnseenSnapshotAndConcurrentBranchUpdate
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=15
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=refusesUnseenSnapshotAndConcurrentBranchUpdate
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=16
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cloudUpdateAfterDownloadPreviewLeavesLocalStateUntouched
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=16
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cloudUpdateAfterDownloadPreviewLeavesLocalStateUntouched
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=17
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=createsPrivateRepositoryAndRejectsPublicExistingRepository
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=17
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=createsPrivateRepositoryAndRejectsPublicExistingRepository
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=18
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=restoreKeepsLocalOnlyRowsCreatesRecoveryAndDisablesPaidTranslation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=18
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=restoreKeepsLocalOnlyRowsCreatesRecoveryAndDisablesPaidTranslation
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=19
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=atomicUploadRoundtripPreservesOtherPathsAndSkipsUnchangedSnapshot
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=19
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=atomicUploadRoundtripPreservesOtherPathsAndSkipsUnchangedSnapshot
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=20
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=rejectsUnknownCloudFilesAndUnsupportedSchemaBeforeRestore
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=20
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=rejectsUnknownCloudFilesAndUnsupportedSchemaBeforeRestore
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=21
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=deviceFlowWaitsSlowsDownRefreshesAndSeparatesEncryptedCredentialSlots
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubSyncTest
+INSTRUMENTATION_STATUS: current=21
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=deviceFlowWaitsSlowsDownRefreshesAndSeparatesEncryptedCredentialSlots
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubUiTest
+INSTRUMENTATION_STATUS: current=22
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.GitHubUiTest:
+INSTRUMENTATION_STATUS: test=registrationGuideAndUnavailableLoginAreClear
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubUiTest
+INSTRUMENTATION_STATUS: current=22
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=registrationGuideAndUnavailableLoginAreClear
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubUiTest
+INSTRUMENTATION_STATUS: current=23
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=uploadNeedsPreviewAndDownloadNeedsExplicitRestore
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubUiTest
+INSTRUMENTATION_STATUS: current=23
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=uploadNeedsPreviewAndDownloadNeedsExplicitRestore
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubNetworkPolicyTest
+INSTRUMENTATION_STATUS: current=24
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.GitHubNetworkPolicyTest:
+INSTRUMENTATION_STATUS: test=initialDeviceCodeRequestCanBeCancelledBeforeAnyCodeIsReturned
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubNetworkPolicyTest
+INSTRUMENTATION_STATUS: current=24
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=initialDeviceCodeRequestCanBeCancelledBeforeAnyCodeIsReturned
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubNetworkPolicyTest
+INSTRUMENTATION_STATUS: current=25
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=hardDeadlineReturnsWithoutWaitingForBlockedVendorIoAndDropsLateReply
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.GitHubNetworkPolicyTest
+INSTRUMENTATION_STATUS: current=25
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=hardDeadlineReturnsWithoutWaitingForBlockedVendorIoAndDropsLateReply
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ReaderPolishTest
+INSTRUMENTATION_STATUS: current=26
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.ReaderPolishTest:
+INSTRUMENTATION_STATUS: test=currentLineIsLargerAndUnknownPositionDoesNotHighlightEveryLine
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ReaderPolishTest
+INSTRUMENTATION_STATUS: current=26
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=currentLineIsLargerAndUnknownPositionDoesNotHighlightEveryLine
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ReaderPolishTest
+INSTRUMENTATION_STATUS: current=27
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=opacityCanReachBothEndpointsAndZeroSurvivesBackupRestore
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ReaderPolishTest
+INSTRUMENTATION_STATUS: current=27
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=opacityCanReachBothEndpointsAndZeroSurvivesBackupRestore
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ReaderPolishTest
+INSTRUMENTATION_STATUS: current=28
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=colorPickerRejectsInvalidDraftAndColorSurvivesBackupRestore
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ReaderPolishTest
+INSTRUMENTATION_STATUS: current=28
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=colorPickerRejectsInvalidDraftAndColorSurvivesBackupRestore
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=29
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.LrcLibClientTest:
+INSTRUMENTATION_STATUS: test=movieVersionDiscoversJapaneseBeforeAcceptingTheExactRomajiTitle
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=29
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stack=org.junit.ComparisonFailure: expected:<...api/search?q=Sparkle[+]RADWIMPS> but was:<...api/search?q=Sparkle[%20]RADWIMPS>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.example.lyricsflow.LrcLibClientTest$movieVersionDiscoversJapaneseBeforeAcceptingTheExactRomajiTitle$1$client$1.get(LrcLibClientTest.kt:28)
+	at com.example.lyricsflow.data.LrcLibClient$fetch$2.invokeSuspend(LrcLibClient.kt:143)
+	at com.example.lyricsflow.data.LrcLibClient$fetch$2.invoke(LrcLibClient.kt:8)
+	at com.example.lyricsflow.data.LrcLibClient$fetch$2.invoke(LrcLibClient.kt:4)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:42)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.withContext(Builders.common.kt:164)
+	at kotlinx.coroutines.BuildersKt.withContext(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at com.example.lyricsflow.data.LrcLibClient.fetch(LrcLibClient.kt:127)
+	at com.example.lyricsflow.data.LrcLibClient.fetch$default(LrcLibClient.kt:126)
+	at com.example.lyricsflow.data.LrcLibClient$search$2.invokeSuspend(LrcLibClient.kt:176)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:113)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:589)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:823)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:720)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:707)
+
+INSTRUMENTATION_STATUS: stream=
+Error in movieVersionDiscoversJapaneseBeforeAcceptingTheExactRomajiTitle(com.example.lyricsflow.LrcLibClientTest):
+org.junit.ComparisonFailure: expected:<...api/search?q=Sparkle[+]RADWIMPS> but was:<...api/search?q=Sparkle[%20]RADWIMPS>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.example.lyricsflow.LrcLibClientTest$movieVersionDiscoversJapaneseBeforeAcceptingTheExactRomajiTitle$1$client$1.get(LrcLibClientTest.kt:28)
+	at com.example.lyricsflow.data.LrcLibClient$fetch$2.invokeSuspend(LrcLibClient.kt:143)
+	at com.example.lyricsflow.data.LrcLibClient$fetch$2.invoke(LrcLibClient.kt:8)
+	at com.example.lyricsflow.data.LrcLibClient$fetch$2.invoke(LrcLibClient.kt:4)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:42)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.withContext(Builders.common.kt:164)
+	at kotlinx.coroutines.BuildersKt.withContext(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at com.example.lyricsflow.data.LrcLibClient.fetch(LrcLibClient.kt:127)
+	at com.example.lyricsflow.data.LrcLibClient.fetch$default(LrcLibClient.kt:126)
+	at com.example.lyricsflow.data.LrcLibClient$search$2.invokeSuspend(LrcLibClient.kt:176)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:113)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:589)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:823)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:720)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:707)
+
+INSTRUMENTATION_STATUS: test=movieVersionDiscoversJapaneseBeforeAcceptingTheExactRomajiTitle
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=30
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=prefersNativeLyricsOnlyWithinMatchingRecording
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=30
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=prefersNativeLyricsOnlyWithinMatchingRecording
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=31
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=respectsLongRetryAfterAndDoesNotRetry404
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=31
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=respectsLongRetryAfterAndDoesNotRetry404
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=32
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=unavailableNativeDiscoveryKeepsTheResponseAndEnglishDoesNotForceJapanese
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=32
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=unavailableNativeDiscoveryKeepsTheResponseAndEnglishDoesNotForceJapanese
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=33
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=latinExactMatchStillTriesOneBroaderDiscoveryAndReusesItsPayload
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=33
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=latinExactMatchStillTriesOneBroaderDiscoveryAndReusesItsPayload
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=34
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=httpDeadlineDisconnectsAStalledConnection
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=34
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=httpDeadlineDisconnectsAStalledConnection
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=35
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=doesNotCallRomanizedTextOriginalWhenNativePlainIsAvailable
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=35
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=doesNotCallRomanizedTextOriginalWhenNativePlainIsAvailable
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=36
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=retriesOne503AndReusesLyricsInSearchResponse
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=36
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=retriesOne503AndReusesLyricsInSearchResponse
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=37
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cancelledRequestDoesNotRetryOrCacheAndReleasesLock
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=37
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cancelledRequestDoesNotRetryOrCacheAndReleasesLock
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=38
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=repeated503UsesStaleCacheAndBackoffButFreshCacheStillWorks
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=38
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=repeated503UsesStaleCacheAndBackoffButFreshCacheStillWorks
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=39
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=duplicateConcurrentRequestsShareTheSuccessfulCache
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=39
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=duplicateConcurrentRequestsShareTheSuccessfulCache
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LyricScrollTest
+INSTRUMENTATION_STATUS: current=40
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.LyricScrollTest:
+INSTRUMENTATION_STATUS: test=wordColorsStillAdvanceAfterCachedOutlineRendering
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LyricScrollTest
+INSTRUMENTATION_STATUS: current=40
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=wordColorsStillAdvanceAfterCachedOutlineRendering
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LyricScrollTest
+INSTRUMENTATION_STATUS: current=41
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=followsNewLineAndSeekButRespectsManualBrowsing
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LyricScrollTest
+INSTRUMENTATION_STATUS: current=41
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=followsNewLineAndSeekButRespectsManualBrowsing
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=42
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.AmllClientTest:
+INSTRUMENTATION_STATUS: test=metadataAliasesMatchCompleteCreditsAndSearchIsFuzzy
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=42
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=metadataAliasesMatchCompleteCreditsAndSearchIsFuzzy
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=43
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=offlineUsesValidatedCacheAndInvalidXmlCannotPoisonIt
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=43
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=offlineUsesValidatedCacheAndInvalidXmlCannotPoisonIt
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=44
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cancellationDoesNotTurnIntoStaleSuccessAndIndexPathsAreValidated
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=44
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cancellationDoesNotTurnIntoStaleSuccessAndIndexPathsAreValidated
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=45
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=resolvesPlatformIdsAndRejectsUntrustedLinks
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=45
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=resolvesPlatformIdsAndRejectsUntrustedLinks
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=46
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cachesIndexAndLyricsWithoutMixingTranslationIntoOriginal
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=46
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cachesIndexAndLyricsWithoutMixingTranslationIntoOriginal
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.MeshUiTest
+INSTRUMENTATION_STATUS: current=47
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.MeshUiTest:
+INSTRUMENTATION_STATUS: test=animatedMeshChangesPixelsWithoutRecomposingAndFreezesWhenPaused
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.MeshUiTest
+INSTRUMENTATION_STATUS: current=47
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=animatedMeshChangesPixelsWithoutRecomposingAndFreezesWhenPaused
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.MeshUiTest
+INSTRUMENTATION_STATUS: current=48
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=meshPreferenceAndBackgroundSurviveBackupRestore
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.MeshUiTest
+INSTRUMENTATION_STATUS: current=48
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=meshPreferenceAndBackgroundSurviveBackupRestore
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ArtworkBlendTest
+INSTRUMENTATION_STATUS: current=49
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.ArtworkBlendTest:
+INSTRUMENTATION_STATUS: test=whiteColourfulAndDarkCoversHaveReadableFullBleedHomePreviews
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ArtworkBlendTest
+INSTRUMENTATION_STATUS: current=49
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=whiteColourfulAndDarkCoversHaveReadableFullBleedHomePreviews
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ArtworkBlendTest
+INSTRUMENTATION_STATUS: current=50
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=brightArtworkMeetsSurroundingsWithoutASeamAndKeepsItsCentre
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ArtworkBlendTest
+INSTRUMENTATION_STATUS: current=50
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=brightArtworkMeetsSurroundingsWithoutASeamAndKeepsItsCentre
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcOriginalCacheTest
+INSTRUMENTATION_STATUS: current=51
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.LrcOriginalCacheTest:
+INSTRUMENTATION_STATUS: test=revisionTwoRomajiBindingIsReselectedWithoutAssigningItsTranslationToJapanese
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcOriginalCacheTest
+INSTRUMENTATION_STATUS: current=51
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=51
+INSTRUMENTATION_STATUS: stack=org.junit.ComparisonFailure: expected:<90000000000000000[2]> but was:<90000000000000000[1]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.example.lyricsflow.LrcOriginalCacheTest.revisionTwoRomajiBindingIsReselectedWithoutAssigningItsTranslationToJapanese(LrcOriginalCacheTest.kt:87)
+
+INSTRUMENTATION_STATUS: stream=
+Error in revisionTwoRomajiBindingIsReselectedWithoutAssigningItsTranslationToJapanese(com.example.lyricsflow.LrcOriginalCacheTest):
+org.junit.ComparisonFailure: expected:<90000000000000000[2]> but was:<90000000000000000[1]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.example.lyricsflow.LrcOriginalCacheTest.revisionTwoRomajiBindingIsReselectedWithoutAssigningItsTranslationToJapanese(LrcOriginalCacheTest.kt:87)
+
+INSTRUMENTATION_STATUS: test=revisionTwoRomajiBindingIsReselectedWithoutAssigningItsTranslationToJapanese
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 68.948
+There were 2 failures:
+1) movieVersionDiscoversJapaneseBeforeAcceptingTheExactRomajiTitle(com.example.lyricsflow.LrcLibClientTest)
+org.junit.ComparisonFailure: expected:<...api/search?q=Sparkle[+]RADWIMPS> but was:<...api/search?q=Sparkle[%20]RADWIMPS>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.example.lyricsflow.LrcLibClientTest$movieVersionDiscoversJapaneseBeforeAcceptingTheExactRomajiTitle$1$client$1.get(LrcLibClientTest.kt:28)
+	at com.example.lyricsflow.data.LrcLibClient$fetch$2.invokeSuspend(LrcLibClient.kt:143)
+	at com.example.lyricsflow.data.LrcLibClient$fetch$2.invoke(LrcLibClient.kt:8)
+	at com.example.lyricsflow.data.LrcLibClient$fetch$2.invoke(LrcLibClient.kt:4)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:42)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.withContext(Builders.common.kt:164)
+	at kotlinx.coroutines.BuildersKt.withContext(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at com.example.lyricsflow.data.LrcLibClient.fetch(LrcLibClient.kt:127)
+	at com.example.lyricsflow.data.LrcLibClient.fetch$default(LrcLibClient.kt:126)
+	at com.example.lyricsflow.data.LrcLibClient$search$2.invokeSuspend(LrcLibClient.kt:176)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:113)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:589)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:823)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:720)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:707)
+2) revisionTwoRomajiBindingIsReselectedWithoutAssigningItsTranslationToJapanese(com.example.lyricsflow.LrcOriginalCacheTest)
+org.junit.ComparisonFailure: expected:<90000000000000000[2]> but was:<90000000000000000[1]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.example.lyricsflow.LrcOriginalCacheTest.revisionTwoRomajiBindingIsReselectedWithoutAssigningItsTranslationToJapanese(LrcOriginalCacheTest.kt:87)
+
+FAILURES!!!
+Tests run: 51,  Failures: 2
+
+
+INSTRUMENTATION_CODE: -1

@@ -10,6 +10,106 @@ import org.junit.Test
 
 class LrcLibClientTest {
     @Test
+    fun movieVersionDiscoversJapaneseBeforeAcceptingTheExactRomajiTitle() = runBlocking {
+        val current = Track("Sparkle - movie ver.", "RADWIMPS", "Exact album", 537000)
+        val roman =
+            record(1, "[00:31.00]Bokutachi wa hikari no mukou e", 538.0, current.title)
+                .put("albumName", current.album)
+        val native =
+            record(2, "[00:31.40]僕たちは光の向こうへ", 534.0, "Sparkle (Movie Version)")
+                .put("albumName", "Other release")
+        val wrong = record(3, "[00:01.00]僕たちは光の向こうへ", 537.0, "Sparkle (English Version)")
+        var calls = 0
+        val client =
+            Cache()
+                .client(
+                    LrcTransport { path ->
+                        calls++
+                        assertEquals("/api/search?q=Sparkle%20RADWIMPS", path)
+                        response(roman, native, wrong)
+                    }
+                )
+        val rows = client.searchOriginal(current).rows
+        val match = SongSearch.automatic(current, client.preferOriginal(current, rows))!!
+        assertEquals("2", match.sourceId)
+        assertEquals("2", client.orderedSearch(current, rows).first().sourceId)
+        assertEquals(3, client.orderedSearch(current, rows).size)
+        assertEquals(
+            "僕たちは光の向こうへ",
+            client.lyrics(client.record("2"), current.duration).lines.single().text,
+        )
+        assertEquals(1, calls)
+    }
+
+    @Test
+    fun latinExactMatchStillTriesOneBroaderDiscoveryAndReusesItsPayload() = runBlocking {
+        var calls = 0
+        val roman = record(1, "[00:01.00]Bokutachi wa hikari no mukou e")
+        val native = record(2, "[00:01.00]僕たちは光の向こうへ")
+        val client =
+            Cache()
+                .client(
+                    LrcTransport { path ->
+                        calls++
+                        if (path.contains("track_name=")) response(roman)
+                        else response(roman, native)
+                    }
+                )
+        val rows = client.searchOriginal(song).rows
+        val match = SongSearch.automatic(song, client.preferOriginal(song, rows))!!
+        assertEquals("2", match.sourceId)
+        assertTrue(
+            client.lyrics(client.record("2"), song.duration).lines.single().text.contains("光")
+        )
+        assertEquals(2, calls)
+    }
+
+    @Test
+    fun unavailableNativeDiscoveryKeepsTheResponseAndEnglishDoesNotForceJapanese() = runBlocking {
+        var calls = 0
+        val roman = record(1, "[00:01.00]Bokutachi wa hikari no mukou e")
+        val client =
+            Cache()
+                .client(
+                    LrcTransport { path ->
+                        calls++
+                        if (path.contains("track_name=")) response(roman) else throw LrcFailure(503)
+                    }
+                )
+        val rows = client.searchOriginal(song).rows
+        assertEquals(listOf("1"), rows.map { it.optString("id") })
+        assertEquals(3, calls) // Initial result, then at most one transient retry.
+        val english = song.copy(title = "Dream Lantern (English ver.)")
+        var englishCalls = 0
+        val englishClient =
+            Cache()
+                .client(
+                    LrcTransport {
+                        englishCalls++
+                        response(
+                            record(
+                                2,
+                                "[00:01.00]Let the light travel with us",
+                                title = "Dream Lantern (English Version)",
+                            )
+                        )
+                    }
+                )
+        assertEquals(
+            "2",
+            SongSearch.automatic(
+                    english,
+                    englishClient.preferOriginal(
+                        english,
+                        englishClient.searchOriginal(english).rows,
+                    ),
+                )!!
+                .sourceId,
+        )
+        assertEquals(1, englishCalls)
+    }
+
+    @Test
     fun httpDeadlineDisconnectsAStalledConnection() = runBlocking {
         val disconnected = java.util.concurrent.CountDownLatch(1)
         val entered = java.util.concurrent.CountDownLatch(1)
@@ -272,8 +372,28 @@ class LrcLibClientTest {
             "Unrelated native text must not inherit romaji timestamps",
             lyrics.lines.all { it.start == null },
         )
-        val english = client.lyrics(record(2, "[00:01.00]Let the morning find us slowly"), 131000)
+        val roman = record(6, "[00:01.00]Bokutachi wa hikari no mukou e")
+        assertEquals(
+            listOf("1"),
+            client.preferOriginal(song, listOf(roman, row)).map { it.sourceId },
+        )
+        val timedNative = record(7, "[00:01.00]僕たちは光の向こうへ")
+        assertEquals(
+            listOf("7"),
+            client.preferOriginal(song, listOf(roman, row, timedNative)).map { it.sourceId },
+        )
+        val english =
+            client.lyrics(
+                record(
+                        2,
+                        "[00:01.00]Let the morning find us slowly",
+                        title = "Dream Lantern (English ver.)",
+                    )
+                    .put("plainLyrics", "僕たちは光の向こうへ"),
+                131000,
+            )
         assertEquals(1000L, english.lines.single().start)
+        assertEquals("Let the morning find us slowly", english.lines.single().text)
         val empty =
             client.lyrics(
                 JSONObject()

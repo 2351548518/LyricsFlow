@@ -1,0 +1,67 @@
+[
+  {
+    "id": 27715961,
+    "title": "Sparkle (Movie Version)",
+    "artist": "RADWIMPS",
+    "album": "Your Name / RADWIMPS",
+    "duration": 534.0,
+    "syncedLength": 803,
+    "plainLength": 462,
+    "syncedKana": 289,
+    "plainKana": 289,
+    "lyricsfileKana": 578,
+    "timedRows": 31
+  },
+  {
+    "id": 34221396,
+    "title": "Sparkle - movie ver.",
+    "artist": "RADWIMPS",
+    "album": "Sparkle - movie ver.",
+    "duration": 538.0,
+    "syncedLength": 1448,
+    "plainLength": 1151,
+    "syncedKana": 0,
+    "plainKana": 0,
+    "lyricsfileKana": 0,
+    "timedRows": 27
+  },
+  {
+    "id": 24947626,
+    "title": "Sparkle",
+    "artist": "RADWIMPS",
+    "album": "Your Name. (Deluxe Edition / Original Motion Picture Soundtrack)",
+    "duration": 534.12,
+    "syncedLength": 1571,
+    "plainLength": 718,
+    "syncedKana": 418,
+    "plainKana": 418,
+    "lyricsfileKana": 836,
+    "timedRows": 78
+  },
+  {
+    "id": 9250944,
+    "title": "Sparkle",
+    "artist": "RADWIMPS",
+    "album": "Your Name.",
+    "duration": 538.0,
+    "syncedLength": 803,
+    "plainLength": 462,
+    "syncedKana": 289,
+    "plainKana": 289,
+    "lyricsfileKana": 578,
+    "timedRows": 31
+  },
+  {
+    "id": 37130981,
+    "title": "Sparkle - movie ver.",
+    "artist": "Radwimps",
+    "album": "Your Name. Original Motion Picture Soundtrack [Deluxe Edition]",
+    "duration": 538.0,
+    "syncedLength": 1448,
+    "plainLength": 1151,
+    "syncedKana": 0,
+    "plainKana": 0,
+    "lyricsfileKana": 0,
+    "timedRows": 27
+  }
+]

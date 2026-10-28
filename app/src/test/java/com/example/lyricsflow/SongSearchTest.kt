@@ -5,6 +5,36 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class SongSearchTest {
+    @Test
+    fun versionAbbreviationsMatchWithoutAcceptingDifferentRecordings() {
+        val current = Track("Sparkle - movie ver.", "RADWIMPS", duration = 537000)
+        val native = current.copy(title = "Sparkle (Movie Version)", duration = 534000)
+        assertNotNull(SongSearch.automatic(current, listOf(native)))
+        for (wrong in
+            listOf(
+                "Sparkle (Original Version)",
+                "Sparkle (English Version)",
+                "Sparkle (Live)",
+                "Sparkle",
+            )) {
+            assertNull(wrong, SongSearch.automatic(current, listOf(native.copy(title = wrong))))
+        }
+        assertNull(SongSearch.automatic(current, listOf(native.copy(duration = 410000))))
+        assertNull(SongSearch.automatic(current, listOf(native.copy(artist = "Cover singer"))))
+    }
+
+    @Test
+    fun discoveryCanOmitVersionWhileAcceptanceRetainsIt() {
+        assertEquals("Sparkle", SongSearch.discoveryTitle("Sparkle - movie ver."))
+        assertEquals("Sparkle", SongSearch.discoveryTitle("Sparkle (Movie Version)"))
+        assertEquals("Dream Lantern", SongSearch.discoveryTitle("Dream Lantern"))
+        assertEquals("Song (Live)", SongSearch.discoveryTitle("Song (Live)"))
+        assertNotEquals(
+            SongSearch.recordingTitle("Song"),
+            SongSearch.recordingTitle("Song (English ver.)"),
+        )
+    }
+
     private fun song(
         title: String,
         artist: String = "rionos",

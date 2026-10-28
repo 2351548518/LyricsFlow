@@ -15,6 +15,16 @@ data class SearchPage(
 
 object SongSearch {
     private val brackets = Regex("\\([^)]*\\)|（[^）]*）|【[^】]*】|\\[[^]]*]")
+    private val versionSpelling =
+        Regex(
+            "\\b(movie|english|japanese|korean|original|album|single|tv)\\s+ver(?:sion)?\\.?(?=$|[\\s)\\]）】-])",
+            RegexOption.IGNORE_CASE,
+        )
+    private val discoverySuffix =
+        Regex(
+            "\\s*(?:[-–—]\\s*|[（(\\[【])(?:movie|english|japanese|korean|original|album|single|tv)\\s+ver(?:sion)?\\.?\\s*[)）\\]】]?\\s*$",
+            RegexOption.IGNORE_CASE,
+        )
     private val versions =
         Regex(
             "live|remix|cover|acoustic|instrumental|karaoke|sped|slowed|version|edit|english|japanese|korean|现场|演唱会|翻唱|伴奏|纯音乐|重制|混音|合唱|独唱|国语|粤语|日语|韩语|英文|版",
@@ -25,6 +35,16 @@ object SongSearch {
         Normalizer.normalize(text, Normalizer.Form.NFKC).lowercase(Locale.ROOT).filter {
             it.isLetterOrDigit()
         }
+
+    /** Normalize equivalent version spellings without discarding recording qualifiers. */
+    fun recordingTitle(text: String): String =
+        normalized(versionSpelling.replace(withoutAliases(text)) { "${it.groupValues[1]} version" })
+
+    /** Broader discovery only; acceptance must still compare the complete recording title. */
+    fun discoveryTitle(text: String): String {
+        val title = withoutAliases(text)
+        return discoverySuffix.replace(title, "").trim().ifBlank { title }
+    }
 
     /** Only remove translated aliases; keep performance/version qualifiers significant. */
     fun withoutAliases(text: String): String =
@@ -134,7 +154,7 @@ object SongSearch {
     }
 
     fun decide(current: Track, candidates: List<Track>): MatchDecision {
-        fun title(t: Track) = normalized(withoutAliases(t.title))
+        fun title(t: Track) = recordingTitle(t.title)
         val all = candidates.distinctBy(::identity)
         fun rejected(reason: String) = MatchDecision(null, reason, all.size)
         if (all.isEmpty()) return rejected("没有返回歌曲候选")

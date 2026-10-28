@@ -47,7 +47,11 @@ class CalibrationOffsetTest {
         val track = Track("Offset QA ${UUID.randomUUID()}")
         val key = track.key + ":QQ"
         val offsetKey = "delay:$key"
-        graph.store.put("binding", key, trackJson(track.copy(provider = Provider.QQ)).toString())
+        graph.store.put(
+            "binding",
+            key,
+            trackJson(track.copy(provider = Provider.QQ, sourceId = "qa-${track.key}")).toString(),
+        )
         graph.store.put(
             "lyrics",
             key,
@@ -93,6 +97,7 @@ class CalibrationOffsetTest {
                 .commit()
             graph.store.remove("binding", key)
             graph.store.remove("lyrics", key)
+            graph.store.remove("selection", track.key)
         }
     }
 }

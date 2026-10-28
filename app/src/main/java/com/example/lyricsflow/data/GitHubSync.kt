@@ -418,7 +418,7 @@ internal constructor(
     private fun describe(files: Map<String, ByteArray>): String {
         val rows = Transfer.validateBackup(SnapshotFiles.zip(files)).first
         val grouped = rows.groupingBy { it.first }.eachCount()
-        return "主题 ${grouped["style"] ?: 0} 项 · 已存歌词 ${grouped["saved"] ?: 0} 首\n歌词数据 ${grouped["lyrics"] ?: 0} 项 · 绑定 ${grouped["binding"] ?: 0} 项\n显示设置、逐曲来源与时间偏移\n共 ${files.values.sumOf { it.size } / 1024 + 1} KB；${if (JSONObject(String(files.getValue("settings.json"), Charsets.UTF_8)).has("backgroundImage")) "包含自定义背景" else "不含自定义背景"}"
+        return "主题 ${grouped["style"] ?: 0} 项 · 已存歌词 ${grouped["saved"] ?: 0} 首\n歌词数据 ${grouped["lyrics"] ?: 0} 项 · 绑定 ${grouped["binding"] ?: 0} 项\n逐曲选择 ${grouped["selection"] ?: 0} 项（来源与具体记录）\n显示设置、逐曲来源与时间偏移\n共 ${files.values.sumOf { it.size } / 1024 + 1} KB；${if (JSONObject(String(files.getValue("settings.json"), Charsets.UTF_8)).has("backgroundImage")) "包含自定义背景" else "不含自定义背景"}"
     }
 
     fun discardPreview() {

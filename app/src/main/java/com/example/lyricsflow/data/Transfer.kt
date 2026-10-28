@@ -248,14 +248,15 @@ object Transfer {
             )
             val rows = JSONArray()
             var size = 0
-            for (k in listOf("binding", "lyrics", "saved", "style")) graph.store.all(k).forEach {
-                (id, body) ->
-                size += body.toByteArray().size
-                require(size <= 16_000_000 && rows.length() < 3000) {
-                    "资料超过单份备份 16 MB／3000 项限制，请先导出部分歌词"
+            for (k in listOf("binding", "lyrics", "saved", "style", "selection")) graph.store
+                .all(k)
+                .forEach { (id, body) ->
+                    size += body.toByteArray().size
+                    require(size <= 16_000_000 && rows.length() < 3000) {
+                        "资料超过单份备份 16 MB／3000 项限制，请先导出部分歌词"
+                    }
+                    rows.put(JSONObject().put("kind", k).put("id", id).put("body", body))
                 }
-                rows.put(JSONObject().put("kind", k).put("id", id).put("body", body))
-            }
             add("data.json", rows.toString())
             val p = graph.state.value.prefs
             val settings =
@@ -322,8 +323,12 @@ object Transfer {
                 val k = r.getString("kind")
                 val id = r.getString("id")
                 val b = r.getString("body")
-                require(k in listOf("binding", "lyrics", "saved", "style") && id.length <= 300)
+                require(
+                    k in listOf("binding", "lyrics", "saved", "style", "selection") &&
+                        id.length <= 300
+                )
                 when (k) {
+                    "selection" -> SongSelection.read(id, jsonObject(b))
                     "binding" -> readTrack(jsonObject(b))
                     "lyrics" -> readLyrics(jsonObject(b))
                     "saved" -> {

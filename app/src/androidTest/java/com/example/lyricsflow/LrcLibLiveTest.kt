@@ -12,6 +12,35 @@ import org.junit.Test
 /** Optional network probe, no real playback controls, binding writes or translation calls. */
 class LrcLibLiveTest {
     @Test
+    fun sparkleMovieVersionUsesNativeTextAndItsOwnTimeline(): Unit = runBlocking {
+        val api = MusicApi(Store(InstrumentationRegistry.getInstrumentation().targetContext))
+        val current = Track("Sparkle - movie ver.", "RADWIMPS", "Your Name.", 537000)
+        val candidates =
+            withTimeout(25000) {
+                api.searchExpanded(Provider.LRCLIB, "${current.title} ${current.artist}", current)
+            }
+        val matched = SongSearch.automatic(current, candidates)
+        assertNotNull("Expected an equivalent movie-version upload", matched)
+        val lyrics = api.lyrics(matched!!)
+        assertTrue(lyrics.lines.any { row -> row.text.any { it in '\u3040'..'\u30ff' } })
+        assertTrue(lyrics.lines.any { it.start != null && it.start > 400000 })
+        assertEquals(
+            SongSearch.recordingTitle(current.title),
+            SongSearch.recordingTitle(matched.title),
+        )
+        InstrumentationRegistry.getInstrumentation()
+            .sendStatus(
+                0,
+                Bundle().apply {
+                    putString(
+                        "sparkle_native",
+                        "record=${matched.sourceId}; duration=${matched.duration}; rows=${lyrics.lines.size}; native=true; synced=true",
+                    )
+                },
+            )
+    }
+
+    @Test
     fun dreamLanternPrefersJapaneseAndReusesTheSearchPayload() = runBlocking {
         val api = MusicApi(Store(InstrumentationRegistry.getInstrumentation().targetContext))
         val current = Track("Dream lantern", "RADWIMPS", "Your Name.", 131000)

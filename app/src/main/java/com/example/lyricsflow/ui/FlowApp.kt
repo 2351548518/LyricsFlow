@@ -388,6 +388,13 @@ fun FlowApp(graph: AppGraph) {
                         title = { Text("选择歌词来源") },
                         text = {
                             Column(Modifier.verticalScroll(rememberScrollState())) {
+                                Text(
+                                    if (s.selectionMode == "record") "已记住本曲的具体歌词记录"
+                                    else if (s.selectionMode == "source") "已记住本曲的歌词来源与记录"
+                                    else "当前按自动规则匹配",
+                                    Modifier.padding(bottom = 12.dp),
+                                    fontSize = 13.sp,
+                                )
                                 if (s.source == Provider.LOCAL)
                                     Text(
                                         "当前：本地歌词",
@@ -402,10 +409,24 @@ fun FlowApp(graph: AppGraph) {
                                 Toggle(
                                     "自动尝试其他歌词源",
                                     s.prefs.autoSources,
-                                    "新歌与刷新按 QQ → 网易云 → AMLL → LRCLIB 查找；手动选源只查询该来源。",
+                                    "未指定来源的新歌按 QQ → 网易云 → AMLL → LRCLIB 查找；已记住的逐曲选择优先。",
                                 ) {
                                     graph.preferences(s.prefs.copy(autoSources = it))
                                 }
+                                FlowOutlinedButton(
+                                    onClick = {
+                                        graph.matchAutomatically()
+                                        sheet = ""
+                                    },
+                                    enabled = !s.busy && s.playback.track != null,
+                                    modifier = Modifier.padding(top = 12.dp, bottom = 12.dp),
+                                ) {
+                                    Text("重新自动匹配")
+                                }
+                                Text(
+                                    "刷新只重新获取当前来源的当前记录，不更换来源。重新自动匹配成功后会解除本曲的固定选择。",
+                                    fontSize = 13.sp,
+                                )
                                 Text("评论来源独立于歌词。可在歌曲匹配中手动确认候选。", fontSize = 13.sp)
                             }
                         },
@@ -931,8 +952,19 @@ private fun Home(
                 fontSize = 10.sp,
                 color = MaterialTheme.colorScheme.primary,
             )
-        if (s.matchNotice.isNotBlank() && !s.demo && !s.browsing)
-            Text(s.matchNotice, fontSize = 10.sp, color = MaterialTheme.colorScheme.primary)
+        if (s.matchNotice.isNotBlank() && !s.demo && !s.browsing) {
+            Text(
+                s.matchNotice,
+                Modifier.padding(top = 4.dp),
+                fontSize = 11.sp,
+                lineHeight = 16.sp,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            if (!s.busy && s.requestedSource != null)
+                TextButton(onClick = search, contentPadding = PaddingValues(0.dp)) {
+                    Text("在 ${s.requestedSource.label} 中匹配", fontSize = 12.sp)
+                }
+        }
         if (
             s.prefs.translation &&
                 s.lyrics?.lines?.any { needsChineseTranslation(it.text) } == true &&
@@ -961,9 +993,12 @@ private fun Home(
                 IconButton(
                     onClick = { graph.refresh() },
                     enabled = !s.busy && !s.demo,
-                    modifier = Modifier.size(44.dp).semantics { contentDescription = "刷新歌词" },
+                    modifier = Modifier.size(44.dp).semantics { contentDescription = "刷新当前来源歌词" },
                 ) {
-                    Glyph("refresh", Modifier.size(18.dp))
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Glyph("refresh", Modifier.size(17.dp))
+                        Text("刷新", fontSize = 9.sp, lineHeight = 12.sp)
+                    }
                 }
                 IconButton(
                     onClick = {

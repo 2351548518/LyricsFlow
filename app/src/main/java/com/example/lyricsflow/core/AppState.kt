@@ -52,6 +52,8 @@ data class ScreenState(
     val overlayStyleRaw: String = "",
     val toast: String = "",
     val imageRevision: Int = 0,
+    val selectionMode: String = "auto",
+    val requestedSource: Provider? = null,
 )
 
 class LyricsFlowApp : Application() {
@@ -67,17 +69,22 @@ class LyricsFlowApp : Application() {
     }
 }
 
-class AppGraph(val app: Application) {
+class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
     val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     val store = Store(app)
     val secrets = Secrets(app)
     val api = MusicApi(store)
+    private val songLyrics = SongLyrics(store, lookup ?: api)
     val github by lazy { GitHubSync(this) }
     private val prefs = app.getSharedPreferences("settings", 0)
     private val mutable = MutableStateFlow(ScreenState(prefs = readPrefs()))
     val state = mutable.asStateFlow()
     private var loadJob: Job? = null
-    private var generation = 0L
+    @Volatile private var generation = 0L
+
+    private data class LyricRequest(val action: String, val source: Provider?, val record: Track?)
+
+    private var pendingLyrics: LyricRequest? = null
     private var lastReal = Playback()
     private var clockJob: Job? = null
     private val translationLock = Mutex()
@@ -248,7 +255,10 @@ class AppGraph(val app: Application) {
                 mutable.update { it.copy(source = source) }
                 loadAutomatic(p.track)
             }
-        } else if (durationArrived) loadAutomatic(p.track!!)
+        } else if (durationArrived) {
+            val pending = pendingLyrics
+            loadAutomatic(p.track!!, pending?.action ?: "load", pending?.source, pending?.record)
+        }
     }
 
     fun live() {
@@ -321,6 +331,7 @@ class AppGraph(val app: Application) {
     private fun resetContent() {
         generation++
         loadJob?.cancel()
+        pendingLyrics = null
         mutable.update {
             it.copy(
                 lyrics = null,
@@ -330,18 +341,17 @@ class AppGraph(val app: Application) {
                 message = "",
                 matchNotice = "",
                 saved = false,
+                selectionMode = "auto",
+                requestedSource = null,
             )
         }
     }
 
     fun selectSource(p: Provider) {
         require(p in LYRIC_PROVIDERS)
-        prefs.edit().putString("lyricPriority", p.name).apply()
-        mutable.update { it.copy(source = p) }
-        state.value.playback.track?.let {
-            prefs.edit().putString("source:${it.key}", p.name).apply()
-            loadAutomatic(it, force = true, selectedSource = p)
-        }
+        val s = state.value
+        if (!s.busy && s.lyrics?.source == p && s.selectionMode == "record") return
+        state.value.playback.track?.let { loadAutomatic(it, "select", p) }
     }
 
     fun browse(t: Track) {
@@ -367,229 +377,236 @@ class AppGraph(val app: Application) {
     }
 
     fun bind(t: Track) {
-        val track = state.value.playback.track ?: t
-        val token = ++generation
-        loadJob?.cancel()
-        prefs.edit().putString("source:${track.key}", t.provider.name).apply()
-        mutable.update {
-            it.copy(
-                binding = t,
-                source = t.provider,
-                busy = true,
-                matchNotice = "",
-                message = "正在获取 ${t.provider.label} 歌词…",
-            )
+        if (state.value.playback.track == null) {
+            browse(t)
+            return
         }
-        loadJob = scope.launch {
-            try {
-                val lyrics = api.lyrics(t)
-                withContext(Dispatchers.IO) {
-                    store.put("binding", track.key + ":" + t.provider.name, trackJson(t).toString())
-                    store.put(
-                        "lyrics",
-                        track.key + ":" + t.provider.name,
-                        lyricsJson(lyrics).toString(),
-                    )
-                }
-                if (token == generation) {
-                    mutable.update {
-                        it.copy(
-                            lyrics = lyrics,
-                            binding = t,
-                            busy = false,
-                            message =
-                                if (lyrics.lines.isEmpty())
-                                    if (lyrics.instrumental) "纯音乐，无歌词" else "该歌曲暂无歌词"
-                                else "",
-                            delay = offset(track, t.provider),
-                        )
-                    }
-                }
-            } catch (e: Exception) {
-                if (e is CancellationException) throw e
-                if (token == generation)
-                    mutable.update { it.copy(busy = false, message = e.message ?: "加载失败") }
-            }
-        }
+        loadAutomatic(state.value.playback.track ?: t, "bind", t.provider, t)
     }
 
     private fun loadAutomatic(
         track: Track,
-        force: Boolean = false,
-        selectedSource: Provider? = null,
+        action: String = "load",
+        requested: Provider? = null,
+        record: Track? = null,
     ) {
         val token = ++generation
         loadJob?.cancel()
-        val preferred =
-            selectedSource ?: if (state.value.prefs.autoSources) Provider.QQ else state.value.source
-        val fallback = selectedSource == null && state.value.prefs.autoSources
+        pendingLyrics = LyricRequest(action, requested, record)
+        val old = state.value
+        val busyText =
+            when (action) {
+                "select" -> "正在切换到 ${requested?.label}…"
+                "bind" -> "正在确认 ${requested?.label} 的这条歌词…"
+                "refresh" -> "正在刷新 ${requested?.label} 的当前记录…"
+                "auto" -> "正在按顺序重新匹配…"
+                else -> "正在恢复这首歌的歌词选择…"
+            }
         mutable.update {
-            it.copy(busy = true, message = "正在匹配 ${preferred.label}…", matchNotice = "")
+            it.copy(
+                busy = true,
+                message = busyText,
+                matchNotice = if (it.lyrics != null) busyText else "",
+                requestedSource = requested,
+            )
+        }
+        var target = requested ?: old.source
+        fun currentRequest() = token == generation && state.value.playback.track?.key == track.key
+        fun failed(reason: String) {
+            if (!currentRequest()) return
+            val label =
+                when (action) {
+                    "select" -> "切换到 ${target.label} 失败"
+                    "bind" -> "绑定 ${target.label} 失败"
+                    "refresh" -> "刷新 ${target.label} 失败"
+                    else -> "歌词匹配未完成"
+                }
+            mutable.update {
+                val kept = it.lyrics?.source
+                val text =
+                    "$label：$reason" +
+                        if (kept != null) "；仍显示 ${kept.label} 歌词。可在歌曲匹配中确认记录。"
+                        else "；可在歌曲匹配中搜索或手动绑定。"
+                it.copy(
+                    busy = false,
+                    source = kept ?: target,
+                    message = text,
+                    matchNotice = if (kept != null) text else "",
+                    requestedSource = target,
+                )
+            }
+            // Retain the request for one retry if missing duration metadata arrives later.
         }
         loadJob = scope.launch {
             try {
-                // Wait briefly for the player's title/artist/album/duration update burst to settle.
-                kotlinx.coroutines.delay(300)
+                if (action == "load") delay(300)
                 val current = state.value.playback.track?.takeIf { it.key == track.key } ?: track
+                val choice =
+                    withContext(Dispatchers.IO) {
+                        songLyrics.selection(current)
+                            ?: prefs
+                                .getString("source:${current.key}", null)
+                                ?.let { runCatching { Provider.valueOf(it) }.getOrNull() }
+                                ?.let { songLyrics.legacy(current, it) }
+                    }
+                val pinned = choice?.takeIf { it.pinned && action == "load" }
+                target =
+                    requested
+                        ?: pinned?.source
+                        ?: if (state.value.prefs.autoSources || action == "auto") Provider.QQ
+                        else
+                            runCatching {
+                                    Provider.valueOf(prefs.getString("lyricPriority", "QQ")!!)
+                                }
+                                .getOrDefault(Provider.QQ)
+                val fallback =
+                    action == "auto" ||
+                        action == "load" && pinned == null && state.value.prefs.autoSources
+                val exact = action in listOf("refresh", "bind") || pinned?.mode == "record"
+                val wanted = record ?: pinned?.record
+                suspend fun lookup(source: Provider) =
+                    withContext(Dispatchers.IO) {
+                        songLyrics.lookup(
+                            current,
+                            source,
+                            action == "refresh",
+                            exact,
+                            wanted?.takeIf { it.provider == source },
+                            action == "auto",
+                        )
+                    }
                 val result =
                     withTimeout(40000) {
-                        AutomaticLyrics.resolve(
-                            preferred,
-                            fallback,
-                            { source, index, total ->
-                                if (token == generation)
-                                    mutable.update {
-                                        it.copy(message = "正在匹配 ${source.label}（$index/$total）…")
-                                    }
-                            },
-                        ) { source ->
-                            val binding =
-                                withContext(Dispatchers.IO) {
-                                    store.get("binding", track.key + ":" + source.name)?.let {
-                                        readTrack(JSONObject(it))
-                                    }
-                                }
-                            val cached =
-                                withContext(Dispatchers.IO) {
-                                    store.get("lyrics", track.key + ":" + source.name)?.let {
-                                        readLyrics(JSONObject(it))
-                                    }
-                                }
-                            if (token != generation) throw CancellationException("Track changed")
-                            val staleQq =
-                                cached?.source == Provider.QQ &&
-                                    cached.providerRevision < QqLyricCodec.REVISION
-                            val latinLrc =
-                                cached?.source == Provider.LRCLIB &&
-                                    cached.lines.none { row ->
-                                        row.text.any { it in '\u3040'..'\u30ff' }
-                                    }
-                            val staleLrc =
-                                latinLrc && cached!!.providerRevision < LrcLibClient.REVISION
-                            if (cached != null && !force && !staleQq && !staleLrc) {
-                                return@resolve SourceLookup(ResolvedLyrics(binding, cached, true))
-                            }
-                            if (cached != null && (staleQq || staleLrc) && source == preferred)
-                                mutable.update {
-                                    it.copy(
-                                        binding = binding,
-                                        lyrics = cached,
-                                        delay = offset(track, source),
-                                        message = "正在更新 ${source.label} 歌词与译文…",
-                                    )
-                                }
-                            val reselect = staleLrc || (force && latinLrc)
-                            val decision =
-                                if (binding == null || reselect)
-                                    SongSearch.decide(
-                                        current,
-                                        api.searchExpanded(
-                                            source,
-                                            "${current.title} ${current.artist}",
-                                            current,
-                                        ),
-                                    )
-                                else null
-                            val t = (if (reselect) null else binding) ?: decision?.track
-                            if (token != generation) throw CancellationException("Track changed")
-                            if (t == null) {
-                                return@resolve SourceLookup(
-                                    reason = decision?.reason ?: "没有歌曲候选",
-                                    candidates = decision?.candidates ?: 0,
-                                )
-                            }
-                            val fetched = api.lyrics(t, force)
-                            if (
-                                source == Provider.AMLL &&
-                                    current.duration > 0 &&
-                                    (fetched.lines.maxOfOrNull { it.end ?: it.start ?: 0 } ?: 0) >
-                                        current.duration + 5000
+                        if (target == Provider.LOCAL) {
+                            val local = lookup(target)
+                            LyricsResolution(
+                                local.resolved,
+                                if (local.resolved == null)
+                                    listOf(SourceAttempt(target, local.reason))
+                                else emptyList(),
                             )
-                                return@resolve SourceLookup(reason = "AMLL 时间轴超过当前歌曲时长，需手动核对版本")
-                            if (token != generation) throw CancellationException("Track changed")
-                            if (fetched.lines.isEmpty() && !fetched.instrumental)
-                                return@resolve SourceLookup(reason = "匹配到歌曲，但该来源没有歌词")
-                            // A provider upgrade must not discard an existing machine/user
-                            // translation for an
-                            // unchanged line.
-                            val oldRows =
-                                cached?.lines.orEmpty().associateBy { it.start to it.text }
-                            val l =
-                                fetched.copy(
-                                    lines =
-                                        fetched.lines.map { row ->
-                                            val old = oldRows[row.start to row.text]
-                                            if (
-                                                row.translation.isBlank() &&
-                                                    old != null &&
-                                                    old.translation.isNotBlank()
+                        } else
+                            AutomaticLyrics.resolve(
+                                target,
+                                fallback,
+                                { source, index, total ->
+                                    if (currentRequest())
+                                        mutable.update {
+                                            it.copy(
+                                                message = "正在匹配 ${source.label}（$index/$total）…"
                                             )
-                                                row.copy(
-                                                    translation = old.translation,
-                                                    translationKind = old.translationKind,
-                                                    translationModel = old.translationModel,
-                                                )
-                                            else row
                                         }
-                                )
-                            withContext(Dispatchers.IO) {
-                                store.put(
-                                    "binding",
-                                    track.key + ":" + source.name,
-                                    trackJson(t).toString(),
-                                )
-                                store.put(
-                                    "lyrics",
-                                    track.key + ":" + source.name,
-                                    lyricsJson(l).toString(),
-                                )
+                                },
+                            ) {
+                                lookup(it)
                             }
-                            SourceLookup(ResolvedLyrics(t, l))
-                        }
                     }
-                if (token != generation) return@launch
+                if (!currentRequest()) return@launch
                 val found = result.resolved
-                if (found == null)
-                    mutable.update {
-                        it.copy(
-                            busy = false,
-                            message = result.failureMessage(),
-                            source = it.lyrics?.source ?: it.source,
-                            matchNotice = if (it.lyrics != null) "更新未完成，保留本地歌词" else "",
-                        )
-                    }
-                else {
-                    val actual = found.lyrics.source
-                    mutable.update {
-                        it.copy(
-                            binding = found.binding,
-                            lyrics = found.lyrics,
-                            source = actual,
-                            busy = false,
-                            delay = offset(track, actual),
-                            message = if (found.cached) "已载入本地歌词" else "",
-                            matchNotice =
-                                if (actual != preferred)
-                                    "${preferred.label} 未取得可用匹配，已自动使用 ${actual.label}"
-                                else "",
-                        )
-                    }
-                }
-            } catch (e: Exception) {
-                if (e is TimeoutCancellationException) {
-                    if (token == generation)
-                        mutable.update { it.copy(busy = false, message = "匹配超时，可重试或搜索歌曲候选") }
+                if (found == null) {
+                    failed(
+                        result.attempts
+                            .joinToString("；") { "${it.source.label}：${it.reason}" }
+                            .ifBlank { "没有可用歌词" }
+                    )
                     return@launch
                 }
-                if (e is CancellationException) throw e
-                if (token == generation)
-                    mutable.update { it.copy(busy = false, message = e.message ?: "加载失败") }
+                val actual = found.lyrics.source
+                val mode =
+                    when (action) {
+                        "select" -> "source"
+                        "bind" -> "record"
+                        "auto" -> "auto"
+                        else -> choice?.mode ?: "auto"
+                    }
+                val candidateChoice = SongSelection(current, actual, found.binding, mode)
+                val selected =
+                    choice?.takeIf {
+                        it.copy(updatedAt = 0) == candidateChoice.copy(updatedAt = 0)
+                    } ?: candidateChoice
+                withContext(Dispatchers.IO) {
+                    val rows =
+                        mutableListOf(
+                            Triple(
+                                "lyrics",
+                                "${track.key}:${actual.name}",
+                                lyricsJson(found.lyrics).toString(),
+                            ),
+                            Triple("selection", track.key, selected.json().toString()),
+                        )
+                    found.binding?.let {
+                        rows +=
+                            Triple(
+                                "binding",
+                                "${track.key}:${actual.name}",
+                                trackJson(it).toString(),
+                            )
+                    }
+                    store.restore(rows) { token == generation }
+                }
+                if (!currentRequest()) return@launch
+                prefs
+                    .edit()
+                    .apply {
+                        if (selected.pinned) putString("source:${track.key}", actual.name)
+                        else remove("source:${track.key}")
+                    }
+                    .apply()
+                val notice =
+                    found.notice.ifBlank {
+                        when {
+                            action == "select" || action == "bind" -> "已记住这首歌的 ${actual.label} 歌词选择"
+                            action == "refresh" -> "已刷新 ${actual.label} 的当前记录"
+                            action == "auto" -> "已重新自动匹配到 ${actual.label}"
+                            pinned != null -> "已恢复这首歌的 ${actual.label} 歌词选择"
+                            actual != target -> "${target.label} 未取得可用匹配，已自动使用 ${actual.label}"
+                            else -> ""
+                        }
+                    }
+                mutable.update {
+                    it.copy(
+                        binding = found.binding,
+                        lyrics = found.lyrics,
+                        source = actual,
+                        busy = false,
+                        delay = offset(track, actual),
+                        message = if (found.cached) "已载入本地歌词" else "",
+                        matchNotice = notice,
+                        selectionMode = mode,
+                        requestedSource = null,
+                    )
+                }
+                pendingLyrics = null
+            } catch (_: TimeoutCancellationException) {
+                failed("请求超时，请稍后重试")
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                failed(e.message ?: "请求失败")
             }
         }
     }
 
+    /** Refresh the displayed record; never restart global provider matching. */
     fun refresh() {
-        state.value.playback.track?.let { loadAutomatic(it, true) }
+        val s = state.value
+        s.playback.track?.let {
+            loadAutomatic(
+                it,
+                "refresh",
+                s.lyrics?.source ?: s.requestedSource ?: s.source,
+                s.binding,
+            )
+        }
+    }
+
+    fun matchAutomatically() {
+        state.value.playback.track?.let { loadAutomatic(it, "auto") }
+    }
+
+    fun reloadRememberedLyrics() {
+        val s = state.value
+        if (!s.demo && !s.browsing) s.playback.track?.let { loadAutomatic(it) }
     }
 
     private fun offset(t: Track, p: Provider) = prefs.getLong("delay:${t.key}:${p.name}", 0)
@@ -615,14 +632,46 @@ class AppGraph(val app: Application) {
             mutable.update {
                 it.copy(demo = false, browsing = true, playback = Playback(t, "本地导入"))
             }
-        generation++
+        val token = ++generation
         loadJob?.cancel()
-        prefs.edit().putString("source:${t.key}", "LOCAL").apply()
-        mutable.update {
-            it.copy(lyrics = lyrics, source = Provider.LOCAL, busy = false, message = "已导入本地歌词")
-        }
-        scope.launch(Dispatchers.IO) {
-            store.put("lyrics", t.key + ":LOCAL", lyricsJson(lyrics).toString())
+        pendingLyrics = null
+        val local = lyrics.copy(source = Provider.LOCAL)
+        scope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    store.restore(
+                        listOf(
+                            Triple("lyrics", "${t.key}:LOCAL", lyricsJson(local).toString()),
+                            Triple(
+                                "selection",
+                                t.key,
+                                SongSelection(t, Provider.LOCAL, null, "record").json().toString(),
+                            ),
+                        )
+                    ) {
+                        token == generation
+                    }
+                }
+                if (token == generation) {
+                    prefs.edit().putString("source:${t.key}", "LOCAL").apply()
+                    mutable.update {
+                        it.copy(
+                            lyrics = local,
+                            binding = null,
+                            source = Provider.LOCAL,
+                            busy = false,
+                            message = "已导入本地歌词",
+                            matchNotice = "已记住本曲的本地歌词",
+                            selectionMode = "record",
+                            requestedSource = null,
+                        )
+                    }
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                if (token == generation) message("导入未完成：${e.message}")
+            }
         }
     }
 
@@ -689,7 +738,12 @@ class AppGraph(val app: Application) {
             val l = state.value.lyrics!!.copy(lines = rows)
             mutable.update { it.copy(lyrics = l) }
             scope.launch(Dispatchers.IO) {
-                store.put("lyrics", trackKey + ":" + state.value.source, lyricsJson(l).toString())
+                if (
+                    state.value.playback.track?.key == trackKey &&
+                        state.value.lyrics?.hash == hash &&
+                        state.value.source == l.source
+                )
+                    store.put("lyrics", trackKey + ":" + l.source.name, lyricsJson(l).toString())
             }
         }
     }
