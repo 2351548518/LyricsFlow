@@ -37,6 +37,7 @@ import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.lyricsflow.BuildConfig
 import com.example.lyricsflow.core.*
 import com.example.lyricsflow.data.*
 import com.example.lyricsflow.overlay.LyricsOverlayService
@@ -476,7 +477,7 @@ fun FlowApp(graph: AppGraph) {
                         title = { Text("LyricsFlow") },
                         text = {
                             Text(
-                                "歌词随音乐流动，共鸣在字里行间。\n\n原生 Android · 1.0 开发版\nQQ / 网易云接口为非官方公开接口，可能变更。仅用于个人聆听辅助；不提供音乐下载、评论发布或平台账号登录。"
+                                "歌词随音乐流动，共鸣在字里行间。\n\n原生 Android · ${BuildConfig.VERSION_NAME}\nQQ / 网易云接口为非官方公开接口，可能变更。仅用于个人聆听辅助；不提供音乐下载、评论发布或平台账号登录。"
                             )
                         },
                         confirmButton = { TextButton(onClick = { sheet = "" }) { Text("知道了") } },

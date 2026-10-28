@@ -14,3 +14,13 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Release artifacts and private signing material must stay out of Git.
+/dist/
+*.jks
+*.keystore
+*.p12
+*.pfx
+keystore.properties
+signing.properties
+*.credentials.clixml

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400" role="img" aria-labelledby="title desc">
+  <title id="title">LyricsFlow — Let the words flow.</title>
+  <desc id="desc">Three equal flowing lyric lines, a serif wordmark, and a soft sky-blue gradient.</desc>
+  <defs>
+    <linearGradient id="bg" x2="1" y2=".6"><stop stop-color="#e2f4ff"/><stop offset="1" stop-color="#acd0f1"/></linearGradient>
+    <radialGradient id="glow"><stop stop-color="#79baf0" stop-opacity=".18"/><stop offset="1" stop-color="#79baf0" stop-opacity="0"/></radialGradient>
+    <radialGradient id="lilac"><stop stop-color="#c8c5eb" stop-opacity=".15"/><stop offset="1" stop-color="#c8c5eb" stop-opacity="0"/></radialGradient>
+    <clipPath id="card"><rect width="1280" height="400" rx="28"/></clipPath>
+  </defs>
+  <g clip-path="url(#card)">
+    <path fill="url(#bg)" d="M0 0h1280v400H0z"/>
+    <ellipse cx="1030" cy="40" rx="580" ry="400" fill="url(#glow)"/>
+    <ellipse cx="170" cy="450" rx="540" ry="380" fill="url(#lilac)"/>
+    <g fill="none" stroke="#275d86" stroke-opacity=".12" stroke-width="2">
+      <path d="M730 235C850 100 970 380 1100 240S1300 130 1380 210"/>
+      <path d="M730 265C850 130 970 410 1100 270S1300 160 1380 240"/>
+      <path d="M730 295C850 160 970 440 1100 300S1300 190 1380 270"/>
+    </g>
+    <g transform="translate(88 84) scale(2.1)" fill="none" stroke-width="6.5" stroke-linecap="round">
+      <path stroke="#193f65" d="M12 24C21 17 27 17 37 24S53 31 62 24"/>
+      <path stroke="#275d86" d="M12 38C21 31 27 31 37 38S53 45 62 38"/>
+      <path stroke="#3d7899" d="M12 52C21 45 27 45 37 52S53 59 62 52"/>
+    </g>
+    <text x="302" y="196" font-family="Georgia, 'Times New Roman', serif" font-size="86" font-weight="600" fill="#193f65">Lyrics<tspan font-style="italic" font-weight="400">Flow</tspan></text>
+    <text x="307" y="251" font-family="Arial, sans-serif" font-size="25" letter-spacing="2.5" fill="#275d86">LET THE WORDS FLOW.</text>
+    <text x="310" y="315" font-family="Arial, sans-serif" font-size="14" letter-spacing="3" fill="#3d7899">LYRICS  /  TRANSLATION  / RESONANCE</text>
+  </g>
+</svg>

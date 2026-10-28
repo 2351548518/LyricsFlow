@@ -1194,7 +1194,7 @@ fun Library(graph: AppGraph, open: (Track, Lyrics) -> Unit) {
 @Composable
 fun HelpScreen(page: String) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-        PageTitle("帮助与隐私", "LyricsFlow · 原生 Android 开发版")
+        PageTitle("帮助与隐私", "LyricsFlow · 原生 Android")
         Section("如何开始")
         Text(
             "1. 在「播放与悬浮窗」授予通知使用权。\n2. 在 Spotify 或其他支持的本机播放器中播放歌曲。\n3. 返回首页，确认歌词来源；匹配失败时搜索或填写歌曲 ID。\n4. 开启悬浮窗后，可拖动、缩放，并在通知中锁定或关闭。",

@@ -14,17 +14,26 @@ android {
         minSdk = 24
         targetSdk = 37
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = providers.environmentVariable("LYRICSFLOW_KEYSTORE_FILE").orNull?.let(::file)
+            storePassword = providers.environmentVariable("LYRICSFLOW_STORE_PASSWORD").orNull
+            keyAlias = providers.environmentVariable("LYRICSFLOW_KEY_ALIAS").orNull
+            keyPassword = providers.environmentVariable("LYRICSFLOW_KEY_PASSWORD").orNull
+        }
+    }
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release")
             optimization {
                 enable = true
-                packageScope = setOf("androidx.**", "kotlin.**", "kotlinx.**")
             }
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {
@@ -33,6 +42,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 

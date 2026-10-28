@@ -1,6 +1,6 @@
 # Android 实现与运行说明
 
-核实日期：2026-10-27。工程包名 `com.example.lyricsflow`；`minSdk 24`、`targetSdk / compileSdk 37`。这是可运行的原生 Android 开发版本，正式发布仍以 PRD 第 23 节为门槛。
+核实日期：2026-10-28。工程包名 `com.example.lyricsflow`；`minSdk 24`、`targetSdk / compileSdk 37`。首个正式版为 v1.0.0；签名与打包见 [发行维护说明](./Release.md)，功能与支持边界以 [README](../README.md) 和 [发行说明](./releases/v1.0.0.md) 为准。
 
 ## 运行
 

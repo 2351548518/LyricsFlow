@@ -1,0 +1,17 @@
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: CN=LyricsFlow, OU=Android, O=LyricsFlow
+Signer #1 certificate SHA-256 digest: 9a3ce1a6d40cd515ae7870ed9dcebf477bb464dee3e76316ccee9ab827104950
+Signer #1 certificate SHA-1 digest: ba48aaff5e1e1cbf6fbae4c90b1ace6bf9a03d30
+Signer #1 certificate MD5 digest: 86d880c575dea4fc3395f3e2b8d87ab5
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 4096
+Signer #1 public key SHA-256 digest: a0deb2b4b653a81687b2a7dfbb7319cf2d8a082e4af5b166298a0472e715f794
+Signer #1 public key SHA-1 digest: c6bf9251729d9486660827779cdbccea8dbd15ae
+Signer #1 public key MD5 digest: eb7109ecbed2420fde8c785ad5960778
