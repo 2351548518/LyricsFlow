@@ -13,6 +13,11 @@ class ApiFailure(message: String) : Exception(message)
 
 class MusicApi(private val store: Store) {
     var neteaseGateway = ""
+    private val amll =
+        AmllClient(
+            read = { path, age -> store.get("cache", digest("amll:$path"), age) },
+            write = { path, value -> store.put("cache", digest("amll:$path"), value) },
+        )
     private val lrc =
         LrcLibClient(
             read = { path, age -> store.get("cache", digest("https://lrclib.net$path"), age) },
@@ -122,6 +127,7 @@ class MusicApi(private val store: Store) {
         query: String,
         current: Track? = null,
     ): List<Track> {
+        if (provider == Provider.AMLL) return amll.search(query, current, size = 50).tracks
         if (provider == Provider.LRCLIB && current != null) {
             val first = lrc.search(query, current)
             val candidates = lrc.preferOriginal(current, first.rows)
@@ -159,6 +165,7 @@ class MusicApi(private val store: Store) {
         require(query.isNotBlank()) { "请输入歌名或歌手" }
         require(query.length <= 500 && page in 0..99 && size in 1..50) { "搜索关键词或分页超出范围" }
         return when (provider) {
+            Provider.AMLL -> amll.search(query, current, page, size)
             Provider.NETEASE -> {
                 val url =
                     if (neteaseGateway.isBlank())
@@ -355,8 +362,11 @@ class MusicApi(private val store: Store) {
         return lrc.track(lrc.record(id))
     }
 
+    suspend fun resolveAmll(value: String): Track = amll.resolve(value)
+
     suspend fun lyrics(t: Track, refresh: Boolean = false): Lyrics {
         return when (t.provider) {
+            Provider.AMLL -> amll.lyrics(t, refresh)
             Provider.NETEASE -> {
                 val url =
                     if (neteaseGateway.isBlank())

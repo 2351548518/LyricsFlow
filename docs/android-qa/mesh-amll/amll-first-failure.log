@@ -1,0 +1,141 @@
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.AmllClientTest:
+INSTRUMENTATION_STATUS: test=initializationError
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=org.junit.runners.model.InvalidTestClassError: Invalid test class 'com.example.lyricsflow.AmllClientTest':
+  1. Method cancellationDoesNotTurnIntoStaleSuccessAndIndexPathsAreValidated() should be void
+	at org.junit.runners.ParentRunner.validate(ParentRunner.java:525)
+	at org.junit.runners.ParentRunner.<init>(ParentRunner.java:92)
+	at org.junit.runners.BlockJUnit4ClassRunner.<init>(BlockJUnit4ClassRunner.java:74)
+	at androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner.<init>(AndroidJUnit4ClassRunner.java:50)
+	at androidx.test.internal.runner.junit4.AndroidJUnit4Builder.runnerForClass(AndroidJUnit4Builder.java:81)
+	at org.junit.runners.model.RunnerBuilder.safeRunnerForClass(RunnerBuilder.java:70)
+	at org.junit.internal.builders.AllDefaultPossibilitiesBuilder.runnerForClass(AllDefaultPossibilitiesBuilder.java:37)
+	at androidx.test.internal.runner.AndroidRunnerBuilder.runnerForClass(AndroidRunnerBuilder.java:152)
+	at org.junit.runners.model.RunnerBuilder.safeRunnerForClass(RunnerBuilder.java:70)
+	at androidx.test.internal.runner.DirectTestLoader.doCreateRunner(DirectTestLoader.java:45)
+	at androidx.test.internal.runner.TestLoader.getRunnersFor(TestLoader.java:64)
+	at androidx.test.internal.runner.TestRequestBuilder.build(TestRequestBuilder.java:842)
+	at androidx.test.runner.AndroidJUnitRunner.buildRequest(AndroidJUnitRunner.java:672)
+	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:453)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2637)
+
+INSTRUMENTATION_STATUS: stream=
+Error in initializationError(com.example.lyricsflow.AmllClientTest):
+org.junit.runners.model.InvalidTestClassError: Invalid test class 'com.example.lyricsflow.AmllClientTest':
+  1. Method cancellationDoesNotTurnIntoStaleSuccessAndIndexPathsAreValidated() should be void
+	at org.junit.runners.ParentRunner.validate(ParentRunner.java:525)
+	at org.junit.runners.ParentRunner.<init>(ParentRunner.java:92)
+	at org.junit.runners.BlockJUnit4ClassRunner.<init>(BlockJUnit4ClassRunner.java:74)
+	at androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner.<init>(AndroidJUnit4ClassRunner.java:50)
+	at androidx.test.internal.runner.junit4.AndroidJUnit4Builder.runnerForClass(AndroidJUnit4Builder.java:81)
+	at org.junit.runners.model.RunnerBuilder.safeRunnerForClass(RunnerBuilder.java:70)
+	at org.junit.internal.builders.AllDefaultPossibilitiesBuilder.runnerForClass(AllDefaultPossibilitiesBuilder.java:37)
+	at androidx.test.internal.runner.AndroidRunnerBuilder.runnerForClass(AndroidRunnerBuilder.java:152)
+	at org.junit.runners.model.RunnerBuilder.safeRunnerForClass(RunnerBuilder.java:70)
+	at androidx.test.internal.runner.DirectTestLoader.doCreateRunner(DirectTestLoader.java:45)
+	at androidx.test.internal.runner.TestLoader.getRunnersFor(TestLoader.java:64)
+	at androidx.test.internal.runner.TestRequestBuilder.build(TestRequestBuilder.java:842)
+	at androidx.test.runner.AndroidJUnitRunner.buildRequest(AndroidJUnitRunner.java:672)
+	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:453)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2637)
+
+INSTRUMENTATION_STATUS: test=initializationError
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllLiveTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.AmllLiveTest:
+INSTRUMENTATION_STATUS: test=officialRepositorySearchIdsAndWordLyrics
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllLiveTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=com.example.lyricsflow.data.ApiFailure: AMLL 仓库连接失败，请检查网络或使用其他来源
+	at com.example.lyricsflow.data.RepositoryHttp.get(RepositoryHttp.kt:73)
+	at com.example.lyricsflow.data.RepositoryHttp$get$1.invokeSuspend(RepositoryHttp.kt:16)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.ScopeCoroutine.afterResume(Scopes.kt:28)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:99)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:113)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:589)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:823)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:720)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:707)
+
+INSTRUMENTATION_STATUS: stream=
+Error in officialRepositorySearchIdsAndWordLyrics(com.example.lyricsflow.AmllLiveTest):
+com.example.lyricsflow.data.ApiFailure: AMLL 仓库连接失败，请检查网络或使用其他来源
+	at com.example.lyricsflow.data.RepositoryHttp.get(RepositoryHttp.kt:73)
+	at com.example.lyricsflow.data.RepositoryHttp$get$1.invokeSuspend(RepositoryHttp.kt:16)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.ScopeCoroutine.afterResume(Scopes.kt:28)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:99)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:113)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:589)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:823)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:720)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:707)
+
+INSTRUMENTATION_STATUS: test=officialRepositorySearchIdsAndWordLyrics
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 7.967
+There were 2 failures:
+1) initializationError(com.example.lyricsflow.AmllClientTest)
+org.junit.runners.model.InvalidTestClassError: Invalid test class 'com.example.lyricsflow.AmllClientTest':
+  1. Method cancellationDoesNotTurnIntoStaleSuccessAndIndexPathsAreValidated() should be void
+	at org.junit.runners.ParentRunner.validate(ParentRunner.java:525)
+	at org.junit.runners.ParentRunner.<init>(ParentRunner.java:92)
+	at org.junit.runners.BlockJUnit4ClassRunner.<init>(BlockJUnit4ClassRunner.java:74)
+	at androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner.<init>(AndroidJUnit4ClassRunner.java:50)
+	at androidx.test.internal.runner.junit4.AndroidJUnit4Builder.runnerForClass(AndroidJUnit4Builder.java:81)
+	at org.junit.runners.model.RunnerBuilder.safeRunnerForClass(RunnerBuilder.java:70)
+	at org.junit.internal.builders.AllDefaultPossibilitiesBuilder.runnerForClass(AllDefaultPossibilitiesBuilder.java:37)
+	at androidx.test.internal.runner.AndroidRunnerBuilder.runnerForClass(AndroidRunnerBuilder.java:152)
+	at org.junit.runners.model.RunnerBuilder.safeRunnerForClass(RunnerBuilder.java:70)
+	at androidx.test.internal.runner.DirectTestLoader.doCreateRunner(DirectTestLoader.java:45)
+	at androidx.test.internal.runner.TestLoader.getRunnersFor(TestLoader.java:64)
+	at androidx.test.internal.runner.TestRequestBuilder.build(TestRequestBuilder.java:842)
+	at androidx.test.runner.AndroidJUnitRunner.buildRequest(AndroidJUnitRunner.java:672)
+	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:453)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2637)
+2) officialRepositorySearchIdsAndWordLyrics(com.example.lyricsflow.AmllLiveTest)
+com.example.lyricsflow.data.ApiFailure: AMLL 仓库连接失败，请检查网络或使用其他来源
+	at com.example.lyricsflow.data.RepositoryHttp.get(RepositoryHttp.kt:73)
+	at com.example.lyricsflow.data.RepositoryHttp$get$1.invokeSuspend(RepositoryHttp.kt:16)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.ScopeCoroutine.afterResume(Scopes.kt:28)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:99)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:113)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:589)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:823)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:720)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:707)
+
+FAILURES!!!
+Tests run: 2,  Failures: 2
+
+
+INSTRUMENTATION_CODE: -1

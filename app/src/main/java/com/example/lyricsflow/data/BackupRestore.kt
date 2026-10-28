@@ -46,9 +46,10 @@ suspend fun restoreBackup(
             autoTranslate = false,
             consent = false,
             coverBlur = number("coverBlur", p.coverBlur, 0f, 24f),
+            coverMesh = o.optBoolean("coverMesh", p.coverMesh),
             background =
                 o.optString("background", "color").takeIf {
-                    it in listOf("color", "cover", "custom")
+                    it in listOf("color", "cover", "custom", "mesh")
                 } ?: "color",
         )
     )

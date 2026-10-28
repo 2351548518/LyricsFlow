@@ -11,7 +11,7 @@ import org.xml.sax.InputSource
 object LyricParser {
     private val stamp = Regex("\\[(\\d{1,3}):(\\d{2})(?:[.:](\\d{1,3}))?]")
 
-    private fun safeXml(raw: String): org.w3c.dom.Document {
+    internal fun safeXml(raw: String): org.w3c.dom.Document {
         require(
             raw.length <= 2_000_000 &&
                 !raw.contains("<!DOCTYPE", true) &&

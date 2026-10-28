@@ -1,5 +1,7 @@
 # Android 开发版验收记录
 
+2026-10-28 更新：[封面网状渐变与 AMLL](./Pear-Mesh-AMLL.md)。自动顺序为 QQ → 网易云 → AMLL → LRCLIB，默认设备回归现为 45 项，JVM 38 项；下文保留各阶段历史记录。
+
 2026-10-28 补充：[LRCLIB 搜索/日文原文选择与滚动渲染](./LRCLIB-Rendering.md)。最新默认设备回归 38 项、JVM 29 项通过；下方历史数字保留为当时记录。
 
 日期：2026-10-26。参考 [PRD](../LyricsFlow-PRD.md)、[原型](../../prototype/lyricsflow-web/README.md) 和 [实现说明](../Android-Implementation.md)。本记录区分已测试行为与仍未覆盖的发布要求。

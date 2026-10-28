@@ -8,16 +8,29 @@ import org.junit.Test
 
 class AutomaticLyricsTest {
     @Test
+    fun amllPrecedesLrclibEvenWhenThePreviousSourceWasLrclib() = runBlocking {
+        val visited = mutableListOf<Provider>()
+        val result =
+            AutomaticLyrics.resolve(Provider.LRCLIB, true) { source ->
+                visited += source
+                if (source in listOf(Provider.QQ, Provider.NETEASE)) SourceLookup(reason = "未收录")
+                else content(source)
+            }
+        assertEquals(listOf(Provider.QQ, Provider.NETEASE, Provider.AMLL), visited)
+        assertEquals(Provider.AMLL, result.resolved!!.lyrics.source)
+    }
+
+    @Test
     fun stalledSourceTimesOutAndFallsBackWithoutCancellingResolution() = runBlocking {
         val visited = mutableListOf<Provider>()
         val result =
-            AutomaticLyrics.resolve(Provider.LRCLIB, true, sourceTimeoutMs = 30) { source ->
+            AutomaticLyrics.resolve(Provider.QQ, true, sourceTimeoutMs = 30) { source ->
                 visited += source
-                if (source == Provider.LRCLIB) kotlinx.coroutines.awaitCancellation()
+                if (source == Provider.QQ) kotlinx.coroutines.awaitCancellation()
                 else content(source)
             }
-        assertEquals(listOf(Provider.LRCLIB, Provider.QQ), visited)
-        assertEquals(Provider.QQ, result.resolved!!.lyrics.source)
+        assertEquals(listOf(Provider.QQ, Provider.NETEASE), visited)
+        assertEquals(Provider.NETEASE, result.resolved!!.lyrics.source)
         assertTrue(
             result.attempts.single().reason.contains("超时") ||
                 result.attempts.single().reason.contains("超过")
@@ -35,7 +48,7 @@ class AutomaticLyricsTest {
     @Test
     fun preferredOrderAndDisabledFallback() = runBlocking {
         assertEquals(
-            listOf(Provider.LRCLIB, Provider.QQ, Provider.NETEASE),
+            listOf(Provider.QQ, Provider.NETEASE, Provider.AMLL, Provider.LRCLIB),
             AutomaticLyrics.order(Provider.LRCLIB, true),
         )
         val visited = mutableListOf<Provider>()
@@ -57,12 +70,13 @@ class AutomaticLyricsTest {
                 when (it) {
                     Provider.QQ -> SourceLookup(reason = "歌手别名无法确认", candidates = 30)
                     Provider.NETEASE -> throw IllegalStateException("HTTP 503")
+                    Provider.AMLL -> SourceLookup(reason = "库中未收录")
                     else -> content(it)
                 }
             }
         assertEquals(LYRIC_PROVIDERS, visited)
         assertEquals(Provider.LRCLIB, result.resolved?.lyrics?.source)
-        assertEquals(2, result.attempts.size)
+        assertEquals(3, result.attempts.size)
     }
 
     @Test

@@ -1,0 +1,171 @@
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=8
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.AmllClientTest:
+INSTRUMENTATION_STATUS: test=metadataAliasesMatchCompleteCreditsAndSearchIsFuzzy
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=8
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=metadataAliasesMatchCompleteCreditsAndSearchIsFuzzy
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=8
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=offlineUsesValidatedCacheAndInvalidXmlCannotPoisonIt
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=8
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=offlineUsesValidatedCacheAndInvalidXmlCannotPoisonIt
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=8
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cancellationDoesNotTurnIntoStaleSuccessAndIndexPathsAreValidated
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=8
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cancellationDoesNotTurnIntoStaleSuccessAndIndexPathsAreValidated
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=8
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=resolvesPlatformIdsAndRejectsUntrustedLinks
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=8
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=resolvesPlatformIdsAndRejectsUntrustedLinks
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=8
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cachesIndexAndLyricsWithoutMixingTranslationIntoOriginal
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllClientTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=8
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cachesIndexAndLyricsWithoutMixingTranslationIntoOriginal
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllLiveTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=8
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.AmllLiveTest:
+INSTRUMENTATION_STATUS: test=officialRepositorySearchIdsAndWordLyrics
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.AmllLiveTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=8
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.AmllClient$Companion.parseIndex(AmllClient.kt:85)
+	at com.example.lyricsflow.data.AmllClient$index$2.invokeSuspend(AmllClient.kt:118)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.ScopeCoroutine.afterResume(Scopes.kt:28)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:113)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:589)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:823)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:720)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:707)
+
+INSTRUMENTATION_STATUS: stream=
+Error in officialRepositorySearchIdsAndWordLyrics(com.example.lyricsflow.AmllLiveTest):
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.AmllClient$Companion.parseIndex(AmllClient.kt:85)
+	at com.example.lyricsflow.data.AmllClient$index$2.invokeSuspend(AmllClient.kt:118)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.ScopeCoroutine.afterResume(Scopes.kt:28)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:113)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:589)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:823)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:720)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:707)
+
+INSTRUMENTATION_STATUS: test=officialRepositorySearchIdsAndWordLyrics
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.MeshUiTest
+INSTRUMENTATION_STATUS: current=7
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=8
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.MeshUiTest:
+INSTRUMENTATION_STATUS: test=animatedMeshChangesPixelsWithoutRecomposingAndFreezesWhenPaused
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.MeshUiTest
+INSTRUMENTATION_STATUS: current=7
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=8
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=animatedMeshChangesPixelsWithoutRecomposingAndFreezesWhenPaused
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.MeshUiTest
+INSTRUMENTATION_STATUS: current=8
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=8
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=meshPreferenceAndBackgroundSurviveBackupRestore
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.MeshUiTest
+INSTRUMENTATION_STATUS: current=8
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=8
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=meshPreferenceAndBackgroundSurviveBackupRestore
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 16.103
+There was 1 failure:
+1) officialRepositorySearchIdsAndWordLyrics(com.example.lyricsflow.AmllLiveTest)
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.example.lyricsflow.data.AmllClient$Companion.parseIndex(AmllClient.kt:85)
+	at com.example.lyricsflow.data.AmllClient$index$2.invokeSuspend(AmllClient.kt:118)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.ScopeCoroutine.afterResume(Scopes.kt:28)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:113)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:589)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:823)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:720)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:707)
+
+FAILURES!!!
+Tests run: 8,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

@@ -1,0 +1,22 @@
+[
+  {
+    "key": "palette",
+    "value": "4"
+  },
+  {
+    "key": "reduced",
+    "value": "false"
+  },
+  {
+    "key": "dark",
+    "value": "system"
+  },
+  {
+    "key": "background",
+    "value": "cover"
+  },
+  {
+    "key": "coverMesh",
+    "value": "true"
+  }
+]

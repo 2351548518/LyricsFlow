@@ -202,7 +202,18 @@ internal fun flowColorScheme(palette: FlowPalette): ColorScheme {
 
 /** Quiet static currents: no perpetual animation or work on each playback tick. */
 @Composable
-internal fun FlowBackdrop(palette: FlowPalette, dark: Boolean) {
+internal fun FlowBackdrop(
+    palette: FlowPalette,
+    dark: Boolean,
+    swatches: List<Int> = emptyList(),
+    mesh: Boolean = false,
+    animate: Boolean = false,
+    reduced: Boolean = true,
+) {
+    if (palette.followsCover && mesh) {
+        CoverMesh(palette, swatches, animate, reduced)
+        return
+    }
     Canvas(Modifier.fillMaxSize()) {
         if (palette.followsCover) {
             val base = palette.background.toArgb()

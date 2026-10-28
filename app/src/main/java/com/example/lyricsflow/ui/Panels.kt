@@ -219,7 +219,7 @@ fun MyScreen(
         item { SettingRow("本地歌词库", "保存的歌词，随时重读") { navigate("library") } }
         item { SettingRow("个性化", "排版、色彩与主题文件") { navigate("appearance") } }
         item { SettingRow("播放与悬浮窗", "播放状态权限 · 窗口与通知") { navigate("permissions") } }
-        item { SettingRow("歌词与评论来源", "QQ 音乐 · 网易云音乐 · LRCLIB") { navigate("sources") } }
+        item { SettingRow("歌词与评论来源", "QQ 音乐 · 网易云音乐 · AMLL · LRCLIB") { navigate("sources") } }
         item { SettingRow("在线翻译", "你的 API、你的模型") { navigate("translation") } }
         item { Section("数据与支持") }
         item {
@@ -356,7 +356,10 @@ fun SearchSheet(
                         // Publish each successful query immediately, rather than wait for all
                         // aliases.
                         rows = SongSearch.rank(collected, text, current).take(300)
-                        if (provider == Provider.LRCLIB && collected.isNotEmpty()) {
+                        if (
+                            provider in listOf(Provider.LRCLIB, Provider.AMLL) &&
+                                collected.isNotEmpty()
+                        ) {
                             // LRCLIB aliases are fallbacks, not three unconditional round trips.
                             next.keys.retainAll(setOf(variant))
                             break
@@ -364,7 +367,7 @@ fun SearchSheet(
                     } catch (e: Exception) {
                         if (e is CancellationException) throw e
                         failures += e.message ?: "部分搜索失败，可重试"
-                        if (provider == Provider.LRCLIB) break
+                        if (provider in listOf(Provider.LRCLIB, Provider.AMLL)) break
                     }
                 }
                 if (token != requestVersion) return@launch
@@ -406,6 +409,11 @@ fun SearchSheet(
             }
             if (source == Provider.LRCLIB)
                 Text("LRCLIB 社区记录可能包含罗马音，候选会标注文字类型。可能没有中文译文；评论仍来自 QQ／网易云。", fontSize = 12.sp)
+            if (source == Provider.AMLL)
+                Text(
+                    "搜索 AMLL 仓库索引，按需读取 TTML；官方直连失败时使用上游列出的 amlldb.bikonoo.com 镜像。支持逐字、译文和罗马音，评论来源独立选择。",
+                    fontSize = 12.sp,
+                )
             OutlinedTextField(
                 query,
                 {
@@ -443,6 +451,8 @@ fun SearchSheet(
                     when (source) {
                         Provider.QQ -> "填写 QQ 音乐歌曲链接中的 songmid（例如 0039MnYb0qxYhV）"
                         Provider.NETEASE -> "填写网易云歌曲链接或数字 ID（例如 186016）"
+                        Provider.AMLL ->
+                            "填写 AMLL 原始 TTML 文件名，或库中收录的网易云 ID、QQ songmid、Spotify ID／歌曲链接"
                         else -> "填写 LRCLIB 数字记录 ID 或 /api/get/<id> 链接"
                     },
                     fontSize = 12.sp,
@@ -456,6 +466,7 @@ fun SearchSheet(
                             when (source) {
                                 Provider.QQ -> "songmid / 歌曲链接"
                                 Provider.LRCLIB -> "LRCLIB 记录 ID / 链接"
+                                Provider.AMLL -> "AMLL 文件名 / 平台 ID / 链接"
                                 else -> "歌曲 ID / 链接"
                             }
                         )
@@ -467,6 +478,8 @@ fun SearchSheet(
                     onClick = {
                         request {
                             val value = id.trim()
+                            if (source == Provider.AMLL)
+                                return@request listOf(graph.api.resolveAmll(value))
                             val key =
                                 if (value.startsWith("http")) {
                                     val uri = Uri.parse(value)
@@ -796,7 +809,7 @@ fun Appearance(
         }
         Text(
             if (s.prefs.palette == 4 && s.playback.artwork == null) "暂无歌曲封面，暂用柔和海蓝。播放时自动更新。"
-            else "跟随封面：取图片 RGB 均值，生成柔和主题色。封面背景下歌词使用反色并调整可读性。",
+            else "跟随封面：保留 RGB 均值作为主题基色，提取封面多色生成柔和流动渐变，并校正文字对比度。",
             fontSize = 12.sp,
             lineHeight = 19.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -808,13 +821,19 @@ fun Appearance(
             graph.preferences(s.prefs.copy(dark = listOf("system", "light", "dark")[it]))
         }
         Toggle("减少动态效果", s.prefs.reduced) { graph.preferences(s.prefs.copy(reduced = it)) }
+        Toggle("动画网状渐变", s.prefs.coverMesh, "跟随封面时缓慢流动；暂停、后台或减少动态效果时静止") {
+            graph.preferences(s.prefs.copy(coverMesh = it))
+        }
         Section("歌词背景")
         Choice(
-            listOf("纯色", "专辑封面", "自定义图片"),
-            listOf("color", "cover", "custom").indexOf(s.prefs.background),
+            listOf("纯色", "专辑封面", "自定义图片", "网状渐变"),
+            listOf("color", "cover", "custom", "mesh").indexOf(s.prefs.background),
         ) {
             if (it == 2) background()
-            else graph.preferences(s.prefs.copy(background = listOf("color", "cover")[it]))
+            else
+                graph.preferences(
+                    s.prefs.copy(background = listOf("color", "cover", "custom", "mesh")[it])
+                )
         }
         Text(
             "封面模糊程度 · ${s.prefs.coverBlur.roundToInt()}",
@@ -1063,7 +1082,7 @@ fun SourceSettings(s: ScreenState, graph: AppGraph, search: () -> Unit) {
         }
         Section("当前能力")
         Text(
-            "QQ：songmid 歌词、数字 songid 热门／最新评论、歌曲详情与搜索（搜索可能受限）。\n网易云：搜索、逐行歌词、译文、罗马音与热门／最新评论。兼容网关可额外返回 YRC 逐字时间轴。\nLRCLIB：补充歌词；不提供评论。\n\n不内置 Cookie 或第三方账号；不通过接口下载音乐。",
+            "自动匹配顺序：QQ 音乐 → 网易云音乐 → AMLL → LRCLIB。\nQQ：songmid 歌词、数字 songid 评论、搜索。\n网易云：搜索、逐行歌词、译文、罗马音与评论。\nAMLL：官方仓库索引与 TTML 逐字歌词，可能含译文、罗马音及背景人声，不提供评论。\nLRCLIB：补充歌词，不提供评论。\n\n手动选择歌词源只查询所选来源。不内置 Cookie 或第三方账号；不通过接口下载音乐。",
             fontSize = 13.sp,
             lineHeight = 23.sp,
         )

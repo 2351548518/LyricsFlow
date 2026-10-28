@@ -3,7 +3,7 @@ package com.example.lyricsflow.core
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withTimeoutOrNull
 
-val LYRIC_PROVIDERS = listOf(Provider.QQ, Provider.NETEASE, Provider.LRCLIB)
+val LYRIC_PROVIDERS = listOf(Provider.QQ, Provider.NETEASE, Provider.AMLL, Provider.LRCLIB)
 
 data class SourceAttempt(val source: Provider, val reason: String, val candidates: Int = 0)
 
@@ -26,9 +26,7 @@ data class LyricsResolution(val resolved: ResolvedLyrics?, val attempts: List<So
 
 object AutomaticLyrics {
     fun order(preferred: Provider, fallback: Boolean): List<Provider> =
-        (listOf(preferred).filter { it in LYRIC_PROVIDERS } +
-                if (fallback) LYRIC_PROVIDERS else emptyList())
-            .distinct()
+        if (fallback) LYRIC_PROVIDERS else listOf(preferred).filter { it in LYRIC_PROVIDERS }
 
     suspend fun resolve(
         preferred: Provider,
@@ -44,8 +42,11 @@ object AutomaticLyrics {
             progress(source, index + 1, sources.size)
             val result =
                 try {
-                    withTimeoutOrNull(sourceTimeoutMs) { lookup(source) }
-                        ?: SourceLookup(reason = "该来源查询超时")
+                    // The first AMLL lookup downloads its public metadata index (~1.65 MB).
+                    val budget =
+                        if (source == Provider.AMLL && sourceTimeoutMs == 12000L) 16000L
+                        else sourceTimeoutMs
+                    withTimeoutOrNull(budget) { lookup(source) } ?: SourceLookup(reason = "该来源查询超时")
                 } catch (e: Exception) {
                     if (e is CancellationException) throw e
                     SourceLookup(reason = "暂不可用：${e.message ?: "连接失败"}")

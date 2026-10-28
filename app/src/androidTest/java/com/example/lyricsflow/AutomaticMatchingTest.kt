@@ -92,7 +92,7 @@ class AutomaticMatchingTest {
             instrumentation.runOnMainSync {
                 graph.preferences(graph.state.value.prefs.copy(autoSources = true))
                 graph.onPlayback(Playback(fixture.copy(duration = 249000), "com.spotify.music"))
-                graph.selectSource(Provider.QQ)
+                graph.refresh()
             }
             await { !graph.state.value.busy && graph.state.value.lyrics != null }
             assertEquals(Provider.NETEASE, graph.state.value.source)

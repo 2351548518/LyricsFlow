@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -62,15 +63,25 @@ fun LyricBackground(s: ScreenState, bleed: Dp = 0.dp, content: @Composable () ->
     val average =
         when (type) {
             "cover" -> LocalCoverAverage.current.takeIf { s.playback.artwork != null }
+            "mesh" -> LocalCoverAverage.current
             "custom" -> customAverage
             else -> null
         }
+    val dark =
+        when (s.prefs.dark) {
+            "dark" -> true
+            "light" -> false
+            else -> isSystemInDarkTheme()
+        }
+    val meshPalette = remember(average, dark) { flowPalette(4, average, dark) }
     val ink =
-        average?.let { coverInk(it) }
-            ?: LyricInk(
-                androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
-                Color.Transparent,
-            )
+        if (type == "mesh") LyricInk(meshPalette.ink, Color.Transparent)
+        else
+            average?.let { coverInk(it) }
+                ?: LyricInk(
+                    androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
+                    Color.Transparent,
+                )
     Box(Modifier.fillMaxSize()) {
         Box(
             Modifier.fillMaxSize()
@@ -83,10 +94,19 @@ fun LyricBackground(s: ScreenState, bleed: Dp = 0.dp, content: @Composable () ->
                 }
                 .testTag("lyric-art-layer")
         ) {
-            if (average != null) Box(Modifier.fillMaxSize().background(Color(average)))
+            if (average != null && type != "mesh")
+                Box(Modifier.fillMaxSize().background(Color(average)))
             if (theme?.backgroundColor != null && average == null)
                 Box(Modifier.fillMaxSize().background(Color(theme.backgroundColor)))
             when (type) {
+                "mesh" ->
+                    if (s.prefs.palette != 4 || !s.prefs.coverMesh)
+                        CoverMesh(
+                            meshPalette,
+                            LocalMeshSwatches.current,
+                            s.playback.playing && s.prefs.coverMesh,
+                            s.prefs.reduced,
+                        )
                 "cover" ->
                     s.playback.artwork?.let {
                         BlurredArtwork(it, s.prefs.coverBlur, s.playback.track?.key.orEmpty())

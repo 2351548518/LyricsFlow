@@ -5,6 +5,7 @@ import java.security.MessageDigest
 enum class Provider(val label: String) {
     QQ("QQ 音乐"),
     NETEASE("网易云音乐"),
+    AMLL("AMLL"),
     LRCLIB("LRCLIB"),
     LOCAL("本地"),
 }

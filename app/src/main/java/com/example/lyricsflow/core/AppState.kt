@@ -30,6 +30,7 @@ data class Preferences(
     val autoSources: Boolean = true,
     val coverBlur: Float = 8f,
     val overlayColor: String = "",
+    val coverMesh: Boolean = true,
 )
 
 data class ScreenState(
@@ -173,6 +174,7 @@ class AppGraph(val app: Application) {
             prefs.getBoolean("autoSources", true),
             prefs.getFloat("coverBlur", 8f).takeIf { it.isFinite() }?.coerceIn(0f, 24f) ?: 8f,
             OverlayColors.normalize(prefs.getString("overlayColor", "").orEmpty()).orEmpty(),
+            prefs.getBoolean("coverMesh", true),
         )
 
     fun preferences(p: Preferences) {
@@ -197,6 +199,7 @@ class AppGraph(val app: Application) {
             .putString("playbackApp", p.playbackApp)
             .putString("background", p.background)
             .putFloat("coverBlur", p.coverBlur)
+            .putBoolean("coverMesh", p.coverMesh)
             .apply()
         prefs.edit().putBoolean("autoTranslate", p.autoTranslate).apply()
         prefs.edit().putBoolean("autoSources", p.autoSources).apply()
@@ -337,7 +340,7 @@ class AppGraph(val app: Application) {
         mutable.update { it.copy(source = p) }
         state.value.playback.track?.let {
             prefs.edit().putString("source:${it.key}", p.name).apply()
-            loadAutomatic(it, force = true)
+            loadAutomatic(it, force = true, selectedSource = p)
         }
     }
 
@@ -410,11 +413,16 @@ class AppGraph(val app: Application) {
         }
     }
 
-    private fun loadAutomatic(track: Track, force: Boolean = false) {
+    private fun loadAutomatic(
+        track: Track,
+        force: Boolean = false,
+        selectedSource: Provider? = null,
+    ) {
         val token = ++generation
         loadJob?.cancel()
-        val preferred = state.value.source
-        val fallback = state.value.prefs.autoSources
+        val preferred =
+            selectedSource ?: if (state.value.prefs.autoSources) Provider.QQ else state.value.source
+        val fallback = selectedSource == null && state.value.prefs.autoSources
         mutable.update {
             it.copy(busy = true, message = "正在匹配 ${preferred.label}…", matchNotice = "")
         }
@@ -424,7 +432,7 @@ class AppGraph(val app: Application) {
                 kotlinx.coroutines.delay(300)
                 val current = state.value.playback.track?.takeIf { it.key == track.key } ?: track
                 val result =
-                    withTimeout(30000) {
+                    withTimeout(40000) {
                         AutomaticLyrics.resolve(
                             preferred,
                             fallback,
@@ -491,6 +499,13 @@ class AppGraph(val app: Application) {
                                 )
                             }
                             val fetched = api.lyrics(t, force)
+                            if (
+                                source == Provider.AMLL &&
+                                    current.duration > 0 &&
+                                    (fetched.lines.maxOfOrNull { it.end ?: it.start ?: 0 } ?: 0) >
+                                        current.duration + 5000
+                            )
+                                return@resolve SourceLookup(reason = "AMLL 时间轴超过当前歌曲时长，需手动核对版本")
                             if (token != generation) throw CancellationException("Track changed")
                             if (fetched.lines.isEmpty() && !fetched.instrumental)
                                 return@resolve SourceLookup(reason = "匹配到歌曲，但该来源没有歌词")
@@ -539,6 +554,7 @@ class AppGraph(val app: Application) {
                         it.copy(
                             busy = false,
                             message = result.failureMessage(),
+                            source = it.lyrics?.source ?: it.source,
                             matchNotice = if (it.lyrics != null) "更新未完成，保留本地歌词" else "",
                         )
                     }

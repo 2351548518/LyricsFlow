@@ -57,6 +57,11 @@ fun FlowApp(graph: AppGraph) {
             else -> isSystemInDarkTheme()
         }
     val average = rememberCoverAverage(s.playback.artwork)
+    val swatches =
+        rememberCoverSwatches(
+            s.playback.artwork.takeIf { s.prefs.palette == 4 || s.prefs.background == "mesh" },
+            average,
+        )
     val palette =
         remember(s.prefs.palette, average, dark) { flowPalette(s.prefs.palette, average, dark) }
     val bg = palette.background
@@ -221,7 +226,10 @@ fun FlowApp(graph: AppGraph) {
                 else "home"
     }
     BackHandler(enabled = sheet.isNotEmpty() || page != "home") { back() }
-    CompositionLocalProvider(LocalCoverAverage provides average) {
+    CompositionLocalProvider(
+        LocalCoverAverage provides average,
+        LocalMeshSwatches provides swatches,
+    ) {
         MaterialTheme(
             colorScheme = scheme,
             shapes =
@@ -234,7 +242,14 @@ fun FlowApp(graph: AppGraph) {
                 ),
         ) {
             Surface(Modifier.fillMaxSize(), color = bg, contentColor = scheme.onBackground) {
-                FlowBackdrop(palette, dark)
+                FlowBackdrop(
+                    palette,
+                    dark,
+                    swatches,
+                    s.prefs.coverMesh,
+                    s.playback.playing && sheet.isEmpty(),
+                    s.prefs.reduced,
+                )
                 Scaffold(
                     containerColor = Color.Transparent,
                     snackbarHost = { SnackbarHost(snack) },
@@ -387,7 +402,7 @@ fun FlowApp(graph: AppGraph) {
                                 Toggle(
                                     "自动尝试其他歌词源",
                                     s.prefs.autoSources,
-                                    "匹配不到或接口不可用时，尝试其他来源。优先来源也用于新歌曲。",
+                                    "新歌与刷新按 QQ → 网易云 → AMLL → LRCLIB 查找；手动选源只查询该来源。",
                                 ) {
                                     graph.preferences(s.prefs.copy(autoSources = it))
                                 }

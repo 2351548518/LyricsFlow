@@ -1,0 +1,153 @@
+Applications Graphics Acceleration Info:
+Uptime: 995594438 Realtime: 1486675525
+
+** Graphics info for pid 19539 [com.example.lyricsflow] **
+
+Stats since: 995564321469283ns
+Total frames rendered: 1808
+Janky frames: 0 (0.00%)
+Janky frames (legacy): 5 (0.28%)
+50th percentile: 5ms
+90th percentile: 6ms
+95th percentile: 6ms
+99th percentile: 8ms
+Number Missed Vsync: 0
+Number High input latency: 0
+Number Slow UI thread: 0
+Number Slow bitmap uploads: 0
+Number Slow issue draw commands: 0
+Number Frame deadline missed: 0
+Number Frame deadline missed (legacy): 5
+HISTOGRAM: 5ms=1278 6ms=469 7ms=42 8ms=10 9ms=3 10ms=3 11ms=1 12ms=1 13ms=0 14ms=0 15ms=1 16ms=0 17ms=0 18ms=0 19ms=0 20ms=0 21ms=0 22ms=0 23ms=0 24ms=0 25ms=0 26ms=0 27ms=0 28ms=0 29ms=0 30ms=0 31ms=0 32ms=0 34ms=0 36ms=0 38ms=0 40ms=0 42ms=0 44ms=0 46ms=0 48ms=0 53ms=0 57ms=0 61ms=0 65ms=0 69ms=0 73ms=0 77ms=0 81ms=0 85ms=0 89ms=0 93ms=0 97ms=0 101ms=0 105ms=0 109ms=0 113ms=0 117ms=0 121ms=0 125ms=0 129ms=0 133ms=0 150ms=0 200ms=0 250ms=0 300ms=0 350ms=0 400ms=0 450ms=0 500ms=0 550ms=0 600ms=0 650ms=0 700ms=0 750ms=0 800ms=0 850ms=0 900ms=0 950ms=0 1000ms=0 1050ms=0 1100ms=0 1150ms=0 1200ms=0 1250ms=0 1300ms=0 1350ms=0 1400ms=0 1450ms=0 1500ms=0 1550ms=0 1600ms=0 1650ms=0 1700ms=0 1750ms=0 1800ms=0 1850ms=0 1900ms=0 1950ms=0 2000ms=0 2050ms=0 2100ms=0 2150ms=0 2200ms=0 2250ms=0 2300ms=0 2350ms=0 2400ms=0 2450ms=0 2500ms=0 2550ms=0 2600ms=0 2650ms=0 2700ms=0 2750ms=0 2800ms=0 2850ms=0 2900ms=0 2950ms=0 3000ms=0 3050ms=0 3100ms=0 3150ms=0 3200ms=0 3250ms=0 3300ms=0 3350ms=0 3400ms=0 3450ms=0 3500ms=0 3550ms=0 3600ms=0 3650ms=0 3700ms=0 3750ms=0 3800ms=0 3850ms=0 3900ms=0 3950ms=0 4000ms=0 4050ms=0 4100ms=0 4150ms=0 4200ms=0 4250ms=0 4300ms=0 4350ms=0 4400ms=0 4450ms=0 4500ms=0 4550ms=0 4600ms=0 4650ms=0 4700ms=0 4750ms=0 4800ms=0 4850ms=0 4900ms=0 4950ms=0
+50th gpu percentile: 4ms
+90th gpu percentile: 5ms
+95th gpu percentile: 5ms
+99th gpu percentile: 6ms
+GPU HISTOGRAM: 1ms=16 2ms=600 3ms=182 4ms=664 5ms=323 6ms=23 7ms=0 8ms=0 9ms=0 10ms=0 11ms=0 12ms=0 13ms=0 14ms=0 15ms=0 16ms=0 17ms=0 18ms=0 19ms=0 20ms=0 21ms=0 22ms=0 23ms=0 24ms=0 25ms=0 4950ms=0
+
+Pipeline=Skia (Vulkan)
+Memory policy:
+  Max surface area: 3292704
+  Max resource usage: 474.15MB (x144)
+  Background retention: 50% (altUiHidden = true)
+  GPU Context timeout: 10
+Contexts: 13 (stopped = 12)
+CPU Caches:
+  Glyph Cache: 13.15 MB (1 entry)
+  Glyph Count: 83 
+Total CPU memory usage:
+  13788627 bytes, 13.15 MB (0.00 bytes is purgeable)
+GPU Caches:
+  Other:
+    Other: 72.78 KB (1 entry)
+    Buffer Object: 2.50 KB (4 entries)
+    StencilAttachment: 552.00 KB (8 entries)
+  Image:
+    Surface: 7.91 MB (27 entries)
+  Scratch:
+    Buffer Object: 1.74 MB (20 entries)
+    Surface: 80.52 MB (58 entries)
+Total GPU memory usage:
+  95195040 bytes, 90.79 MB (14.01 MB is purgeable)
+Pipeline Cache: inactive
+GraphicBufferAllocator buffers:
+            Handle |         Size |     W (Stride) x H | Layers |   Format |      Usage | Requestor
+0xb4000077c6e4b220 | 13320.00 KiB | 1236 (1280) x 2664 |      1 |        1 | 0x10000b00 | VRI[MainActivity]#12(BLAST Consumer)12
+0xb4000077c8a0ddd0 | 13320.00 KiB | 1236 (1280) x 2664 |      1 |        1 | 0x10000b00 | VRI[MainActivity]#12(BLAST Consumer)12
+0xb4000077c8a0f3d0 | 13320.00 KiB | 1236 (1280) x 2664 |      1 |        1 | 0x10000b00 | VRI[MainActivity]#12(BLAST Consumer)12
+0xb4000077c8a116e0 | 13320.00 KiB | 1236 (1280) x 2664 |      1 |        1 | 0x10000b00 | VRI[MainActivity]#12(BLAST Consumer)12
+Total allocated by GraphicBufferAllocator (estimate): 53280.00 KB
+Imported gralloc buffers:
++ name:VRI[MainActivity]#12(BLAST Consumer)12, id:2067226, size:13444.00KiB, w/h:1236x2664, usage: 0x10000b00, req fmt:1, fourcc/mod:0/0, dataspace: 0x8810000, compressed: true
++ name:VRI[MainActivity]#12(BLAST Consumer)12, id:2067225, size:13444.00KiB, w/h:1236x2664, usage: 0x10000b00, req fmt:1, fourcc/mod:0/0, dataspace: 0x8810000, compressed: true
++ name:VRI[MainActivity]#12(BLAST Consumer)12, id:2067224, size:13444.00KiB, w/h:1236x2664, usage: 0x10000b00, req fmt:1, fourcc/mod:0/0, dataspace: 0x8810000, compressed: true
++ name:VRI[MainActivity]#12(BLAST Consumer)12, id:2067223, size:13444.00KiB, w/h:1236x2664, usage: 0x10000b00, req fmt:1, fourcc/mod:0/0, dataspace: 0x8810000, compressed: true
+Total imported by gralloc: 53776.00KiB
+
+Profile data in ms:
+
+	com.example.lyricsflow/com.example.lyricsflow.MainActivity/android.view.ViewRootImpl@2ce5198 (visibility=8)
+Window: com.example.lyricsflow/com.example.lyricsflow.MainActivity
+Stats since: 995564321382564ns
+Total frames rendered: 0
+Janky frames: 0 (0.00%)
+Janky frames (legacy): 0 (0.00%)
+50th percentile: 4950ms
+90th percentile: 4950ms
+95th percentile: 4950ms
+99th percentile: 4950ms
+Number Missed Vsync: 0
+Number High input latency: 0
+Number Slow UI thread: 0
+Number Slow bitmap uploads: 0
+Number Slow issue draw commands: 0
+Number Frame deadline missed: 0
+Number Frame deadline missed (legacy): 0
+HISTOGRAM: 5ms=0 6ms=0 7ms=0 8ms=0 9ms=0 10ms=0 11ms=0 12ms=0 13ms=0 14ms=0 15ms=0 16ms=0 17ms=0 18ms=0 19ms=0 20ms=0 21ms=0 22ms=0 23ms=0 24ms=0 25ms=0 26ms=0 27ms=0 28ms=0 29ms=0 30ms=0 31ms=0 32ms=0 34ms=0 36ms=0 38ms=0 40ms=0 42ms=0 44ms=0 46ms=0 48ms=0 53ms=0 57ms=0 61ms=0 65ms=0 69ms=0 73ms=0 77ms=0 81ms=0 85ms=0 89ms=0 93ms=0 97ms=0 101ms=0 105ms=0 109ms=0 113ms=0 117ms=0 121ms=0 125ms=0 129ms=0 133ms=0 150ms=0 200ms=0 250ms=0 300ms=0 350ms=0 400ms=0 450ms=0 500ms=0 550ms=0 600ms=0 650ms=0 700ms=0 750ms=0 800ms=0 850ms=0 900ms=0 950ms=0 1000ms=0 1050ms=0 1100ms=0 1150ms=0 1200ms=0 1250ms=0 1300ms=0 1350ms=0 1400ms=0 1450ms=0 1500ms=0 1550ms=0 1600ms=0 1650ms=0 1700ms=0 1750ms=0 1800ms=0 1850ms=0 1900ms=0 1950ms=0 2000ms=0 2050ms=0 2100ms=0 2150ms=0 2200ms=0 2250ms=0 2300ms=0 2350ms=0 2400ms=0 2450ms=0 2500ms=0 2550ms=0 2600ms=0 2650ms=0 2700ms=0 2750ms=0 2800ms=0 2850ms=0 2900ms=0 2950ms=0 3000ms=0 3050ms=0 3100ms=0 3150ms=0 3200ms=0 3250ms=0 3300ms=0 3350ms=0 3400ms=0 3450ms=0 3500ms=0 3550ms=0 3600ms=0 3650ms=0 3700ms=0 3750ms=0 3800ms=0 3850ms=0 3900ms=0 3950ms=0 4000ms=0 4050ms=0 4100ms=0 4150ms=0 4200ms=0 4250ms=0 4300ms=0 4350ms=0 4400ms=0 4450ms=0 4500ms=0 4550ms=0 4600ms=0 4650ms=0 4700ms=0 4750ms=0 4800ms=0 4850ms=0 4900ms=0 4950ms=0
+50th gpu percentile: 4950ms
+90th gpu percentile: 4950ms
+95th gpu percentile: 4950ms
+99th gpu percentile: 4950ms
+GPU HISTOGRAM: 1ms=0 2ms=0 3ms=0 4ms=0 5ms=0 6ms=0 7ms=0 8ms=0 9ms=0 10ms=0 11ms=0 12ms=0 13ms=0 14ms=0 15ms=0 16ms=0 17ms=0 18ms=0 19ms=0 20ms=0 21ms=0 22ms=0 23ms=0 24ms=0 25ms=0 4950ms=0
+
+
+
+---PROFILEDATA---
+Flags,FrameTimelineVsyncId,IntendedVsync,Vsync,InputEventId,HandleInputStart,AnimationStart,PerformTraversalsStart,DrawStart,FrameDeadline,FrameStartTime,FrameInterval,WorkloadTarget,AnimationTime,SyncQueued,SyncStart,IssueDrawCommandsStart,SwapBuffers,FrameCompleted,DequeueBufferDuration,QueueBufferDuration,GpuCompleted,SwapBuffersCompleted,DisplayPresentTime,CommandSubmissionCompleted,
+---PROFILEDATA---
+
+
+	com.example.lyricsflow/com.example.lyricsflow.MainActivity/android.view.ViewRootImpl@c51f5df (visibility=0)
+Window: com.example.lyricsflow/com.example.lyricsflow.MainActivity
+Stats since: 995564321469126ns
+Total frames rendered: 1808
+Janky frames: 0 (0.00%)
+Janky frames (legacy): 5 (0.28%)
+50th percentile: 5ms
+90th percentile: 6ms
+95th percentile: 6ms
+99th percentile: 8ms
+Number Missed Vsync: 0
+Number High input latency: 0
+Number Slow UI thread: 0
+Number Slow bitmap uploads: 0
+Number Slow issue draw commands: 0
+Number Frame deadline missed: 0
+Number Frame deadline missed (legacy): 5
+HISTOGRAM: 5ms=1278 6ms=469 7ms=42 8ms=10 9ms=3 10ms=3 11ms=1 12ms=1 13ms=0 14ms=0 15ms=1 16ms=0 17ms=0 18ms=0 19ms=0 20ms=0 21ms=0 22ms=0 23ms=0 24ms=0 25ms=0 26ms=0 27ms=0 28ms=0 29ms=0 30ms=0 31ms=0 32ms=0 34ms=0 36ms=0 38ms=0 40ms=0 42ms=0 44ms=0 46ms=0 48ms=0 53ms=0 57ms=0 61ms=0 65ms=0 69ms=0 73ms=0 77ms=0 81ms=0 85ms=0 89ms=0 93ms=0 97ms=0 101ms=0 105ms=0 109ms=0 113ms=0 117ms=0 121ms=0 125ms=0 129ms=0 133ms=0 150ms=0 200ms=0 250ms=0 300ms=0 350ms=0 400ms=0 450ms=0 500ms=0 550ms=0 600ms=0 650ms=0 700ms=0 750ms=0 800ms=0 850ms=0 900ms=0 950ms=0 1000ms=0 1050ms=0 1100ms=0 1150ms=0 1200ms=0 1250ms=0 1300ms=0 1350ms=0 1400ms=0 1450ms=0 1500ms=0 1550ms=0 1600ms=0 1650ms=0 1700ms=0 1750ms=0 1800ms=0 1850ms=0 1900ms=0 1950ms=0 2000ms=0 2050ms=0 2100ms=0 2150ms=0 2200ms=0 2250ms=0 2300ms=0 2350ms=0 2400ms=0 2450ms=0 2500ms=0 2550ms=0 2600ms=0 2650ms=0 2700ms=0 2750ms=0 2800ms=0 2850ms=0 2900ms=0 2950ms=0 3000ms=0 3050ms=0 3100ms=0 3150ms=0 3200ms=0 3250ms=0 3300ms=0 3350ms=0 3400ms=0 3450ms=0 3500ms=0 3550ms=0 3600ms=0 3650ms=0 3700ms=0 3750ms=0 3800ms=0 3850ms=0 3900ms=0 3950ms=0 4000ms=0 4050ms=0 4100ms=0 4150ms=0 4200ms=0 4250ms=0 4300ms=0 4350ms=0 4400ms=0 4450ms=0 4500ms=0 4550ms=0 4600ms=0 4650ms=0 4700ms=0 4750ms=0 4800ms=0 4850ms=0 4900ms=0 4950ms=0
+50th gpu percentile: 4ms
+90th gpu percentile: 5ms
+95th gpu percentile: 5ms
+99th gpu percentile: 6ms
+GPU HISTOGRAM: 1ms=16 2ms=600 3ms=182 4ms=664 5ms=323 6ms=23 7ms=0 8ms=0 9ms=0 10ms=0 11ms=0 12ms=0 13ms=0 14ms=0 15ms=0 16ms=0 17ms=0 18ms=0 19ms=0 20ms=0 21ms=0 22ms=0 23ms=0 24ms=0 25ms=0 4950ms=0
+
+
+
+---PROFILEDATA---
+Flags,FrameTimelineVsyncId,IntendedVsync,Vsync,InputEventId,HandleInputStart,AnimationStart,PerformTraversalsStart,DrawStart,FrameDeadline,FrameStartTime,FrameInterval,WorkloadTarget,AnimationTime,SyncQueued,SyncStart,IssueDrawCommandsStart,SwapBuffers,FrameCompleted,DequeueBufferDuration,QueueBufferDuration,GpuCompleted,SwapBuffersCompleted,DisplayPresentTime,CommandSubmissionCompleted,
+0,1021213941,995592451779322,995592451779322,0,995592452038699,995592452039584,995592452074324,995592452136563,995592468445988,995592452011511,16663996,16666666,995592451779322,995592453280366,995592453318907,995592453417188,995592457618491,995592460398386,8802,138698,995592460398386,995592457816980,995592475780626,995592457618491,
+0,1021213949,995592468443301,995592468443301,0,995592468673438,995592468674949,995592468719220,995592468775574,995592485109967,995592468646407,16663994,16666666,995592468443301,995592469732605,995592469803282,995592469923230,995592474560886,995592477300366,10156,139896,995592477300366,995592474757761,995592492444636,995592474560886,
+0,1021213957,995592485107299,995592485107299,0,995592485329897,995592485330834,995592485374376,995592485477761,995592501773965,995592485294168,16663994,16666666,995592485107299,995592486618334,995592486679584,995592486780261,995592491645834,995592494431147,7813,139687,995592494431147,995592491844428,995592509108646,995592491645834,
+0,1021213965,995592501771275,995592501771275,0,995592502055730,995592502057084,995592502098334,995592502155782,995592518437941,995592502027553,16663992,16666666,995592501771275,995592502747241,995592502784949,995592502933282,995592507765886,995592510543126,8646,136355,995592510543126,995592507984376,995592525772657,995592507765886,
+0,1021213973,995592518435269,995592518435269,0,995592518734324,995592518735053,995592518781251,995592518865991,995592535101935,995592518703543,16663992,16666666,995592518435269,995592519910522,995592519942761,995592520054272,995592524844793,995592527705157,9062,140625,995592527705157,995592525047761,995592542436615,995592524844793,
+0,1021213981,995592535099264,995592535099264,0,995592535340626,995592535341563,995592535382709,995592535446251,995592551765930,995592535313438,16663992,16666666,995592535099264,995592536708751,995592537047188,995592537135522,995592540678022,995592543501095,6875,131719,995592543501095,995592540864636,995592559100626,995592540678022,
+0,1021213989,995592551763277,995592551763277,0,995592551999740,995592552025574,995592552066303,995592552126303,995592568429943,995592551975938,16663994,16666666,995592551763277,995592553151772,995592553175105,995592553274272,995592556967240,995592559749740,8178,129375,995592559749740,995592557155365,995592575764636,995592556967240,
+0,1021213997,995592568427252,995592568427252,0,995592568655782,995592568656668,995592568693490,995592568775730,995592585093918,995592568627761,16663992,16666666,995592568427252,995592569500886,995592569521459,995592569832345,995592573623543,995592576390678,8594,143437,995592576390678,995592573824063,995592592428594,995592573623543,
+0,1021214005,995592585091281,995592585091281,0,995592585382397,995592585383178,995592585428647,995592585491615,995592601757947,995592585347813,16663996,16666666,995592585091281,995592587890730,995592587924740,995592588059532,995592589013647,995592591925418,10521,137969,995592591925418,995592589205261,995592609092604,995592589013647,
+0,1021214013,995592601755260,995592601755260,0,995592601999324,995592602000365,995592602049220,995592602110990,995592618421926,995592601964949,16663994,16666666,995592601755260,995592602821824,995592602856043,995592602950418,995592603826615,995592607734480,9532,122031,995592607734480,995592604022865,995592625756615,995592603826615,
+---PROFILEDATA---
+
+
+View hierarchy:
+
+  com.example.lyricsflow/com.example.lyricsflow.MainActivity/android.view.ViewRootImpl@2ce5198
+  11 views, 46.64 kB of render nodes
+
+  com.example.lyricsflow/com.example.lyricsflow.MainActivity/android.view.ViewRootImpl@c51f5df
+  11 views, 45.61 kB of render nodes
+
+
+Total ViewRootImpl   : 2
+Total attached Views : 22
+Total RenderNode     : 92.25 kB (used) / 120.20 kB (capacity)
+

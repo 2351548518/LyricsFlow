@@ -89,6 +89,8 @@ APK：[app-debug.apk](../app/build/outputs/apk/debug/app-debug.apk)。安装使�
 
 悬浮文字颜色现可通过设置选预设、RGB 滑块或十六进制值，手动颜色优先于主题，同步作用于原文和译文；本地/云端备份携带新字段 overlayColor。测试与图片见 [悬浮颜色专项](./android-qa/Overlay-Text-Color.md)。
 
+2026-10-28 网状渐变/AMLL：参考 Pear-Wall 的分层及低分辨率渲染策略，实现封面多色聚类、AGSL/旧版原生渐变、25% 离屏绘制与暂停省电，保留歌词清晰度和既有封面选择。AMLL 使用公开元数据索引和按需 TTML，优先最新平台稿件，独立处理绝对时间/译文/罗马音/背景人声；自动顺序固定 QQ → 网易云 → AMLL → LRCLIB，手动选源单独查询。源代码分析、兼容边界及性能证据见 [专项报告](./android-qa/Pear-Mesh-AMLL.md)。
+
 2026-10-28：LRCLIB 使用可取消客户端，增加结构化检索、复用搜索歌词、有限重试/退避、缓存回退；身份检查后优先日文同步记录，升级旧拉丁字母缓存。歌词描边复用文字布局，当前行采用图层缩放，时钟/高亮分离并按固定目标滚动。JVM 29 项、模拟器 38 项通过；真机样本 P95 从 21 ms 降至 8–9 ms。证据及真机测试 APK 升级限制见 [LRCLIB 与渲染专项](./android-qa/LRCLIB-Rendering.md)。
 
 2026-10-27 GitHub 增量：`GitHubApi` 负责固定官方端点、私有仓库检查和完整 Git 提交；`GitHubSync` 负责设备授权、刷新、预览、基线与恢复副本；`BackupRestore` 统一本地与云端恢复，`GitHubSettings` 接入我的页面。Token 与翻译 Key 使用独立加密槽，GitHub 状态排除系统备份。详见 [GitHub 同步说明](./GitHub-Sync.md)。
