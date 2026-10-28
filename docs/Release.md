@@ -2,6 +2,8 @@
 
 首个正式版：**v1.0.0**，`versionCode = 1`，包名保持 `com.example.lyricsflow`。后续每次发行递增 versionCode，始终沿用首次发布的正式签名。
 
+当前版本：**v1.0.1**，`versionCode = 2`，图标配色更新；沿用首版签名。脚本按构建输出中的版本号生成对应 `dist/v<版本>/`，历史版本不覆盖。
+
 ## Windows 本机签名
 
 使用 PowerShell 7、JDK 21、Android SDK 37 与 Android CLI。

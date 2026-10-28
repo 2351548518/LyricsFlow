@@ -6,10 +6,10 @@
 
 为 Spotify 等本机音乐 App 带来同步歌词、中文翻译与音乐评论。
 
-[![Release](https://img.shields.io/github/v/release/2351548518/LyricsFlow?style=flat-square&color=386b61&cacheSeconds=300&v=1.0.0)](https://github.com/2351548518/LyricsFlow/releases/latest)
-![Android](https://img.shields.io/badge/Android-7.0%2B-386b61?style=flat-square)
+[![Release](https://img.shields.io/github/v/release/2351548518/LyricsFlow?style=flat-square&color=3273f4&cacheSeconds=300&v=1.0.1)](https://github.com/2351548518/LyricsFlow/releases/latest)
+![Android](https://img.shields.io/badge/Android-7.0%2B-3273f4?style=flat-square)
 ![UI](https://img.shields.io/badge/UI-Jetpack_Compose-607d8b?style=flat-square)
-[![Downloads](https://img.shields.io/github/downloads/2351548518/LyricsFlow/total?style=flat-square&color=386b61&cacheSeconds=300&v=1.0.0)](https://github.com/2351548518/LyricsFlow/releases)
+[![Downloads](https://img.shields.io/github/downloads/2351548518/LyricsFlow/total?style=flat-square&color=3273f4&cacheSeconds=300&v=1.0.1)](https://github.com/2351548518/LyricsFlow/releases)
 
 [下载正式版](https://github.com/2351548518/LyricsFlow/releases/latest) · [快速开始](#快速开始) · [界面预览](#界面预览) · [反馈问题](https://github.com/2351548518/LyricsFlow/issues)
 
@@ -63,7 +63,7 @@ AMLL、LRCLIB 的收录范围和译文情况取决于社区记录；没有真实
 
 ## 快速开始
 
-1. 从 [GitHub Releases](https://github.com/2351548518/LyricsFlow/releases/latest) 下载 `LyricsFlow-v1.0.0.apk` 并安装，支持 **Android 7.0 / API 24 及以上**。
+1. 从 [GitHub Releases](https://github.com/2351548518/LyricsFlow/releases/latest) 下载最新的 `LyricsFlow-v1.0.1.apk` 并安装，支持 **Android 7.0 / API 24 及以上**。
 2. 在“我的 → 播放与悬浮窗”授予**通知使用权**，然后在 Spotify 等支持的音乐 App 中播放歌曲。
 3. 返回首页查看歌词。若版本或歌曲不符，点击来源按钮或“歌曲匹配”，搜索并确认记录；选择会随歌曲保存。
 4. 需要悬浮歌词时，授予“显示在其他应用上层”权限并主动开启；翻译与 GitHub 同步均可按需配置。
@@ -119,6 +119,7 @@ android build :app:assembleDebug -- :app:assembleDebugAndroidTest :app:testDebug
 | [验收记录](docs/android-qa/README.md) | 真机、模拟器、来源与数据验证证据 |
 | [主题 Schema](docs/lyricsflow.style.schema.json) | 声明式主题格式 |
 | [品牌资源](docs/branding/README.md) | SVG Logo、PNG 与 Android 图标 |
+| [v1.0.1 发行说明](docs/releases/v1.0.1.md) | 最新图标配色与覆盖升级说明 |
 | [v1.0.0 发行说明](docs/releases/v1.0.0.md) | 首版功能与安装说明 |
 
 ## 致谢与参考
