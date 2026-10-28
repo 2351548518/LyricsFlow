@@ -849,7 +849,7 @@ fun Appearance(
                 Modifier.testTag("cover-blur-slider").semantics { contentDescription = "封面模糊程度" },
         )
         Text(
-            "0 保留原图，数值越大越柔和；仅模糊封面和自定义图片，歌词保持清晰。",
+            "控制封面中心的模糊程度，四周自动柔化并融入背景。0 关闭图片模糊，歌词始终保持清晰。",
             fontSize = 12.sp,
             lineHeight = 19.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant,

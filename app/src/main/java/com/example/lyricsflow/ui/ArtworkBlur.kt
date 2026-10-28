@@ -6,9 +6,16 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import kotlin.coroutines.coroutineContext
@@ -17,6 +24,44 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
+
+/** Mask only the artwork, so the one shared page background shows through at every boundary. */
+internal fun Modifier.artworkFeather(focus: Boolean = false): Modifier = graphicsLayer {
+    compositingStrategy = CompositingStrategy.Offscreen
+}
+    .drawWithCache {
+        val vertical = if (focus) size.height * .46f else minOf(112.dp.toPx(), size.height * .24f)
+        val horizontal = if (focus) size.width * .44f else minOf(28.dp.toPx(), size.width * .09f)
+        fun stops(fraction: Float): Array<Pair<Float, Color>> {
+            val edge = fraction.coerceIn(.001f, .49f)
+            val leading =
+                (0..12).map { step ->
+                    val t = step / 12f
+                    t * edge to Color.White.copy(alpha = t * t * (3f - 2f * t))
+                }
+            return (leading + leading.asReversed().map { (p, c) -> 1f - p to c }).toTypedArray()
+        }
+        val yMask = Brush.verticalGradient(*stops(vertical / size.height.coerceAtLeast(1f)))
+        val xMask = Brush.horizontalGradient(*stops(horizontal / size.width.coerceAtLeast(1f)))
+        onDrawWithContent {
+            drawContent()
+            drawRect(yMask, blendMode = BlendMode.DstIn)
+            drawRect(xMask, blendMode = BlendMode.DstIn)
+        }
+    }
+
+/** Two cached blur levels blend smoothly: readable centre, softer periphery, no blur on lyrics. */
+@Composable
+internal fun FeatheredArtwork(bitmap: Bitmap, radius: Float, contentKey: String) {
+    val amount = radius.takeIf { it.isFinite() }?.coerceIn(0f, 24f) ?: 8f
+    if (amount == 0f) BlurredArtwork(bitmap, 0f, contentKey)
+    else {
+        BlurredArtwork(bitmap, (amount * 2.2f + 4f).coerceAtMost(32f), contentKey, maxRadius = 32f)
+        Box(Modifier.fillMaxSize().artworkFeather(focus = true)) {
+            BlurredArtwork(bitmap, amount, contentKey)
+        }
+    }
+}
 
 /** API 24–30 fallback: bounded, cancellable, separable box passes approximating Gaussian blur. */
 internal suspend fun blurCover(source: Bitmap, radius: Float): Bitmap? =
@@ -84,13 +129,18 @@ internal suspend fun blurCover(source: Bitmap, radius: Float): Bitmap? =
     }
 
 @Composable
-internal fun BlurredArtwork(bitmap: Bitmap, radius: Float, contentKey: String) {
-    val amount = radius.takeIf { it.isFinite() }?.coerceIn(0f, 24f) ?: 8f
+internal fun BlurredArtwork(
+    bitmap: Bitmap,
+    radius: Float,
+    contentKey: String,
+    maxRadius: Float = 24f,
+) {
+    val amount = radius.takeIf { it.isFinite() }?.coerceIn(0f, maxRadius) ?: 8f
     if (Build.VERSION.SDK_INT >= 31 || amount == 0f) {
         Image(
             bitmap.asImageBitmap(),
             null,
-            Modifier.fillMaxSize().blur(amount.dp),
+            Modifier.fillMaxSize().blur(amount.dp, edgeTreatment = BlurredEdgeTreatment.Rectangle),
             contentScale = ContentScale.Crop,
             filterQuality = FilterQuality.High,
         )

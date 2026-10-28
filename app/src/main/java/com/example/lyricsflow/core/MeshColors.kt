@@ -1,10 +1,42 @@
 package com.example.lyricsflow.core
 
+import kotlin.math.exp
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
 /** Small deterministic colour clustering. The exact RGB mean remains the theme's base colour. */
 object MeshColors {
+    /** Keep cover colours near their original corners, with overlapping, soft sampling windows. */
+    fun spatial(pixels: IntArray, width: Int, height: Int, fallback: Int): List<Int> {
+        require(width > 0 && height > 0 && width.toLong() * height == pixels.size.toLong())
+        return List(4) { corner ->
+            val cx = if (corner % 2 == 0) .22 else .78
+            val cy = if (corner < 2) .22 else .78
+            val sums = DoubleArray(4)
+            // Bounded work even when callers pass a full-resolution cover.
+            val step = maxOf(1, kotlin.math.ceil(kotlin.math.sqrt(pixels.size / 4096.0)).toInt())
+            for (y in 0 until height step step) for (x in 0 until width step step) {
+                val p = pixels[y * width + x]
+                val alpha = (p ushr 24) / 255.0
+                if (alpha < .125) continue
+                val dx = (x + .5) / width - cx
+                val dy = (y + .5) / height - cy
+                val weight = exp(-12.0 * (dx * dx + dy * dy)) * alpha
+                sums[0] += (p ushr 16 and 255) * weight
+                sums[1] += (p ushr 8 and 255) * weight
+                sums[2] += (p and 255) * weight
+                sums[3] += weight
+            }
+            if (sums[3] <= 0) fallback
+            else
+                CoverColors.rgb(
+                    (sums[0] / sums[3]).roundToInt(),
+                    (sums[1] / sums[3]).roundToInt(),
+                    (sums[2] / sums[3]).roundToInt(),
+                )
+        }
+    }
+
     fun extract(pixels: IntArray, fallback: Int): List<Int> {
         val samples = pixels.filter { it ushr 24 >= 32 }.take(4096)
         if (samples.isEmpty()) return List(4) { fallback }

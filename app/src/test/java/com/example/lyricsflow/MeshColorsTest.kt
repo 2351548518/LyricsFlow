@@ -6,6 +6,39 @@ import org.junit.Test
 
 class MeshColorsTest {
     @Test
+    fun spatialColoursKeepTheirCoverPositions() {
+        val red = 0xffee2233.toInt()
+        val blue = 0xff2255ee.toInt()
+        val green = 0xff22cc55.toInt()
+        val gold = 0xffddaa22.toInt()
+        val pixels =
+            IntArray(64 * 64) { i ->
+                when {
+                    i / 64 < 32 && i % 64 < 32 -> red
+                    i / 64 < 32 -> blue
+                    i % 64 < 32 -> green
+                    else -> gold
+                }
+            }
+        val colors = MeshColors.spatial(pixels, 64, 64, 0xff777777.toInt())
+        fun distance(a: Int, b: Int) =
+            (0..2).sumOf { c ->
+                kotlin.math.abs((a ushr (c * 8) and 255) - (b ushr (c * 8) and 255))
+            }
+        listOf(red, blue, green, gold).forEachIndexed { i, expected ->
+            assertEquals(expected, listOf(red, blue, green, gold).minBy { distance(it, colors[i]) })
+        }
+        assertEquals(colors, MeshColors.spatial(pixels, 64, 64, 0xff777777.toInt()))
+    }
+
+    @Test
+    fun spatialSamplingHandlesTinyAndTransparentCovers() {
+        val fallback = 0xff345678.toInt()
+        assertEquals(List(4) { fallback }, MeshColors.spatial(IntArray(4), 2, 2, fallback))
+        assertEquals(List(4) { fallback }, MeshColors.spatial(intArrayOf(fallback), 1, 1, 0))
+    }
+
+    @Test
     fun extractsMultipleCoverColoursDeterministically() {
         val colors =
             intArrayOf(

@@ -93,9 +93,10 @@ fun LyricBackground(s: ScreenState, bleed: Dp = 0.dp, content: @Composable () ->
                     layout(constraints.maxWidth, layer.height) { layer.place(-inset, 0) }
                 }
                 .testTag("lyric-art-layer")
+                .then(
+                    if (type == "cover" || type == "custom") Modifier.artworkFeather() else Modifier
+                )
         ) {
-            if (average != null && type != "mesh")
-                Box(Modifier.fillMaxSize().background(Color(average)))
             if (theme?.backgroundColor != null && average == null)
                 Box(Modifier.fillMaxSize().background(Color(theme.backgroundColor)))
             when (type) {
@@ -109,15 +110,15 @@ fun LyricBackground(s: ScreenState, bleed: Dp = 0.dp, content: @Composable () ->
                         )
                 "cover" ->
                     s.playback.artwork?.let {
-                        BlurredArtwork(it, s.prefs.coverBlur, s.playback.track?.key.orEmpty())
+                        FeatheredArtwork(it, s.prefs.coverBlur, s.playback.track?.key.orEmpty())
                     }
                 "custom" ->
                     custom?.let {
-                        BlurredArtwork(it, s.prefs.coverBlur, "custom:${s.imageRevision}")
+                        FeatheredArtwork(it, s.prefs.coverBlur, "custom:${s.imageRevision}")
                     }
             }
         }
-        // Keep the original image fully opaque. Contrast belongs to the glyphs, not a white veil.
+        // Lyrics are outside both image masks and blur layers; their opacity stays unchanged.
         CompositionLocalProvider(LocalLyricInk provides ink, content = content)
     }
 }

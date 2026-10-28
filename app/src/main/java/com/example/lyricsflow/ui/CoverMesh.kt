@@ -57,7 +57,7 @@ internal fun rememberCoverSwatches(bitmap: Bitmap?, average: Int?): List<Int> {
                     try {
                         val pixels = IntArray(48 * 48)
                         small.getPixels(pixels, 0, 48, 0, 0, 48, 48)
-                        MeshColors.extract(pixels, average ?: 0xff477f86.toInt())
+                        MeshColors.spatial(pixels, 48, 48, average ?: 0xff477f86.toInt())
                     } finally {
                         if (small !== readable) small.recycle()
                         if (readable !== bitmap) readable.recycle()
@@ -135,10 +135,10 @@ internal fun CoverMesh(
         val t = phase.floatValue * .15f
         val points =
             arrayOf(
-                Offset(.18f + sin(t * .83f) * .22f, .18f + cos(t * .67f) * .22f),
-                Offset(.82f + cos(t * .73f) * .20f, .22f + sin(t * .91f) * .26f),
-                Offset(.18f + cos(t * .61f) * .23f, .82f + sin(t * .77f) * .22f),
-                Offset(.82f + sin(t * .71f) * .24f, .82f + cos(t * .89f) * .24f),
+                Offset(.18f + sin(t * .83f) * .065f, .20f + cos(t * .67f) * .055f),
+                Offset(.82f + cos(t * .73f) * .060f, .20f + sin(t * .91f) * .065f),
+                Offset(.18f + cos(t * .61f) * .055f, .80f + sin(t * .77f) * .060f),
+                Offset(.82f + sin(t * .71f) * .065f, .80f + cos(t * .89f) * .055f),
             )
         // A soft background needs few pixels. Force a small offscreen texture, then upscale it.
         // This leaves text at native resolution and avoids shading the full display every frame.
@@ -160,7 +160,7 @@ internal fun CoverMesh(
                     Brush.radialGradient(
                         listOf(colors[i], colors[i].copy(alpha = 0f)),
                         center = Offset(points[i].x * size.width, points[i].y * size.height),
-                        radius = size.maxDimension * .9f,
+                        radius = size.maxDimension * 1.15f,
                     )
                 )
             }
@@ -178,11 +178,11 @@ private object MeshShader {
         uniform float2 p0; uniform float2 p1; uniform float2 p2; uniform float2 p3;
         layout(color) uniform half4 c0; layout(color) uniform half4 c1;
         layout(color) uniform half4 c2; layout(color) uniform half4 c3;
-        float weight(float2 uv, float2 p) { float2 d=uv-p; float r=dot(d,d); return 1.0/(0.018+r*r); }
+        float weight(float2 uv, float2 p) { float2 d=uv-p; return exp(-3.2*dot(d,d)); }
         half4 main(float2 coord) {
             float2 uv=coord/resolution;
-            uv.x+=0.14*sin(uv.y*4.0+phase);
-            uv.y+=0.10*cos(uv.x*3.5-phase*0.7);
+            uv.x+=0.045*sin(uv.y*3.0+phase);
+            uv.y+=0.035*cos(uv.x*2.5-phase*0.7);
             float a=weight(uv,p0), b=weight(uv,p1), c=weight(uv,p2), d=weight(uv,p3);
             half3 rgb=(c0.rgb*a+c1.rgb*b+c2.rgb*c+c3.rgb*d)/(a+b+c+d);
             float noise=fract(sin(dot(coord,float2(12.9898,78.233)))*43758.5453)-0.5;
