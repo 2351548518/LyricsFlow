@@ -400,11 +400,9 @@ fun FlowApp(graph: AppGraph) {
                                         "当前：本地歌词",
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
-                                LYRIC_PROVIDERS.forEach { p ->
-                                    FlowChoiceChip(p.label, s.source == p) {
-                                        graph.selectSource(p)
-                                        sheet = ""
-                                    }
+                                FlowProviderRow(LYRIC_PROVIDERS, s.source) { p ->
+                                    graph.selectSource(p)
+                                    sheet = ""
                                 }
                                 Toggle(
                                     "自动尝试其他歌词源",
@@ -413,25 +411,23 @@ fun FlowApp(graph: AppGraph) {
                                 ) {
                                     graph.preferences(s.prefs.copy(autoSources = it))
                                 }
-                                FlowOutlinedButton(
-                                    onClick = {
-                                        graph.matchAutomatically()
-                                        sheet = ""
-                                    },
-                                    enabled = !s.busy && s.playback.track != null,
-                                    modifier = Modifier.padding(top = 12.dp, bottom = 12.dp),
-                                ) {
-                                    Text("重新自动匹配")
-                                }
                                 Text(
                                     "刷新只重新获取当前来源的当前记录，不更换来源。重新自动匹配成功后会解除本曲的固定选择。",
+                                    Modifier.padding(top = 12.dp),
                                     fontSize = 13.sp,
                                 )
                                 Text("评论来源独立于歌词。可在歌曲匹配中手动确认候选。", fontSize = 13.sp)
                             }
                         },
                         confirmButton = {
-                            TextButton(onClick = { sheet = "search" }) { Text("歌曲匹配") }
+                            FlowMatchActions(
+                                enabled = !s.busy && s.playback.track != null,
+                                autoMatch = {
+                                    graph.matchAutomatically()
+                                    sheet = ""
+                                },
+                                openMatch = { sheet = "search" },
+                            )
                         },
                     )
                 "delay" ->
@@ -995,10 +991,7 @@ private fun Home(
                     enabled = !s.busy && !s.demo,
                     modifier = Modifier.size(44.dp).semantics { contentDescription = "刷新当前来源歌词" },
                 ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Glyph("refresh", Modifier.size(17.dp))
-                        Text("刷新", fontSize = 9.sp, lineHeight = 12.sp)
-                    }
+                    Glyph("refresh", Modifier.size(18.dp))
                 }
                 IconButton(
                     onClick = {

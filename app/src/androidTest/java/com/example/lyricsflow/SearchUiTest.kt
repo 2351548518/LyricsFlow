@@ -1,11 +1,14 @@
 package com.example.lyricsflow
 
 import android.graphics.Bitmap
+import androidx.activity.compose.setContent
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.lyricsflow.core.*
+import com.example.lyricsflow.ui.SearchSheet
 import java.io.File
 import org.junit.Rule
 import org.junit.Test
@@ -16,17 +19,15 @@ class SearchUiTest {
     @Test
     fun lrclibIsVisibleAndKeepsItsSelectionAndRecordIdInput() {
         val graph = (compose.activity.application as LyricsFlowApp).graph
-        val settings = graph.app.getSharedPreferences("settings", 0)
-        val initial = settings.getString("lyricPriority", null)
-        compose.activityRule.scenario.onActivity {
-            graph.live()
-            graph.selectSource(Provider.LRCLIB)
+        compose.activityRule.scenario.onActivity { activity ->
+            activity.setContent {
+                MaterialTheme { SearchSheet(graph, null, {}, initialSource = Provider.LRCLIB) {} }
+            }
         }
         try {
-            compose.onNodeWithText("搜索歌曲与真实评论").performClick()
             compose.onNodeWithText("LRCLIB").performScrollTo().assertIsSelected()
-            compose.onNodeWithText("QQ 音乐").assertExists()
-            compose.onNodeWithText("网易云音乐").assertExists()
+            compose.onNodeWithText("QQ音乐").assertExists()
+            compose.onNodeWithText("网易云").assertExists()
             val instrumentation = InstrumentationRegistry.getInstrumentation()
             androidx.test.espresso.Espresso.closeSoftKeyboard()
             compose.waitForIdle()
@@ -38,17 +39,10 @@ class SearchUiTest {
             }
             compose.onNodeWithText("使用歌曲链接／ID 绑定").performScrollTo().performClick()
             compose.onNodeWithText("LRCLIB 记录 ID / 链接").performScrollTo().assertIsDisplayed()
-            compose.onNodeWithText("QQ 音乐").performScrollTo().performClick()
+            compose.onNodeWithText("QQ音乐").performScrollTo().performClick()
             compose.onNodeWithText("songmid / 歌曲链接").performScrollTo().assertIsDisplayed()
         } finally {
-            settings
-                .edit()
-                .apply {
-                    if (initial == null) remove("lyricPriority")
-                    else putString("lyricPriority", initial)
-                }
-                .commit()
-            compose.activityRule.scenario.onActivity { graph.live() }
+            compose.waitForIdle()
         }
     }
 

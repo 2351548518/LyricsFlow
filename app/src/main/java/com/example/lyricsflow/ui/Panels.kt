@@ -256,6 +256,10 @@ fun SearchSheet(
     dismiss: () -> Unit,
     providers: List<Provider> = LYRIC_PROVIDERS,
     initialSource: Provider? = null,
+    loadPage: suspend (Provider, String, Int, String, Track?) -> SearchPage =
+        { provider, query, page, channel, track ->
+            graph.api.searchPage(provider, query, page, channel = channel, current = track)
+        },
     select: (Track) -> Unit,
 ) {
     val keyboard = LocalSoftwareKeyboardController.current
@@ -280,6 +284,9 @@ fun SearchSheet(
     var requestVersion by remember { mutableIntStateOf(0) }
     var searchJob by remember { mutableStateOf<Job?>(null) }
     val scope = rememberCoroutineScope()
+    fun failureText(e: Exception) =
+        e.message?.takeUnless { it.isBlank() || it == "Failed requirement." }
+            ?: "请求未完成，请检查输入后重试，或切换来源。"
     fun invalidate() {
         requestVersion++
         searchJob?.cancel()
@@ -307,13 +314,14 @@ fun SearchSheet(
                 if (rows.isEmpty()) error = "未返回候选，可简化关键词或使用歌曲链接／ID。"
             } catch (e: Exception) {
                 if (e is CancellationException) throw e
-                if (token == requestVersion) error = e.message ?: "搜索失败"
+                if (token == requestVersion) error = failureText(e)
             } finally {
                 if (token == requestVersion) busy = false
             }
         }
     }
     fun search(append: Boolean = false) {
+        if (busy || append && cursors.isEmpty()) return
         keyboard?.hide()
         focusManager.clearFocus()
         if (!append) invalidate()
@@ -336,13 +344,7 @@ fun SearchSheet(
                 for ((variant, cursor) in pending) {
                     try {
                         val result =
-                            graph.api.searchPage(
-                                provider,
-                                variant,
-                                cursor.first,
-                                channel = cursor.second,
-                                current = current,
-                            )
+                            loadPage(provider, variant, cursor.first, cursor.second, current)
                         if (token != requestVersion) return@launch
                         val signature = result.tracks.joinToString("|") { SongSearch.identity(it) }
                         val repeated = cursor.first > 0 && signature == nextSignatures[variant]
@@ -366,7 +368,7 @@ fun SearchSheet(
                         }
                     } catch (e: Exception) {
                         if (e is CancellationException) throw e
-                        failures += e.message ?: "部分搜索失败，可重试"
+                        failures += failureText(e)
                         if (provider in listOf(Provider.LRCLIB, Provider.AMLL)) break
                     }
                 }
@@ -403,8 +405,8 @@ fun SearchSheet(
                 fontSize = 12.sp,
                 modifier = Modifier.padding(top = 8.dp, bottom = 16.dp),
             )
-            Choice(providers.map { it.label }, providers.indexOf(source).coerceAtLeast(0)) {
-                source = providers[it]
+            FlowProviderRow(providers, source) {
+                source = it
                 invalidate()
             }
             if (source == Provider.LRCLIB)
@@ -538,13 +540,13 @@ fun SearchSheet(
                     fontSize = 12.sp,
                     modifier = Modifier.padding(vertical = 8.dp),
                 )
-            if (cursors.isNotEmpty())
+            if (rows.isNotEmpty() && cursors.isNotEmpty())
                 FlowOutlinedButton(
                     onClick = { search(true) },
                     enabled = !busy,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text("加载更多候选")
+                    Text(if (error.isNotBlank()) "重试加载" else "加载更多候选")
                 }
             if (rows.isNotEmpty()) Spacer(Modifier.height(16.dp))
             rows.forEach { t ->
@@ -556,14 +558,6 @@ fun SearchSheet(
                     select(t)
                 }
             }
-            if (cursors.isNotEmpty())
-                FlowOutlinedButton(
-                    onClick = { search(true) },
-                    enabled = !busy,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text("加载更多候选")
-                }
             if (rows.size >= 300) Text("已显示 300 首，请缩小关键词继续查找。", fontSize = 12.sp)
             Spacer(Modifier.height(28.dp))
         }

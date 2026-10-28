@@ -81,9 +81,9 @@ class ControlReadabilityTest {
             compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
             compose.onNodeWithText("首页", useUnmergedTree = true).performClick()
             compose.onNodeWithText("歌曲匹配").performClick()
-            compose.onNodeWithText("QQ 音乐").assertIsSelected()
-            compose.onNodeWithText("网易云音乐").performClick().assertIsSelected()
-            compose.onNodeWithText("QQ 音乐").assertIsNotSelected()
+            compose.onNodeWithTag("provider-choice-QQ").assertIsSelected()
+            compose.onNodeWithTag("provider-choice-NETEASE").performClick().assertIsSelected()
+            compose.onNodeWithTag("provider-choice-QQ").assertIsNotSelected()
             capture("brown-matching")
             compose.activityRule.scenario.onActivity {
                 state.value =
