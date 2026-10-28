@@ -7,6 +7,23 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class AutomaticLyricsTest {
+    @Test
+    fun stalledSourceTimesOutAndFallsBackWithoutCancellingResolution() = runBlocking {
+        val visited = mutableListOf<Provider>()
+        val result =
+            AutomaticLyrics.resolve(Provider.LRCLIB, true, sourceTimeoutMs = 30) { source ->
+                visited += source
+                if (source == Provider.LRCLIB) kotlinx.coroutines.awaitCancellation()
+                else content(source)
+            }
+        assertEquals(listOf(Provider.LRCLIB, Provider.QQ), visited)
+        assertEquals(Provider.QQ, result.resolved!!.lyrics.source)
+        assertTrue(
+            result.attempts.single().reason.contains("超时") ||
+                result.attempts.single().reason.contains("超过")
+        )
+    }
+
     private fun content(source: Provider, timed: Boolean = true) =
         SourceLookup(
             ResolvedLyrics(

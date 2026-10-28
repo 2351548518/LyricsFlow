@@ -1,5 +1,7 @@
 # Android 开发版验收记录
 
+2026-10-28 补充：[LRCLIB 搜索/日文原文选择与滚动渲染](./LRCLIB-Rendering.md)。最新默认设备回归 38 项、JVM 29 项通过；下方历史数字保留为当时记录。
+
 日期：2026-10-26。参考 [PRD](../LyricsFlow-PRD.md)、[原型](../../prototype/lyricsflow-web/README.md) 和 [实现说明](../Android-Implementation.md)。本记录区分已测试行为与仍未覆盖的发布要求。
 
 2026-10-27 的配色、全宽封面、可调模糊、译文放大、刷新闪烁修复及在线翻译每日不限量，见 [最新 UI 专项记录](./Flow-UI.md)；下文保留首轮验收历史。

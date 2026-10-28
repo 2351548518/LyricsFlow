@@ -341,6 +341,7 @@ fun SearchSheet(
                                 variant,
                                 cursor.first,
                                 channel = cursor.second,
+                                current = current,
                             )
                         if (token != requestVersion) return@launch
                         val signature = result.tracks.joinToString("|") { SongSearch.identity(it) }
@@ -352,9 +353,18 @@ fun SearchSheet(
                         nextSignatures[variant] = signature
                         if (result.note.isNotBlank()) notices += result.note
                         if (variant == pending.keys.first() && !append) total = result.total
+                        // Publish each successful query immediately, rather than wait for all
+                        // aliases.
+                        rows = SongSearch.rank(collected, text, current).take(300)
+                        if (provider == Provider.LRCLIB && collected.isNotEmpty()) {
+                            // LRCLIB aliases are fallbacks, not three unconditional round trips.
+                            next.keys.retainAll(setOf(variant))
+                            break
+                        }
                     } catch (e: Exception) {
                         if (e is CancellationException) throw e
                         failures += e.message ?: "部分搜索失败，可重试"
+                        if (provider == Provider.LRCLIB) break
                     }
                 }
                 if (token != requestVersion) return@launch
@@ -395,7 +405,7 @@ fun SearchSheet(
                 invalidate()
             }
             if (source == Provider.LRCLIB)
-                Text("LRCLIB 提供原文歌词，可能没有中文译文；评论仍来自 QQ／网易云。", fontSize = 12.sp)
+                Text("LRCLIB 社区记录可能包含罗马音，候选会标注文字类型。可能没有中文译文；评论仍来自 QQ／网易云。", fontSize = 12.sp)
             OutlinedTextField(
                 query,
                 {
@@ -527,7 +537,8 @@ fun SearchSheet(
             rows.forEach { t ->
                 SettingRow(
                     t.title,
-                    "${t.artist} · ${t.album}\n${t.duration/1000} 秒 · ${t.provider.label}",
+                    "${t.artist} · ${t.album}\n${t.duration/1000} 秒 · ${t.provider.label}" +
+                        graph.api.lyricHint(t).let { if (it.isBlank()) "" else "\n$it" },
                 ) {
                     select(t)
                 }

@@ -1,6 +1,7 @@
 package com.example.lyricsflow.core
 
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.withTimeoutOrNull
 
 val LYRIC_PROVIDERS = listOf(Provider.QQ, Provider.NETEASE, Provider.LRCLIB)
 
@@ -33,6 +34,7 @@ object AutomaticLyrics {
         preferred: Provider,
         fallback: Boolean,
         progress: (Provider, Int, Int) -> Unit = { _, _, _ -> },
+        sourceTimeoutMs: Long = 12000,
         lookup: suspend (Provider) -> SourceLookup,
     ): LyricsResolution {
         val sources = order(preferred, fallback)
@@ -42,7 +44,8 @@ object AutomaticLyrics {
             progress(source, index + 1, sources.size)
             val result =
                 try {
-                    lookup(source)
+                    withTimeoutOrNull(sourceTimeoutMs) { lookup(source) }
+                        ?: SourceLookup(reason = "该来源查询超时")
                 } catch (e: Exception) {
                     if (e is CancellationException) throw e
                     SourceLookup(reason = "暂不可用：${e.message ?: "连接失败"}")

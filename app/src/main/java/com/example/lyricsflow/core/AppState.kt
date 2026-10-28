@@ -451,20 +451,28 @@ class AppGraph(val app: Application) {
                             val staleQq =
                                 cached?.source == Provider.QQ &&
                                     cached.providerRevision < QqLyricCodec.REVISION
-                            if (cached != null && !force && !staleQq) {
+                            val latinLrc =
+                                cached?.source == Provider.LRCLIB &&
+                                    cached.lines.none { row ->
+                                        row.text.any { it in '\u3040'..'\u30ff' }
+                                    }
+                            val staleLrc =
+                                latinLrc && cached!!.providerRevision < LrcLibClient.REVISION
+                            if (cached != null && !force && !staleQq && !staleLrc) {
                                 return@resolve SourceLookup(ResolvedLyrics(binding, cached, true))
                             }
-                            if (cached != null && staleQq && source == preferred)
+                            if (cached != null && (staleQq || staleLrc) && source == preferred)
                                 mutable.update {
                                     it.copy(
                                         binding = binding,
                                         lyrics = cached,
                                         delay = offset(track, source),
-                                        message = "正在更新 QQ 歌词与译文…",
+                                        message = "正在更新 ${source.label} 歌词与译文…",
                                     )
                                 }
+                            val reselect = staleLrc || (force && latinLrc)
                             val decision =
-                                if (binding == null)
+                                if (binding == null || reselect)
                                     SongSearch.decide(
                                         current,
                                         api.searchExpanded(
@@ -474,7 +482,7 @@ class AppGraph(val app: Application) {
                                         ),
                                     )
                                 else null
-                            val t = binding ?: decision?.track
+                            val t = (if (reselect) null else binding) ?: decision?.track
                             if (token != generation) throw CancellationException("Track changed")
                             if (t == null) {
                                 return@resolve SourceLookup(

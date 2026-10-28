@@ -1,0 +1,16 @@
+[
+  {
+    "url": "https://lrclib.net/api/get/18731361",
+    "status": 200,
+    "ms": 2375,
+    "retryAfter": "",
+    "errorBody": ""
+  },
+  {
+    "url": "https://lrclib.net/api/search?track_name=Nandemonaiya&artist_name=RADWIMPS",
+    "status": 200,
+    "ms": 2770,
+    "retryAfter": "",
+    "errorBody": ""
+  }
+]

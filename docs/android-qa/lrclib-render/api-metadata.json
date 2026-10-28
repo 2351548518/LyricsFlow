@@ -1,0 +1,43 @@
+[
+  {
+    "id": 18139719,
+    "status": 200,
+    "ms": 2211,
+    "title": "Dream lantern",
+    "artist": "RADWIMPS",
+    "album": "Your Name.",
+    "duration": 129.0,
+    "syncedKanaCount": 0,
+    "plainKanaCount": 0,
+    "hasSeparateRomanizationField": false
+  },
+  {
+    "id": 18731361,
+    "error": "Response status code does not indicate success: 503 (Service Unavailable).",
+    "ms": 2003
+  },
+  {
+    "id": 19932106,
+    "status": 200,
+    "ms": 3087,
+    "title": "Dream Lantern",
+    "artist": "RADWIMPS",
+    "album": "Your Name (Original Motion Picture Soundtrack) (Deluxe Edition)",
+    "duration": 129.186667,
+    "syncedKanaCount": 187,
+    "plainKanaCount": 187,
+    "hasSeparateRomanizationField": false
+  },
+  {
+    "id": 1962284,
+    "status": 200,
+    "ms": 1923,
+    "title": "Dream Lantern",
+    "artist": "Radwimps",
+    "album": "Your Name.",
+    "duration": 132.0,
+    "syncedKanaCount": 0,
+    "plainKanaCount": 0,
+    "hasSeparateRomanizationField": false
+  }
+]

@@ -1,0 +1,82 @@
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibLiveTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.LrcLibLiveTest:
+INSTRUMENTATION_STATUS: test=dreamLanternPrefersJapaneseAndReusesTheSearchPayload
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: lrclib_search=ms=4307; rows=2; match=null; reason=存在多个不同录音，需确认版本
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibLiveTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Expected a matching native record: 存在多个不同录音，需确认版本
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertNotNull(Assert.java:713)
+	at com.example.lyricsflow.LrcLibLiveTest$dreamLanternPrefersJapaneseAndReusesTheSearchPayload$1.invokeSuspend(LrcLibLiveTest.kt:34)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.ScopeCoroutine.afterResume(Scopes.kt:28)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at com.example.lyricsflow.LrcLibLiveTest.dreamLanternPrefersJapaneseAndReusesTheSearchPayload(LrcLibLiveTest.kt:15)
+
+INSTRUMENTATION_STATUS: stream=
+Error in dreamLanternPrefersJapaneseAndReusesTheSearchPayload(com.example.lyricsflow.LrcLibLiveTest):
+java.lang.AssertionError: Expected a matching native record: 存在多个不同录音，需确认版本
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertNotNull(Assert.java:713)
+	at com.example.lyricsflow.LrcLibLiveTest$dreamLanternPrefersJapaneseAndReusesTheSearchPayload$1.invokeSuspend(LrcLibLiveTest.kt:34)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.ScopeCoroutine.afterResume(Scopes.kt:28)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at com.example.lyricsflow.LrcLibLiveTest.dreamLanternPrefersJapaneseAndReusesTheSearchPayload(LrcLibLiveTest.kt:15)
+
+INSTRUMENTATION_STATUS: test=dreamLanternPrefersJapaneseAndReusesTheSearchPayload
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 4.314
+There was 1 failure:
+1) dreamLanternPrefersJapaneseAndReusesTheSearchPayload(com.example.lyricsflow.LrcLibLiveTest)
+java.lang.AssertionError: Expected a matching native record: 存在多个不同录音，需确认版本
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertNotNull(Assert.java:713)
+	at com.example.lyricsflow.LrcLibLiveTest$dreamLanternPrefersJapaneseAndReusesTheSearchPayload$1.invokeSuspend(LrcLibLiveTest.kt:34)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.ScopeCoroutine.afterResume(Scopes.kt:28)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-45da9db86d7bc57bf898763f35a5bc0c6f106ca4:1)
+	at com.example.lyricsflow.LrcLibLiveTest.dreamLanternPrefersJapaneseAndReusesTheSearchPayload(LrcLibLiveTest.kt:15)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

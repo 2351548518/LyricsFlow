@@ -1,0 +1,241 @@
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibLiveTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.LrcLibLiveTest:
+INSTRUMENTATION_STATUS: test=dreamLanternPrefersJapaneseAndReusesTheSearchPayload
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: lrclib_search=ms=341; rows=1; match=18731361; reason=歌名、歌手与时长符合
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: lrclib_lyrics=ms=8; rows=23; native=true; synced=true
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibLiveTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=dreamLanternPrefersJapaneseAndReusesTheSearchPayload
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.LrcLibClientTest:
+INSTRUMENTATION_STATUS: test=prefersNativeLyricsOnlyWithinMatchingRecording
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=prefersNativeLyricsOnlyWithinMatchingRecording
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=respectsLongRetryAfterAndDoesNotRetry404
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=respectsLongRetryAfterAndDoesNotRetry404
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=doesNotCallRomanizedTextOriginalWhenNativePlainIsAvailable
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=doesNotCallRomanizedTextOriginalWhenNativePlainIsAvailable
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=retriesOne503AndReusesLyricsInSearchResponse
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=retriesOne503AndReusesLyricsInSearchResponse
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cancelledRequestDoesNotRetryOrCacheAndReleasesLock
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cancelledRequestDoesNotRetryOrCacheAndReleasesLock
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=7
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=repeated503UsesStaleCacheAndBackoffButFreshCacheStillWorks
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=7
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=repeated503UsesStaleCacheAndBackoffButFreshCacheStillWorks
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=8
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=duplicateConcurrentRequestsShareTheSuccessfulCache
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LrcLibClientTest
+INSTRUMENTATION_STATUS: current=8
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=duplicateConcurrentRequestsShareTheSuccessfulCache
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LyricScrollTest
+INSTRUMENTATION_STATUS: current=9
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.LyricScrollTest:
+INSTRUMENTATION_STATUS: test=initializationError
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.LyricScrollTest
+INSTRUMENTATION_STATUS: current=9
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stack=java.lang.RuntimeException: Failed loading specified test class 'com.example.lyricsflow.LyricScrollTest'
+	at androidx.test.internal.runner.DirectTestLoader.doCreateRunner(DirectTestLoader.java:50)
+	at androidx.test.internal.runner.TestLoader.getRunnersFor(TestLoader.java:64)
+	at androidx.test.internal.runner.TestRequestBuilder.build(TestRequestBuilder.java:842)
+	at androidx.test.runner.AndroidJUnitRunner.buildRequest(AndroidJUnitRunner.java:672)
+	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:453)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2760)
+Caused by: java.lang.ClassNotFoundException: com.example.lyricsflow.LyricScrollTest
+	at java.lang.Class.classForName(Native Method)
+	at java.lang.Class.forName(Class.java:591)
+	at androidx.test.internal.runner.DirectTestLoader.doCreateRunner(DirectTestLoader.java:44)
+	... 5 more
+Caused by: java.lang.ClassNotFoundException: Didn't find class "com.example.lyricsflow.LyricScrollTest" on path: DexPathList[[zip file "/data/app/~~8RuVGYRqU88VhrPbbrVmXg==/com.example.lyricsflow.test-pi8vFXC96MMyWu6dueWHTg==/base.apk", zip file "/data/app/~~3uZ317fYfxZ4wYSO_Q9M9g==/com.example.lyricsflow-a0n3OLAQApXFDaPHc1lhPQ==/base.apk"],nativeLibraryDirectories=[/data/app/~~8RuVGYRqU88VhrPbbrVmXg==/com.example.lyricsflow.test-pi8vFXC96MMyWu6dueWHTg==/lib/arm64, /data/app/~~3uZ317fYfxZ4wYSO_Q9M9g==/com.example.lyricsflow-a0n3OLAQApXFDaPHc1lhPQ==/lib/arm64, /data/app/~~8RuVGYRqU88VhrPbbrVmXg==/com.example.lyricsflow.test-pi8vFXC96MMyWu6dueWHTg==/base.apk!/lib/arm64-v8a, /data/app/~~3uZ317fYfxZ4wYSO_Q9M9g==/com.example.lyricsflow-a0n3OLAQApXFDaPHc1lhPQ==/base.apk!/lib/arm64-v8a, /system/lib64, /product_h/lib64, /system_ext/lib64]]
+	at dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:259)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:644)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:580)
+	... 8 more
+
+INSTRUMENTATION_STATUS: stream=
+Error in initializationError(com.example.lyricsflow.LyricScrollTest):
+java.lang.RuntimeException: Failed loading specified test class 'com.example.lyricsflow.LyricScrollTest'
+	at androidx.test.internal.runner.DirectTestLoader.doCreateRunner(DirectTestLoader.java:50)
+	at androidx.test.internal.runner.TestLoader.getRunnersFor(TestLoader.java:64)
+	at androidx.test.internal.runner.TestRequestBuilder.build(TestRequestBuilder.java:842)
+	at androidx.test.runner.AndroidJUnitRunner.buildRequest(AndroidJUnitRunner.java:672)
+	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:453)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2760)
+Caused by: java.lang.ClassNotFoundException: com.example.lyricsflow.LyricScrollTest
+	at java.lang.Class.classForName(Native Method)
+	at java.lang.Class.forName(Class.java:591)
+	at androidx.test.internal.runner.DirectTestLoader.doCreateRunner(DirectTestLoader.java:44)
+	... 5 more
+Caused by: java.lang.ClassNotFoundException: Didn't find class "com.example.lyricsflow.LyricScrollTest" on path: DexPathList[[zip file "/data/app/~~8RuVGYRqU88VhrPbbrVmXg==/com.example.lyricsflow.test-pi8vFXC96MMyWu6dueWHTg==/base.apk", zip file "/data/app/~~3uZ317fYfxZ4wYSO_Q9M9g==/com.example.lyricsflow-a0n3OLAQApXFDaPHc1lhPQ==/base.apk"],nativeLibraryDirectories=[/data/app/~~8RuVGYRqU88VhrPbbrVmXg==/com.example.lyricsflow.test-pi8vFXC96MMyWu6dueWHTg==/lib/arm64, /data/app/~~3uZ317fYfxZ4wYSO_Q9M9g==/com.example.lyricsflow-a0n3OLAQApXFDaPHc1lhPQ==/lib/arm64, /data/app/~~8RuVGYRqU88VhrPbbrVmXg==/com.example.lyricsflow.test-pi8vFXC96MMyWu6dueWHTg==/base.apk!/lib/arm64-v8a, /data/app/~~3uZ317fYfxZ4wYSO_Q9M9g==/com.example.lyricsflow-a0n3OLAQApXFDaPHc1lhPQ==/base.apk!/lib/arm64-v8a, /system/lib64, /product_h/lib64, /system_ext/lib64]]
+	at dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:259)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:644)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:580)
+	... 8 more
+
+INSTRUMENTATION_STATUS: test=initializationError
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ReaderPolishTest
+INSTRUMENTATION_STATUS: current=10
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+com.example.lyricsflow.ReaderPolishTest:
+INSTRUMENTATION_STATUS: test=currentLineIsLargerAndUnknownPositionDoesNotHighlightEveryLine
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ReaderPolishTest
+INSTRUMENTATION_STATUS: current=10
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=currentLineIsLargerAndUnknownPositionDoesNotHighlightEveryLine
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ReaderPolishTest
+INSTRUMENTATION_STATUS: current=11
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=opacityCanReachBothEndpointsAndZeroSurvivesBackupRestore
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ReaderPolishTest
+INSTRUMENTATION_STATUS: current=11
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=opacityCanReachBothEndpointsAndZeroSurvivesBackupRestore
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ReaderPolishTest
+INSTRUMENTATION_STATUS: current=12
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=colorPickerRejectsInvalidDraftAndColorSurvivesBackupRestore
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.example.lyricsflow.ReaderPolishTest
+INSTRUMENTATION_STATUS: current=12
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=12
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=colorPickerRejectsInvalidDraftAndColorSurvivesBackupRestore
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 7.674
+There was 1 failure:
+1) initializationError(com.example.lyricsflow.LyricScrollTest)
+java.lang.RuntimeException: Failed loading specified test class 'com.example.lyricsflow.LyricScrollTest'
+	at androidx.test.internal.runner.DirectTestLoader.doCreateRunner(DirectTestLoader.java:50)
+	at androidx.test.internal.runner.TestLoader.getRunnersFor(TestLoader.java:64)
+	at androidx.test.internal.runner.TestRequestBuilder.build(TestRequestBuilder.java:842)
+	at androidx.test.runner.AndroidJUnitRunner.buildRequest(AndroidJUnitRunner.java:672)
+	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:453)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2760)
+Caused by: java.lang.ClassNotFoundException: com.example.lyricsflow.LyricScrollTest
+	at java.lang.Class.classForName(Native Method)
+	at java.lang.Class.forName(Class.java:591)
+	at androidx.test.internal.runner.DirectTestLoader.doCreateRunner(DirectTestLoader.java:44)
+	... 5 more
+Caused by: java.lang.ClassNotFoundException: Didn't find class "com.example.lyricsflow.LyricScrollTest" on path: DexPathList[[zip file "/data/app/~~8RuVGYRqU88VhrPbbrVmXg==/com.example.lyricsflow.test-pi8vFXC96MMyWu6dueWHTg==/base.apk", zip file "/data/app/~~3uZ317fYfxZ4wYSO_Q9M9g==/com.example.lyricsflow-a0n3OLAQApXFDaPHc1lhPQ==/base.apk"],nativeLibraryDirectories=[/data/app/~~8RuVGYRqU88VhrPbbrVmXg==/com.example.lyricsflow.test-pi8vFXC96MMyWu6dueWHTg==/lib/arm64, /data/app/~~3uZ317fYfxZ4wYSO_Q9M9g==/com.example.lyricsflow-a0n3OLAQApXFDaPHc1lhPQ==/lib/arm64, /data/app/~~8RuVGYRqU88VhrPbbrVmXg==/com.example.lyricsflow.test-pi8vFXC96MMyWu6dueWHTg==/base.apk!/lib/arm64-v8a, /data/app/~~3uZ317fYfxZ4wYSO_Q9M9g==/com.example.lyricsflow-a0n3OLAQApXFDaPHc1lhPQ==/base.apk!/lib/arm64-v8a, /system/lib64, /product_h/lib64, /system_ext/lib64]]
+	at dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:259)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:644)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:580)
+	... 8 more
+
+FAILURES!!!
+Tests run: 12,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

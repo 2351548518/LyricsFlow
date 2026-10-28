@@ -11,10 +11,12 @@ import android.provider.Settings
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -39,6 +41,7 @@ import com.example.lyricsflow.core.*
 import com.example.lyricsflow.data.*
 import com.example.lyricsflow.overlay.LyricsOverlayService
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
 import org.json.JSONObject
 
 @Composable
@@ -794,21 +797,34 @@ private fun Home(
         }
         return
     }
-    var now by remember { mutableLongStateOf(SystemClock.elapsedRealtime()) }
+    val now = remember { mutableLongStateOf(SystemClock.elapsedRealtime()) }
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     LaunchedEffect(s.playback.playing, s.prefs.reduced) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             while (isActive) {
-                now = SystemClock.elapsedRealtime()
-                delay(if (s.playback.playing) 80 else 500)
+                if (s.playback.playing && !s.prefs.reduced)
+                    withFrameNanos { now.longValue = SystemClock.elapsedRealtime() }
+                else {
+                    now.longValue = SystemClock.elapsedRealtime()
+                    delay(if (s.playback.playing) 80 else 500)
+                }
             }
         }
     }
-    val position = s.playback.at(now)
-    val active = if (s.playback.positionKnown) s.lyrics?.active(position - s.delay) ?: -1 else -1
-    LaunchedEffect(position) {
-        if (s.demo && s.playback.playing && t.duration > 0 && position >= t.duration)
+    val position = remember(s.playback) { derivedStateOf { s.playback.at(now.longValue) } }
+    val active by
+        remember(s.lyrics, s.playback.positionKnown, s.delay, position) {
+            derivedStateOf {
+                if (s.playback.positionKnown) s.lyrics?.active(position.value - s.delay) ?: -1
+                else -1
+            }
+        }
+    val lyricPosition = remember(position, s.delay) { { position.value - s.delay } }
+    LaunchedEffect(s.demo, s.playback) {
+        if (s.demo && s.playback.playing && t.duration > 0) {
+            snapshotFlow { position.value }.first { it >= t.duration }
             graph.demoPlay()
+        }
     }
     Column(Modifier.fillMaxSize()) {
         Spacer(Modifier.height(16.dp))
@@ -837,7 +853,7 @@ private fun Home(
                 Box(Modifier.weight(1f).fillMaxHeight()) {
                     LyricBackground(s, bleed = if (wide) 0.dp else 24.dp) {
                         if (s.lyrics != null && s.lyrics.lines.isNotEmpty())
-                            LyricStage(s, style, active, position - s.delay)
+                            key(t.key) { LyricStage(s, style, active, lyricPosition) }
                         else
                             Column(
                                 Modifier.align(Alignment.Center),
@@ -989,43 +1005,50 @@ private fun Home(
                     Text("返回实时", fontSize = 11.sp)
                 }
         }
-        if (s.demo) {
-            Slider(
-                value = position.toFloat().coerceIn(0f, t.duration.toFloat()),
-                onValueChange = { graph.demoSeek(it.toLong()) },
-                valueRange = 0f..t.duration.toFloat(),
-                modifier = Modifier.height(22.dp).semantics { contentDescription = "预览时间轴" },
-            )
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Text(time(position), fontSize = 11.sp)
-                Spacer(Modifier.weight(1f))
-                IconButton(
-                    onClick = { graph.demoPlay() },
-                    modifier =
-                        Modifier.semantics {
-                            contentDescription = if (s.playback.playing) "暂停预览" else "播放预览"
-                        },
-                ) {
-                    Glyph(if (s.playback.playing) "pause" else "play", Modifier.size(19.dp))
-                }
-                Spacer(Modifier.weight(1f))
-                Text(time(t.duration), fontSize = 11.sp)
+        PlaybackFooter(s, graph, t, position)
+    }
+}
+
+@Composable
+private fun PlaybackFooter(s: ScreenState, graph: AppGraph, t: Track, clock: State<Long>) {
+    val second by remember(clock) { derivedStateOf { clock.value / 1000 } }
+    val position = second * 1000
+    if (s.demo) {
+        Slider(
+            value = clock.value.toFloat().coerceIn(0f, t.duration.toFloat()),
+            onValueChange = { graph.demoSeek(it.toLong()) },
+            valueRange = 0f..t.duration.toFloat(),
+            modifier = Modifier.height(22.dp).semantics { contentDescription = "预览时间轴" },
+        )
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(time(position), fontSize = 11.sp)
+            Spacer(Modifier.weight(1f))
+            IconButton(
+                onClick = { graph.demoPlay() },
+                modifier =
+                    Modifier.semantics {
+                        contentDescription = if (s.playback.playing) "暂停预览" else "播放预览"
+                    },
+            ) {
+                Glyph(if (s.playback.playing) "pause" else "play", Modifier.size(19.dp))
             }
-        } else {
-            LinearProgressIndicator(
-                progress = {
-                    if (t.duration > 0) (position.toFloat() / t.duration).coerceIn(0f, 1f) else 0f
-                },
-                modifier = Modifier.fillMaxWidth().height(2.dp),
+            Spacer(Modifier.weight(1f))
+            Text(time(t.duration), fontSize = 11.sp)
+        }
+    } else {
+        LinearProgressIndicator(
+            progress = {
+                if (t.duration > 0) (clock.value.toFloat() / t.duration).coerceIn(0f, 1f) else 0f
+            },
+            modifier = Modifier.fillMaxWidth().height(2.dp),
+        )
+        Row(Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp)) {
+            Text(
+                if (s.browsing) "浏览歌词" else if (s.playback.playing) "正在播放" else "已暂停",
+                fontSize = 10.sp,
             )
-            Row(Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp)) {
-                Text(
-                    if (s.browsing) "浏览歌词" else if (s.playback.playing) "正在播放" else "已暂停",
-                    fontSize = 10.sp,
-                )
-                Spacer(Modifier.weight(1f))
-                Text("${time(position)} / ${time(t.duration)}", fontSize = 10.sp)
-            }
+            Spacer(Modifier.weight(1f))
+            Text("${time(position)} / ${time(t.duration)}", fontSize = 10.sp)
         }
     }
 }
@@ -1088,34 +1111,32 @@ private fun LyricText(
                 textAlign = textAlign,
             )
         )
-    Box(modifier) {
-        if (ink.overImage) {
-            val width = with(LocalDensity.current) { 1.2.dp.toPx() }
-            Text(
-                AnnotatedString(text.text),
-                Modifier.fillMaxWidth().clearAndSetSemantics {},
-                style =
-                    resolved.copy(
+    // Reuse the exact shaped paragraph for outline and fill (including wraps/bidi/baselines).
+    var layout by remember { mutableStateOf<TextLayoutResult?>(null) }
+    val width = with(LocalDensity.current) { 1.2.dp.toPx() }
+    Text(
+        text,
+        modifier.fillMaxWidth().drawWithContent {
+            if (ink.overImage)
+                layout?.let {
+                    drawText(
+                        it,
                         color = ink.scrim.copy(alpha = .9f),
-                        drawStyle = Stroke(width = width),
                         shadow = Shadow.None,
-                    ),
-                maxLines = maxLines,
-                overflow = overflow,
-            )
-        }
-        Text(
-            text,
-            Modifier.fillMaxWidth(),
-            style = resolved,
-            maxLines = maxLines,
-            overflow = overflow,
-        )
-    }
+                        drawStyle = Stroke(width = width),
+                    )
+                }
+            drawContent()
+        },
+        style = resolved,
+        maxLines = maxLines,
+        overflow = overflow,
+        onTextLayout = { layout = it },
+    )
 }
 
 @Composable
-private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position: Long) {
+private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position: () -> Long) {
     val lines = s.lyrics!!.lines
     val list = rememberLazyListState()
     var manualUntil by remember { mutableLongStateOf(0) }
@@ -1131,20 +1152,33 @@ private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position:
             "end" -> TextAlign.End
             else -> TextAlign.Start
         }
-    fun rowText(row: Line, current: Boolean): AnnotatedString = buildAnnotatedString {
-        if (current && s.playback.positionKnown && row.words.isNotEmpty()) {
-            row.words.forEach { w ->
-                withStyle(
-                    SpanStyle(
-                        color =
-                            if (position >= w.start) color
-                            else color.copy(alpha = if (ink.overImage) .6f else .3f)
-                    )
-                ) {
-                    append(w.text)
+    @Composable
+    fun rowText(row: Line, current: Boolean): AnnotatedString {
+        val sung by
+            remember(row, current, position) {
+                derivedStateOf {
+                    if (current && s.playback.positionKnown && row.words.isNotEmpty())
+                        row.words.count { position() >= it.start }
+                    else 0
                 }
             }
-        } else append(row.text)
+        return remember(row, current, sung, color, ink, s.playback.positionKnown) {
+            buildAnnotatedString {
+                if (current && s.playback.positionKnown && row.words.isNotEmpty()) {
+                    row.words.forEachIndexed { index, w ->
+                        withStyle(
+                            SpanStyle(
+                                color =
+                                    if (index < sung) color
+                                    else color.copy(alpha = if (ink.overImage) .6f else .3f)
+                            )
+                        ) {
+                            append(w.text)
+                        }
+                    }
+                } else append(row.text)
+            }
+        }
     }
     @Composable
     fun group(
@@ -1159,7 +1193,7 @@ private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position:
                 active in lines.indices &&
                 row.start != null &&
                 row.start == lines[active].start
-        val emphasis by
+        val emphasis =
             animateFloatAsState(
                 targetValue = if (highlighted) 1.18f else 1f,
                 animationSpec = if (s.prefs.reduced) snap() else tween(220),
@@ -1170,20 +1204,15 @@ private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position:
                 row.start == null ||
                 !s.playback.positionKnown ||
                 active >= 0 && row.start == lines[active].start
-        val motion =
-            if (current && s.playback.positionKnown && !s.prefs.reduced)
-                theme?.motion(
-                    (position - (row.start ?: position)).coerceAtLeast(0),
-                    (row.end ?: position) - (row.start ?: 0),
-                ) ?: Motion()
-            else Motion()
         val font =
             when (theme?.font) {
                 "serif" -> FontFamily.Serif
                 "monospace" -> FontFamily.Monospace
                 else -> FontFamily.SansSerif
             }
-        val preferredSize = s.prefs.fontSize * emphasis
+        // Shape once at the final size. Intermediate frames only transform the hardware layer.
+        val targetEmphasis = if (highlighted) 1.18f else 1f
+        val preferredSize = s.prefs.fontSize * targetEmphasis
         val textSize =
             if (partitionHeight != null)
                 minOf(preferredSize, ((partitionHeight - 36f) / 2.5f).coerceAtLeast(10f))
@@ -1192,16 +1221,32 @@ private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position:
             if (partitionHeight != null) (textSize * .6f).coerceAtLeast(12f)
             else
                 (theme?.translation?.size ?: (s.prefs.fontSize * .6f)).coerceAtLeast(16f) *
-                    (1f + (emphasis - 1f) * .55f)
+                    (1f + (targetEmphasis - 1f) * .55f)
         Column(
             modifier
                 .fillMaxWidth()
                 .graphicsLayer {
+                    val motion =
+                        if (
+                            current && s.playback.positionKnown && !s.prefs.reduced && theme != null
+                        ) {
+                            val p = position()
+                            theme.motion(
+                                (p - (row.start ?: p)).coerceAtLeast(0),
+                                (row.end ?: p) - (row.start ?: 0),
+                            )
+                        } else Motion()
                     alpha =
                         (if (current) 1f
                         else if (ink.overImage) .82f else theme?.inactive ?: .36f) * motion.opacity
-                    scaleX = motion.scale
-                    scaleY = motion.scale
+                    scaleX = motion.scale * emphasis.value / targetEmphasis
+                    scaleY = motion.scale * emphasis.value / targetEmphasis
+                    transformOrigin =
+                        TransformOrigin(
+                            if (align == TextAlign.Center) .5f
+                            else if (align == TextAlign.End) 1f else 0f,
+                            0f,
+                        )
                     rotationZ = motion.rotation
                     translationX = motion.x * size.width
                     translationY = motion.y * size.height
@@ -1310,25 +1355,37 @@ private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position:
     } else
         BoxWithConstraints(Modifier.fillMaxSize()) {
             val top = maxHeight * (theme?.anchor ?: .26f)
-            LaunchedEffect(active) {
-                if (
-                    active >= 0 &&
-                        SystemClock.elapsedRealtime() > manualUntil &&
-                        !list.isScrollInProgress
-                ) {
-                    if (s.prefs.reduced) list.scrollToItem(active)
-                    else list.animateScrollToItem(active)
+            suspend fun follow(index: Int) {
+                if (index !in lines.indices) return
+                if (s.prefs.reduced) {
+                    list.scrollToItem(index)
+                    return
                 }
+                // Wait for the single final-size layout before choosing a fixed scroll target.
+                withFrameNanos {}
+                withFrameNanos {}
+                var item = list.layoutInfo.visibleItemsInfo.firstOrNull { it.index == index }
+                if (item == null) {
+                    list.scrollToItem((index - 1).coerceAtLeast(0))
+                    withFrameNanos {}
+                    item = list.layoutInfo.visibleItemsInfo.firstOrNull { it.index == index }
+                }
+                if (item != null)
+                    list.animateScrollBy(
+                        item.offset.toFloat(),
+                        tween(480, easing = FastOutSlowInEasing),
+                    )
+                else list.animateScrollToItem(index)
             }
             LaunchedEffect(dragged) {
                 if (dragged) manualUntil = SystemClock.elapsedRealtime() + 5000
             }
-            LaunchedEffect(manualUntil) {
+            LaunchedEffect(active, lines, dragged, manualUntil) {
+                if (dragged) return@LaunchedEffect
                 if (manualUntil > 0) {
-                    delay(5100)
-                    if (!list.isScrollInProgress && active >= 0) list.animateScrollToItem(active)
+                    delay((manualUntil - SystemClock.elapsedRealtime()).coerceAtLeast(0))
                     manualUntil = 0
-                }
+                } else follow(active)
             }
             LazyColumn(
                 state = list,
@@ -1341,7 +1398,7 @@ private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position:
                 TextButton(
                     onClick = {
                         manualUntil = 0
-                        scope.launch { list.animateScrollToItem(active.coerceAtLeast(0)) }
+                        scope.launch { follow(active.coerceAtLeast(0)) }
                     },
                     modifier = Modifier.align(Alignment.BottomEnd),
                 ) {

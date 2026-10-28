@@ -13,6 +13,15 @@ class ApiFailure(message: String) : Exception(message)
 
 class MusicApi(private val store: Store) {
     var neteaseGateway = ""
+    private val lrc =
+        LrcLibClient(
+            read = { path, age -> store.get("cache", digest("https://lrclib.net$path"), age) },
+            write = { path, value -> store.put("cache", digest("https://lrclib.net$path"), value) },
+        )
+
+    fun lyricHint(track: Track): String =
+        if (track.provider == Provider.LRCLIB) lrc.hint(track) else ""
+
     private val cooldowns = java.util.concurrent.ConcurrentHashMap<String, Long>()
 
     private fun enc(s: String) = URLEncoder.encode(s, "UTF-8")
@@ -113,6 +122,17 @@ class MusicApi(private val store: Store) {
         query: String,
         current: Track? = null,
     ): List<Track> {
+        if (provider == Provider.LRCLIB && current != null) {
+            val first = lrc.search(query, current)
+            val candidates = lrc.preferOriginal(current, first.rows)
+            if (SongSearch.automatic(current, candidates) != null) return candidates
+            // One broader title-only lookup; never fan out three full-text queries on overload.
+            val broad = lrc.search(SongSearch.withoutAliases(current.title))
+            return lrc.preferOriginal(
+                current,
+                (first.rows + broad.rows).distinctBy { it.optString("id") },
+            )
+        }
         val all = mutableListOf<Track>()
         var failure: Exception? = null
         for (variant in SongSearch.queries(query, current)) {
@@ -134,6 +154,7 @@ class MusicApi(private val store: Store) {
         page: Int = 0,
         size: Int = 30,
         channel: String = "",
+        current: Track? = null,
     ): SearchPage {
         require(query.isNotBlank()) { "请输入歌名或歌手" }
         require(query.length <= 500 && page in 0..99 && size in 1..50) { "搜索关键词或分页超出范围" }
@@ -267,27 +288,21 @@ class MusicApi(private val store: Store) {
                 }
             }
             Provider.LRCLIB -> {
-                val a =
-                    request("https://lrclib.net/api/search?q=${enc(query)}").optJSONArray("items")
-                        ?: JSONArray()
+                val context = current?.takeIf {
+                    SongSearch.normalized(query) ==
+                        SongSearch.normalized("${it.title} ${it.artist}")
+                }
+                val first = lrc.search(query, context)
+                val result =
+                    if (context != null && first.rows.isEmpty())
+                        lrc.search(SongSearch.withoutAliases(context.title))
+                    else first
                 SearchPage(
-                    (0 until a.length())
-                        .map {
-                            val r = a.getJSONObject(it)
-                            Track(
-                                r.optString("trackName"),
-                                r.optString("artistName"),
-                                r.optString("albumName"),
-                                (r.optDouble("duration") * 1000).toLong(),
-                                provider,
-                                r.optString("id"),
-                            )
-                        }
-                        .drop(page * size)
-                        .take(size),
-                    (page + 1) * size < a.length(),
+                    result.rows.map(lrc::track).drop(page * size).take(size),
+                    (page + 1) * size < result.rows.size,
                     null, // LRCLIB returns an array, not the catalogue's total hit count.
                     "lrclib",
+                    if (result.stale) "LRCLIB 暂不可用，显示最近保存的搜索结果。" else "",
                 )
             }
             else -> SearchPage(emptyList())
@@ -337,16 +352,7 @@ class MusicApi(private val store: Store) {
     }
 
     suspend fun resolveLrc(id: String): Track {
-        require(Regex("[0-9]{1,20}").matches(id)) { "请输入 LRCLIB 数字记录 ID" }
-        val r = request("https://lrclib.net/api/get/$id")
-        return Track(
-            r.getString("trackName"),
-            r.optString("artistName"),
-            r.optString("albumName"),
-            (r.optDouble("duration") * 1000).toLong(),
-            Provider.LRCLIB,
-            r.get("id").toString(),
-        )
+        return lrc.track(lrc.record(id))
     }
 
     suspend fun lyrics(t: Track, refresh: Boolean = false): Lyrics {
@@ -411,20 +417,7 @@ class MusicApi(private val store: Store) {
                 QqLyricCodec.lyrics(r, t.duration, revision = 1)
             }
             Provider.LRCLIB -> {
-                val r = request("https://lrclib.net/api/get/${t.sourceId}", refresh = refresh)
-                Lyrics(
-                    LyricParser.lrc(
-                        r.optString("syncedLyrics")
-                            .takeUnless { it == "null" }
-                            .orEmpty()
-                            .ifBlank {
-                                r.optString("plainLyrics").takeUnless { it == "null" }.orEmpty()
-                            },
-                        t.duration,
-                    ),
-                    t.provider,
-                    r.optBoolean("instrumental"),
-                )
+                lrc.lyrics(lrc.record(t.sourceId, refresh), t.duration)
             }
             else -> throw ApiFailure("请选择网络来源或导入歌词文件")
         }
