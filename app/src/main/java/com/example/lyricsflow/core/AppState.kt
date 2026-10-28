@@ -118,8 +118,8 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
                     val captured = state.value
                     val track = captured.playback.track ?: return@collectLatest
                     try {
-                        val rows = translate()
-                        applyTranslation(rows, l.hash, track.key)
+                        val rows = translate(captured)
+                        applyTranslation(rows, l.hash, track.key, l.source)
                     } catch (e: Exception) {
                         if (e is CancellationException) throw e
                         message("自动翻译未完成：${e.message}")
@@ -243,6 +243,7 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
         if (changed) {
             resetContent()
             if (p.track != null) {
+                reloadSaved(p.track)
                 val source = runCatching {
                     Provider.valueOf(
                         prefs.getString(
@@ -276,13 +277,15 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
             it.copy(demo = false, browsing = false, playback = lastReal, source = source)
         }
         resetContent()
-        lastReal.track?.let { loadAutomatic(it) }
+        lastReal.track?.let {
+            reloadSaved(it)
+            loadAutomatic(it)
+        }
         playback.refresh()
     }
 
     fun preview() {
-        loadJob?.cancel()
-        generation++
+        resetContent()
         clockJob?.cancel()
         mutable.update {
             it.copy(
@@ -373,6 +376,14 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
                 lyrics = l,
                 source = l.source,
             )
+        }
+        reloadSaved(t)
+    }
+
+    private fun reloadSaved(t: Track) {
+        scope.launch {
+            val saved = withContext(Dispatchers.IO) { store.get("saved", t.key) != null }
+            mutable.update { if (it.playback.track?.key == t.key) it.copy(saved = saved) else it }
         }
     }
 
@@ -524,26 +535,28 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
                     choice?.takeIf {
                         it.copy(updatedAt = 0) == candidateChoice.copy(updatedAt = 0)
                     } ?: candidateChoice
-                withContext(Dispatchers.IO) {
-                    val rows =
-                        mutableListOf(
-                            Triple(
-                                "lyrics",
-                                "${track.key}:${actual.name}",
-                                lyricsJson(found.lyrics).toString(),
-                            ),
-                            Triple("selection", track.key, selected.json().toString()),
-                        )
-                    found.binding?.let {
-                        rows +=
-                            Triple(
-                                "binding",
-                                "${track.key}:${actual.name}",
-                                trackJson(it).toString(),
+                val saved =
+                    withContext(Dispatchers.IO) {
+                        val rows =
+                            mutableListOf(
+                                Triple(
+                                    "lyrics",
+                                    "${track.key}:${actual.name}",
+                                    lyricsJson(found.lyrics).toString(),
+                                ),
+                                Triple("selection", track.key, selected.json().toString()),
                             )
+                        found.binding?.let {
+                            rows +=
+                                Triple(
+                                    "binding",
+                                    "${track.key}:${actual.name}",
+                                    trackJson(it).toString(),
+                                )
+                        }
+                        store.restore(rows) { token == generation }
+                        store.get("saved", track.key) != null
                     }
-                    store.restore(rows) { token == generation }
-                }
                 if (!currentRequest()) return@launch
                 prefs
                     .edit()
@@ -574,6 +587,7 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
                         matchNotice = notice,
                         selectionMode = mode,
                         requestedSource = null,
+                        saved = saved,
                     )
                 }
                 pendingLyrics = null
@@ -681,6 +695,25 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
         prefs.edit().putString("comments:$key", value).apply()
     }
 
+    suspend fun commentBinding(track: Track, source: Provider): Track? =
+        withContext(Dispatchers.IO) {
+            require(source in listOf(Provider.QQ, Provider.NETEASE))
+            val key = "${track.key}:${source.name}"
+            (store.get("commentBinding", key) ?: store.get("binding", key))
+                ?.let { readTrack(JSONObject(it)) }
+                ?.takeIf { it.provider == source }
+        }
+
+    suspend fun bindComments(track: Track, record: Track) =
+        withContext(Dispatchers.IO) {
+            require(record.provider in listOf(Provider.QQ, Provider.NETEASE))
+            store.put(
+                "commentBinding",
+                "${track.key}:${record.provider.name}",
+                trackJson(record).toString(),
+            )
+        }
+
     fun trackPreferences(): JSONObject =
         JSONObject().apply {
             prefs.all.forEach { (k, v) ->
@@ -722,19 +755,46 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
         val t = s.playback.track ?: return
         val l = s.lyrics ?: return
         scope.launch {
-            withContext(Dispatchers.IO) {
-                store.put(
-                    "saved",
-                    t.key,
-                    JSONObject().put("track", trackJson(t)).put("lyrics", lyricsJson(l)).toString(),
-                )
+            try {
+                withContext(Dispatchers.IO) {
+                    store.put(
+                        "saved",
+                        t.key,
+                        JSONObject()
+                            .put("track", trackJson(t))
+                            .put("lyrics", lyricsJson(l))
+                            .toString(),
+                    )
+                }
+                mutable.update {
+                    if (it.playback.track?.key == t.key)
+                        it.copy(saved = true, message = "已保存到本地歌词库")
+                    else it
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                message("保存歌词失败：${e.message}")
             }
-            mutable.update { it.copy(saved = true, message = "已保存到本地歌词库") }
         }
     }
 
-    fun applyTranslation(rows: List<Line>, hash: String, trackKey: String) {
-        if (state.value.playback.track?.key == trackKey && state.value.lyrics?.hash == hash) {
+    suspend fun removeSaved(track: Track) {
+        withContext(Dispatchers.IO) { store.remove("saved", track.key) }
+        mutable.update { if (it.playback.track?.key == track.key) it.copy(saved = false) else it }
+    }
+
+    fun applyTranslation(
+        rows: List<Line>,
+        hash: String,
+        trackKey: String,
+        source: Provider,
+    ): Boolean {
+        if (
+            state.value.playback.track?.key == trackKey &&
+                state.value.lyrics?.hash == hash &&
+                state.value.lyrics?.source == source
+        ) {
             val l = state.value.lyrics!!.copy(lines = rows)
             mutable.update { it.copy(lyrics = l) }
             scope.launch(Dispatchers.IO) {
@@ -745,11 +805,12 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
                 )
                     store.put("lyrics", trackKey + ":" + l.source.name, lyricsJson(l).toString())
             }
+            return true
         }
+        return false
     }
 
-    suspend fun translate(): List<Line> = translationLock.withLock {
-        val s = state.value
+    suspend fun translate(s: ScreenState = state.value): List<Line> = translationLock.withLock {
         val l = s.lyrics ?: error("暂无歌词")
         val p = s.prefs
         require(
@@ -780,6 +841,16 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
         }
         if (batch.isNotEmpty()) batches += batch
         for (batch in batches) {
+            val current = state.value
+            if (
+                current.playback.track?.key != s.playback.track?.key ||
+                    current.lyrics?.source != l.source ||
+                    current.lyrics?.hash != l.hash ||
+                    !current.prefs.consent ||
+                    current.prefs.translationUrl != p.translationUrl ||
+                    current.prefs.model != p.model
+            )
+                throw CancellationException("歌曲或歌词来源已切换")
             val day =
                 java.text
                     .SimpleDateFormat("yyyy-MM-dd", java.util.Locale.ROOT)

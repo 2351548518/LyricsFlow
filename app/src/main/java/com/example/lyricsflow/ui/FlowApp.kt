@@ -95,6 +95,11 @@ fun FlowApp(graph: AppGraph) {
         remember(commentsTrackData) {
             commentsTrackData.takeIf { it.isNotBlank() }?.let { readTrack(JSONObject(it)) }
         }
+    var commentsBindingData by rememberSaveable { mutableStateOf("") }
+    val commentsBinding =
+        remember(commentsBindingData) {
+            commentsBindingData.takeIf { it.isNotBlank() }?.let { readTrack(JSONObject(it)) }
+        }
     val snack = remember { SnackbarHostState() }
     fun report(e: Throwable) {
         graph.message(e.message ?: "操作失败，请重试")
@@ -289,13 +294,20 @@ fun FlowApp(graph: AppGraph) {
                                             s.playback.track
                                                 ?.let { trackJson(it).toString() }
                                                 .orEmpty()
+                                        commentsBindingData =
+                                            s.binding?.let { trackJson(it).toString() }.orEmpty()
                                         page = "comments"
                                     },
                                     { overlay() },
                                     { sheet = "delay" },
                                 )
                             "comments" ->
-                                CommentsScreen(graph, commentsTrack, s.binding, { page = "home" })
+                                CommentsScreen(
+                                    graph,
+                                    commentsTrack,
+                                    commentsBinding,
+                                    { page = "home" },
+                                )
                             "my" ->
                                 MyScreen(
                                     s,

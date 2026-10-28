@@ -30,12 +30,13 @@ try {
     $testClasses += ',com.example.lyricsflow.LrcOriginalCacheTest'
     $testClasses += ',com.example.lyricsflow.SongSelectionTest,com.example.lyricsflow.SongSelectionUiTest'
     $testClasses += ',com.example.lyricsflow.SearchLayoutTest'
-    $expectedCount = 64
+    $testClasses += ',com.example.lyricsflow.AuditStateTest,com.example.lyricsflow.AuditUiTest'
+    $expectedCount = 70
     if ($IncludeNetwork) {
         $testClasses += ',com.example.lyricsflow.ProviderIntegrationTest,com.example.lyricsflow.QqDiscoveryTest,com.example.lyricsflow.SearchUiTest,com.example.lyricsflow.AutomaticMatchingTest'
         $testClasses += ',com.example.lyricsflow.LrcLibLiveTest'
         $testClasses += ',com.example.lyricsflow.AmllLiveTest'
-        $expectedCount = 81
+        $expectedCount = 87
     }
     $testOutput = & $adbExecutable -s $Device shell am instrument -w -r -e disableAnalytics true -e class $testClasses com.example.lyricsflow.test/androidx.test.runner.AndroidJUnitRunner
     $outputDirectory = Join-Path $projectDirectory 'docs\android-qa'

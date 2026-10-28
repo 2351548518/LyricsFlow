@@ -1,0 +1,100 @@
+ACTIVITY MANAGER PROCESS EXIT INFO (dumpsys activity exit-info)
+Last Timestamp of Persistence Into Persistent Storage: 2026-10-28 21:33:51.565
+  package: com.example.lyricsflow
+    Historical Process Exit for uid=10314
+        ApplicationExitInfo #0:
+          timestamp=2026-10-28 21:39:53.122 pid=13419 realUid=10314 packageUid=10314 definingUid=10314 user=0
+          process=com.example.lyricsflow reason=16 (PACKAGE UPDATED) subreason=0 (UNKNOWN) status=0
+          importance=400 pss=0.00 rss=540MB state=empty trace=null
+          description=stop com.example.lyricsflow due to killDueToPackageUpdate
+          anrInfo=null
+        ApplicationExitInfo #1:
+          timestamp=2026-10-28 21:15:20.713 pid=11505 realUid=10314 packageUid=10314 definingUid=10314 user=0
+          process=com.example.lyricsflow reason=2 (SIGNALED) subreason=0 (UNKNOWN) status=9
+          importance=125 pss=0.00 rss=172MB state=empty trace=null
+          description=iAwareF[LowMem](service) 1317676ms
+          anrInfo=null
+        ApplicationExitInfo #2:
+          timestamp=2026-10-28 18:13:34.876 pid=7158 realUid=10314 packageUid=10314 definingUid=10314 user=0
+          process=com.example.lyricsflow reason=2 (SIGNALED) subreason=0 (UNKNOWN) status=9
+          importance=125 pss=0.00 rss=188MB state=empty trace=null
+          description=iAwareF[LowMemQuick](service) 1355561ms
+          anrInfo=null
+        ApplicationExitInfo #3:
+          timestamp=2026-10-28 17:01:45.002 pid=15157 realUid=10314 packageUid=10314 definingUid=10314 user=0
+          process=com.example.lyricsflow reason=10 (USER REQUESTED) subreason=21 (FORCE STOP) status=0
+          importance=125 pss=0.00 rss=423MB state=empty trace=null
+          description=stop com.example.lyricsflow due to from pid 4400 (system) iAwareF[SystemManager] 74660ms
+          anrInfo=null
+        ApplicationExitInfo #4:
+          timestamp=2026-10-28 16:32:29.714 pid=8374 realUid=10314 packageUid=10314 definingUid=10314 user=0
+          process=com.example.lyricsflow reason=10 (USER REQUESTED) subreason=21 (FORCE STOP) status=0
+          importance=125 pss=0.00 rss=393MB state=empty trace=null
+          description=stop com.example.lyricsflow due to from pid 4400 (system) iAwareF[SystemManagerSwipeUp] 519ms
+          anrInfo=null
+        ApplicationExitInfo #5:
+          timestamp=2026-10-28 16:24:07.020 pid=2180 realUid=10314 packageUid=10314 definingUid=10314 user=0
+          process=com.example.lyricsflow reason=16 (PACKAGE UPDATED) subreason=0 (UNKNOWN) status=0
+          importance=125 pss=0.00 rss=508MB state=empty trace=null
+          description=stop com.example.lyricsflow due to killDueToPackageUpdate
+          anrInfo=null
+        ApplicationExitInfo #6:
+          timestamp=2026-10-28 16:14:49.464 pid=11754 realUid=10314 packageUid=10314 definingUid=10314 user=0
+          process=com.example.lyricsflow reason=16 (PACKAGE UPDATED) subreason=0 (UNKNOWN) status=0
+          importance=125 pss=0.00 rss=448MB state=empty trace=null
+          description=stop com.example.lyricsflow due to killDueToPackageUpdate
+          anrInfo=null
+        ApplicationExitInfo #7:
+          timestamp=2026-10-28 15:41:33.558 pid=5363 realUid=10314 packageUid=10314 definingUid=10314 user=0
+          process=com.example.lyricsflow reason=16 (PACKAGE UPDATED) subreason=0 (UNKNOWN) status=0
+          importance=125 pss=0.00 rss=478MB state=empty trace=null
+          description=stop com.example.lyricsflow due to killDueToPackageUpdate
+          anrInfo=null
+        ApplicationExitInfo #8:
+          timestamp=2026-10-28 15:23:20.215 pid=22190 realUid=10314 packageUid=10314 definingUid=10314 user=0
+          process=com.example.lyricsflow reason=10 (USER REQUESTED) subreason=21 (FORCE STOP) status=0
+          importance=125 pss=0.00 rss=352MB state=empty trace=null
+          description=stop com.example.lyricsflow due to from pid 4400 (system) iAwareF[SystemManager] 229352ms
+          anrInfo=null
+        ApplicationExitInfo #9:
+          timestamp=2026-10-28 15:04:25.849 pid=20484 realUid=10314 packageUid=10314 definingUid=10314 user=0
+          process=com.example.lyricsflow reason=16 (PACKAGE UPDATED) subreason=0 (UNKNOWN) status=0
+          importance=125 pss=0.00 rss=469MB state=empty trace=null
+          description=stop com.example.lyricsflow due to killDueToPackageUpdate
+          anrInfo=null
+        ApplicationExitInfo #10:
+          timestamp=2026-10-28 14:57:37.318 pid=11160 realUid=10314 packageUid=10314 definingUid=10314 user=0
+          process=com.example.lyricsflow reason=16 (PACKAGE UPDATED) subreason=0 (UNKNOWN) status=0
+          importance=125 pss=0.00 rss=195MB state=empty trace=null
+          description=stop com.example.lyricsflow due to killDueToPackageUpdate
+          anrInfo=null
+        ApplicationExitInfo #11:
+          timestamp=2026-10-28 14:35:57.341 pid=8976 realUid=10314 packageUid=10314 definingUid=10314 user=0
+          process=com.example.lyricsflow reason=16 (PACKAGE UPDATED) subreason=0 (UNKNOWN) status=0
+          importance=125 pss=0.00 rss=565MB state=empty trace=null
+          description=stop com.example.lyricsflow due to killDueToPackageUpdate
+          anrInfo=null
+        ApplicationExitInfo #12:
+          timestamp=2026-10-28 14:32:11.659 pid=23224 realUid=10314 packageUid=10314 definingUid=10314 user=0
+          process=com.example.lyricsflow reason=16 (PACKAGE UPDATED) subreason=0 (UNKNOWN) status=0
+          importance=125 pss=0.00 rss=558MB state=empty trace=null
+          description=stop com.example.lyricsflow due to killDueToPackageUpdate
+          anrInfo=null
+        ApplicationExitInfo #13:
+          timestamp=2026-10-28 14:13:27.729 pid=19539 realUid=10314 packageUid=10314 definingUid=10314 user=0
+          process=com.example.lyricsflow reason=16 (PACKAGE UPDATED) subreason=0 (UNKNOWN) status=0
+          importance=125 pss=0.00 rss=453MB state=empty trace=null
+          description=stop com.example.lyricsflow due to killDueToPackageUpdate
+          anrInfo=null
+        ApplicationExitInfo #14:
+          timestamp=2026-10-28 13:59:59.059 pid=15457 realUid=10314 packageUid=10314 definingUid=10314 user=0
+          process=com.example.lyricsflow reason=16 (PACKAGE UPDATED) subreason=0 (UNKNOWN) status=0
+          importance=125 pss=0.00 rss=427MB state=empty trace=null
+          description=stop com.example.lyricsflow due to killDueToPackageUpdate
+          anrInfo=null
+        ApplicationExitInfo #15:
+          timestamp=2026-10-28 13:51:03.371 pid=12680 realUid=10314 packageUid=10314 definingUid=10314 user=0
+          process=com.example.lyricsflow reason=16 (PACKAGE UPDATED) subreason=0 (UNKNOWN) status=0
+          importance=125 pss=0.00 rss=407MB state=empty trace=null
+          description=stop com.example.lyricsflow due to killDueToPackageUpdate
+          anrInfo=null

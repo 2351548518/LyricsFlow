@@ -103,7 +103,7 @@ class DeepSeekTranslationIntegrationTest {
                 translated.map { it.text to (it.start to it.end) },
             )
             instrumentation.runOnMainSync {
-                graph.applyTranslation(translated, sample.hash, manual.key)
+                graph.applyTranslation(translated, sample.hash, manual.key, sample.source)
             }
             assertEquals(translated, cached(manual).lines)
             assertEquals(translated, graph.translate())

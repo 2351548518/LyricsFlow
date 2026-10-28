@@ -248,7 +248,9 @@ object Transfer {
             )
             val rows = JSONArray()
             var size = 0
-            for (k in listOf("binding", "lyrics", "saved", "style", "selection")) graph.store
+            for (k in
+                listOf("binding", "commentBinding", "lyrics", "saved", "style", "selection")) graph
+                .store
                 .all(k)
                 .forEach { (id, body) ->
                     size += body.toByteArray().size
@@ -324,12 +326,23 @@ object Transfer {
                 val id = r.getString("id")
                 val b = r.getString("body")
                 require(
-                    k in listOf("binding", "lyrics", "saved", "style", "selection") &&
-                        id.length <= 300
+                    k in
+                        listOf(
+                            "binding",
+                            "commentBinding",
+                            "lyrics",
+                            "saved",
+                            "style",
+                            "selection",
+                        ) && id.length <= 300
                 )
                 when (k) {
                     "selection" -> SongSelection.read(id, jsonObject(b))
                     "binding" -> readTrack(jsonObject(b))
+                    "commentBinding" -> {
+                        val record = readTrack(jsonObject(b))
+                        require(record.provider in listOf(Provider.QQ, Provider.NETEASE))
+                    }
                     "lyrics" -> readLyrics(jsonObject(b))
                     "saved" -> {
                         val o = jsonObject(b)

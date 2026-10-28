@@ -1,0 +1,76 @@
+Applications Memory Usage (in Kilobytes):
+Uptime: 1021316644 Realtime: 1514147029
+
+** MEMINFO in pid 18022 [com.example.lyricsflow] **
+                   Pss  Private  Private  SwapPss      Rss     Heap     Heap     Heap
+                 Total    Dirty    Clean    Dirty    Total     Size    Alloc     Free
+                ------   ------   ------   ------   ------   ------   ------   ------
+  Native Heap    68109    68048        0       20    70808   118004    75596    38432
+  Dalvik Heap   162340   162300       12       48   164876   203761     7153   196608
+ Dalvik Other    16632     5724        0        0    27860                           
+        Stack     1736     1736        0        0     1744                           
+       Ashmem        9        0        0        0      584                           
+      Gfx dev     3816     3816        0        0     3820                           
+    Other dev       32        0       28        0      676                           
+     .so mmap     2960      664      224        4    60640                           
+    .jar mmap     2773        0      392        0    65364                           
+    .apk mmap      102        0        0        0     2224                           
+    .ttf mmap     2004        0      400        0    16236                           
+    .dex mmap        7        0        0        0     1088                           
+    .oat mmap       11        0        0        0     1276                           
+    .art mmap    10063     9636      216       20    24932                           
+   Other mmap     6067        4        0        0    14212                           
+   EGL mtrack    26888    26888        0        0    26888                           
+    GL mtrack      384      384        0        0      384                           
+        Memfd     2484     1056        0        0    13024                           
+      Unknown    31152    31132        8        4    32188                           
+        TOTAL   337665   311388     1280       96   528824   321765    82749   235040
+ 
+ App Summary
+                       Pss(KB)                        Rss(KB)
+                        ------                         ------
+           Java Heap:   172152                         189808
+         Native Heap:    68048                          70808
+                Code:     2032                         168996
+               Stack:     1736                           1744
+            Graphics:    31088                          31092
+       Private Other:    37612
+              System:    24997
+             Unknown:                                   66376
+ 
+           TOTAL PSS:   337665            TOTAL RSS:   528824       TOTAL SWAP PSS:       96
+ 
+ Objects
+               Views:       20         ViewRootImpl:        2
+         AppContexts:        6           Activities:        1
+              Assets:       17        AssetManagers:        0
+       Local Binders:       45        Proxy Binders:      105
+       Parcel memory:      405         Parcel count:     1037
+    Death Recipients:        2             WebViews:        0
+ 
+ Native Allocations
+                         Count                       Total(kB)
+                        ------                         ------
+   Bitmap (malloced):       49                            148
+Bitmap (nonmalloced):       32                          11250
+    Other (malloced):     4687                            446
+ Other (nonmalloced):      218                            147
+ 
+ Mapped Bitmaps
+                         Count                       Size(KB)
+                        ------                         ------
+              Mapped:        0                              0
+              Unique:        0                              0
+ 
+ SQL
+         MEMORY_USED:     2126
+  PAGECACHE_OVERFLOW:     2064          MALLOC_SIZE:     1613
+ 
+ DATABASES
+      pgsz     dbsz   Lookaside(b) cache hits cache misses cache size  Dbname
+PER CONNECTION STATS
+         4    57020             48   223    31     4  /data/user/0/com.example.lyricsflow/databases/lyricsflow.db
+POOL STATS
+     cache hits  cache misses    cache size  Dbname
+            223            32             4  /data/user/0/com.example.lyricsflow/databases/lyricsflow.db
+ 
