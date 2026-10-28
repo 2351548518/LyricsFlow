@@ -6,10 +6,10 @@
 
 为 Spotify 等本机音乐 App 带来同步歌词、中文翻译与音乐评论。
 
-[![Release](https://img.shields.io/github/v/release/2351548518/LyricsFlow?style=flat-square&color=386b61)](https://github.com/2351548518/LyricsFlow/releases/latest)
+[![Release](https://img.shields.io/github/v/release/2351548518/LyricsFlow?style=flat-square&color=386b61&cacheSeconds=300&v=1.0.0)](https://github.com/2351548518/LyricsFlow/releases/latest)
 ![Android](https://img.shields.io/badge/Android-7.0%2B-386b61?style=flat-square)
 ![UI](https://img.shields.io/badge/UI-Jetpack_Compose-607d8b?style=flat-square)
-[![Downloads](https://img.shields.io/github/downloads/2351548518/LyricsFlow/total?style=flat-square&color=386b61)](https://github.com/2351548518/LyricsFlow/releases)
+[![Downloads](https://img.shields.io/github/downloads/2351548518/LyricsFlow/total?style=flat-square&color=386b61&cacheSeconds=300&v=1.0.0)](https://github.com/2351548518/LyricsFlow/releases)
 
 [下载正式版](https://github.com/2351548518/LyricsFlow/releases/latest) · [快速开始](#快速开始) · [界面预览](#界面预览) · [反馈问题](https://github.com/2351548518/LyricsFlow/issues)
 
