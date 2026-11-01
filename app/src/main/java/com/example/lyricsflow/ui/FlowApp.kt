@@ -92,7 +92,8 @@ fun FlowApp(graph: AppGraph) {
         if (s.playback.track == null) fullscreenLyrics = false
     }
     var pendingImport by remember { mutableStateOf("lyrics") }
-    var pendingBytes by remember { mutableStateOf(ByteArray(0)) }
+    val pendingExport = remember(context) { PendingExport(context) }
+    var exporting by remember { mutableStateOf(false) }
     var pendingStyle by remember { mutableStateOf<StyleSpec?>(null) }
     var pendingBackup by remember {
         mutableStateOf<Pair<List<Triple<String, String, String>>, JSONObject>?>(null)
@@ -121,23 +122,42 @@ fun FlowApp(graph: AppGraph) {
         rememberLauncherForActivityResult(
             ActivityResultContracts.CreateDocument("application/octet-stream")
         ) { uri ->
-            if (uri != null)
-                scope.launch {
-                    try {
-                        withContext(Dispatchers.IO) {
-                            context.contentResolver.openOutputStream(uri, "wt")!!.use {
-                                it.write(pendingBytes)
-                            }
-                        }
+            scope.launch {
+                try {
+                    if (uri != null) {
+                        pendingExport.writeTo(uri)
                         graph.message("文件已导出")
-                    } catch (e: Exception) {
-                        report(e)
                     }
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    report(e)
+                } finally {
+                    withContext(NonCancellable) { pendingExport.clear() }
+                    exporting = false
                 }
+            }
         }
     fun output(name: String, bytes: ByteArray) {
-        pendingBytes = bytes
-        export.launch(name)
+        if (exporting) {
+            graph.message("请先完成当前导出")
+            return
+        }
+        exporting = true
+        scope.launch {
+            try {
+                pendingExport.stage(bytes)
+                export.launch(name)
+            } catch (e: CancellationException) {
+                withContext(NonCancellable) { pendingExport.clear() }
+                exporting = false
+                throw e
+            } catch (e: Exception) {
+                pendingExport.clear()
+                exporting = false
+                report(e)
+            }
+        }
     }
     val pick =
         rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
@@ -893,12 +913,14 @@ private fun Home(
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     LaunchedEffect(s.playback.playing, s.prefs.reduced) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            now.longValue = SystemClock.elapsedRealtime()
+            if (!s.playback.playing) return@repeatOnLifecycle
             while (isActive) {
                 if (s.playback.playing && !s.prefs.reduced)
                     withFrameNanos { now.longValue = SystemClock.elapsedRealtime() }
                 else {
                     now.longValue = SystemClock.elapsedRealtime()
-                    delay(if (s.playback.playing) 80 else 500)
+                    delay(80)
                 }
             }
         }

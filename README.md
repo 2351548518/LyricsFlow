@@ -6,10 +6,10 @@
 
 为 Spotify 等本机音乐 App 带来同步歌词、中文翻译与音乐评论。
 
-[![Release](https://img.shields.io/github/v/release/2351548518/LyricsFlow?style=flat-square&color=3273f4&cacheSeconds=300&v=1.0.2)](https://github.com/2351548518/LyricsFlow/releases/latest)
+[![Release](https://img.shields.io/github/v/release/2351548518/LyricsFlow?style=flat-square&color=3273f4&cacheSeconds=300&v=1.0.3)](https://github.com/2351548518/LyricsFlow/releases/latest)
 ![Android](https://img.shields.io/badge/Android-7.0%2B-3273f4?style=flat-square)
 ![UI](https://img.shields.io/badge/UI-Jetpack_Compose-607d8b?style=flat-square)
-[![Downloads](https://img.shields.io/github/downloads/2351548518/LyricsFlow/total?style=flat-square&color=3273f4&cacheSeconds=300&v=1.0.2)](https://github.com/2351548518/LyricsFlow/releases)
+[![Downloads](https://img.shields.io/github/downloads/2351548518/LyricsFlow/total?style=flat-square&color=3273f4&cacheSeconds=300&v=1.0.3)](https://github.com/2351548518/LyricsFlow/releases)
 
 [下载正式版](https://github.com/2351548518/LyricsFlow/releases/latest) · [快速开始](#快速开始) · [界面预览](#界面预览) · [反馈问题](https://github.com/2351548518/LyricsFlow/issues)
 
@@ -122,6 +122,7 @@ android build :app:assembleDebug -- :app:assembleDebugAndroidTest :app:testDebug
 | [验收记录](docs/android-qa/README.md) | 真机、模拟器、来源与数据验证证据 |
 | [主题 Schema](docs/lyricsflow.style.schema.json) | 声明式主题格式 |
 | [品牌资源](docs/branding/README.md) | SVG Logo、PNG 与 Android 图标 |
+| [v1.0.3 发行说明](docs/releases/v1.0.3.md) | 减少空闲开销、内存优化与导出修复 |
 | [v1.0.2 发行说明](docs/releases/v1.0.2.md) | 全屏歌词、应用内更新、设置布局与整首翻译 |
 | [v1.0.1 发行说明](docs/releases/v1.0.1.md) | 图标配色与覆盖升级说明 |
 | [v1.0.0 发行说明](docs/releases/v1.0.0.md) | 首版功能与安装说明 |

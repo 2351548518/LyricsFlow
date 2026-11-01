@@ -49,8 +49,9 @@ data class Track(
     val sourceId: String = "",
     val mid: String = "",
 ) {
-    val key: String
-        get() = digest("${title.trim().lowercase()}|${artist.trim().lowercase()}|$album")
+    val key: String by lazy(LazyThreadSafetyMode.PUBLICATION) {
+        digest("${title.trim().lowercase()}|${artist.trim().lowercase()}|$album")
+    }
 }
 
 data class Word(val text: String, val start: Long, val end: Long)
@@ -72,10 +73,27 @@ data class Lyrics(
     val instrumental: Boolean = false,
     val providerRevision: Int = 0,
 ) {
-    val hash
-        get() = digest(lines.joinToString("\n") { "${it.start}:${it.end}:${it.text}:${it.words}" })
+    val hash: String by lazy(LazyThreadSafetyMode.PUBLICATION) {
+        digest(lines.joinToString("\n") { "${it.start}:${it.end}:${it.text}:${it.words}" })
+    }
 
-    fun active(position: Long): Int = lines.indexOfLast { it.start != null && it.start <= position }
+    // Snapshots are immutable. Keep original row indices, including untimed/duplicate rows.
+    private val timeline by lazy(LazyThreadSafetyMode.PUBLICATION) {
+        val indices = lines.indices.filter { lines[it].start != null }.toIntArray()
+        val starts = LongArray(indices.size) { lines[indices[it]].start!! }
+        if ((1 until starts.size).all { starts[it - 1] <= starts[it] }) starts to indices else null
+    }
+
+    fun active(position: Long): Int {
+        val (starts, indices) = timeline ?: return lines.indexOfLast { it.start != null && it.start <= position }
+        var low = 0
+        var high = starts.size
+        while (low < high) {
+            val middle = (low + high) ushr 1
+            if (starts[middle] <= position) low = middle + 1 else high = middle
+        }
+        return if (low == 0) -1 else indices[low - 1]
+    }
 }
 
 data class Playback(
@@ -108,10 +126,17 @@ data class Comment(
 
 data class CommentPage(val comments: List<Comment>, val more: Boolean, val cursor: String = "")
 
-fun digest(value: String): String =
-    MessageDigest.getInstance("SHA-256").digest(value.toByteArray()).joinToString("") {
-        "%02x".format(it)
-    }
+fun digest(value: String): String {
+    val bytes = MessageDigest.getInstance("SHA-256").digest(value.toByteArray())
+    val digits = "0123456789abcdef"
+    return CharArray(bytes.size * 2).apply {
+        bytes.forEachIndexed { index, byte ->
+            val unsigned = byte.toInt() and 255
+            this[index * 2] = digits[unsigned ushr 4]
+            this[index * 2 + 1] = digits[unsigned and 15]
+        }
+    }.concatToString()
+}
 
 object Demo {
     val track = Track("Somewhere, softer", "THE QUIET HOURS", "A softer place", 80000)

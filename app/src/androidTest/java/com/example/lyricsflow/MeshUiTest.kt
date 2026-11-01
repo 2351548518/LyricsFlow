@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.example.lyricsflow.core.*
@@ -32,10 +33,18 @@ class MeshUiTest {
                 graph.preferences(previous.copy(coverMesh = true))
                 it.setContent {
                     val s by graph.state.collectAsState()
-                    MaterialTheme { Appearance(s, graph, null, {}, {}, {}, {}) }
+                    MaterialTheme {
+                        Box(Modifier.fillMaxSize().safeDrawingPadding()) {
+                            Appearance(s, graph, null, {}, {}, {}, {})
+                        }
+                    }
                 }
             }
-            compose.onNodeWithText("网状渐变").performScrollTo().performClick()
+            // The choice row also scrolls horizontally. Scroll its vertical ancestor first;
+            // performScrollTo() on the label would only reveal it in the inner row.
+            val settings = compose.onNode(hasScrollAction() and hasAnyDescendant(hasText("个性化")))
+            settings.performSemanticsAction(SemanticsActions.ScrollBy) { it(0f, 1800f) }
+            compose.onNodeWithTag("choice-网状渐变").assertIsDisplayed().performClick().assertIsSelected()
             assertEquals("mesh", graph.state.value.prefs.background)
             compose.onNodeWithText("动画网状渐变").performScrollTo().performClick()
             assertFalse(graph.state.value.prefs.coverMesh)

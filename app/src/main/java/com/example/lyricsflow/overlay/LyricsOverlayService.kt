@@ -10,10 +10,12 @@ import android.provider.Settings
 import android.view.*
 import android.widget.*
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.example.lyricsflow.MainActivity
 import com.example.lyricsflow.R
 import com.example.lyricsflow.core.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 class LyricsOverlayService : Service() {
     companion object {
@@ -32,7 +34,17 @@ class LyricsOverlayService : Service() {
     private var pausedAt = 0L
     private var styleRaw = ""
     private var theme: ThemeSpec? = null
-    private var rendered = ""
+    private var rendered: OverlayRenderKey? = null
+    private val screenChanges = MutableStateFlow(0)
+    private val permissionWatcher = AppOpsManager.OnOpChangedListener { op, packageName ->
+        if (op == AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW && packageName == this.packageName)
+            screenChanges.update { it + 1 }
+    }
+    private val screenReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            screenChanges.update { it + 1 }
+        }
+    }
     private lateinit var params: WindowManager.LayoutParams
 
     override fun onBind(intent: Intent?) = null
@@ -41,6 +53,19 @@ class LyricsOverlayService : Service() {
         super.onCreate()
         graph = (application as LyricsFlowApp).graph
         wm = getSystemService(WindowManager::class.java)
+        getSystemService(AppOpsManager::class.java).startWatchingMode(
+            AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW, packageName, permissionWatcher,
+        )
+        ContextCompat.registerReceiver(
+            this,
+            screenReceiver,
+            IntentFilter().apply {
+                addAction(Intent.ACTION_SCREEN_ON)
+                addAction(Intent.ACTION_SCREEN_OFF)
+                addAction(Intent.ACTION_USER_PRESENT)
+            },
+            ContextCompat.RECEIVER_NOT_EXPORTED,
+        )
         if (Build.VERSION.SDK_INT >= 26)
             getSystemService(NotificationManager::class.java)
                 .createNotificationChannel(
@@ -70,9 +95,12 @@ class LyricsOverlayService : Service() {
             createWindow()
             graph.overlay(true, false)
             scope.launch {
-                while (isActive) {
-                    render()
-                    delay(80)
+                combine(graph.state, screenChanges) { _, _ -> Unit }.collectLatest {
+                    while (isActive && render()) {
+                        val pause = if (graph.state.value.playback.playing) 80L else
+                            (pausedAt + OverlayPolicy.PAUSE_GRACE_MS - SystemClock.elapsedRealtime()).coerceAtLeast(1)
+                        delay(pause)
+                    }
                 }
             }
         }
@@ -280,10 +308,10 @@ class LyricsOverlayService : Service() {
         updateWindow()
     }
 
-    private fun render() {
+    private fun render(): Boolean {
         if (!Settings.canDrawOverlays(this)) {
             stopSelf()
-            return
+            return false
         }
         val s = graph.state.value
         val p = s.playback
@@ -299,7 +327,7 @@ class LyricsOverlayService : Service() {
                 now,
             )
         panel?.visibility = if (hidden) View.GONE else View.VISIBLE
-        if (hidden) return
+        if (hidden) return false
         val line =
             if (p.positionKnown)
                 s.lyrics?.let { it.lines.getOrNull(it.active(p.at(now) - s.delay)) }
@@ -310,16 +338,11 @@ class LyricsOverlayService : Service() {
                 styleRaw
                     .takeIf { it.isNotBlank() }
                     ?.let { runCatching { ThemeSpec.from(it, "overlay") }.getOrNull() }
-            rendered = ""
+            rendered = null
         }
         val position = p.at(now) - s.delay
         val content = line?.text ?: if (s.busy) "正在加载歌词…" else "暂无同步歌词"
-        val signature =
-            content +
-                line?.translation +
-                line?.words?.indexOfLast { position >= it.start } +
-                s.prefs +
-                styleRaw
+        val signature = OverlayRenderKey(content, line, line?.words?.indexOfLast { position >= it.start }, s.prefs, styleRaw)
         if (signature != rendered) {
             rendered = signature
             val lyricColor = OverlayColors.resolve(s.prefs.overlayColor, theme?.original?.color)
@@ -391,6 +414,7 @@ class LyricsOverlayService : Service() {
         translation?.alpha = motion.opacity
         panel?.background?.alpha =
             ((s.prefs.overlayAlpha.takeIf { it.isFinite() } ?: .85f).coerceIn(0f, 1f) * 255).toInt()
+        return true
     }
 
     override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
@@ -407,6 +431,8 @@ class LyricsOverlayService : Service() {
 
     override fun onDestroy() {
         scope.cancel()
+        unregisterReceiver(screenReceiver)
+        getSystemService(AppOpsManager::class.java).stopWatchingMode(permissionWatcher)
         panel?.let { runCatching { wm.removeView(it) } }
         panel = null
         graph.overlay(false, false)

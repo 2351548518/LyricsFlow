@@ -31,14 +31,15 @@ try {
     $testClasses += ',com.example.lyricsflow.SongSelectionTest,com.example.lyricsflow.SongSelectionUiTest'
     $testClasses += ',com.example.lyricsflow.SearchLayoutTest'
     $testClasses += ',com.example.lyricsflow.AuditStateTest,com.example.lyricsflow.AuditUiTest'
-    $expectedCount = 70
+    $testClasses += ',com.example.lyricsflow.AppUpdatesTest,com.example.lyricsflow.AppUpdateUiTest,com.example.lyricsflow.FullscreenLyricsTest,com.example.lyricsflow.SettingsRowsTest,com.example.lyricsflow.TranslationProtocolTest,com.example.lyricsflow.PendingExportTest,com.example.lyricsflow.OverlayLifecycleTest'
+    $expectedCount = 96
     if ($IncludeNetwork) {
         $testClasses += ',com.example.lyricsflow.ProviderIntegrationTest,com.example.lyricsflow.QqDiscoveryTest,com.example.lyricsflow.SearchUiTest,com.example.lyricsflow.AutomaticMatchingTest'
         $testClasses += ',com.example.lyricsflow.LrcLibLiveTest'
         $testClasses += ',com.example.lyricsflow.AmllLiveTest'
-        $expectedCount = 87
+        $expectedCount = 113
     }
-    $testOutput = & $adbExecutable -s $Device shell am instrument -w -r -e disableAnalytics true -e class $testClasses com.example.lyricsflow.test/androidx.test.runner.AndroidJUnitRunner
+    $testOutput = & $adbExecutable -s $Device shell am instrument -w -r -e disableAnalytics true -e updateNetwork ($IncludeNetwork.IsPresent.ToString().ToLowerInvariant()) -e class $testClasses com.example.lyricsflow.test/androidx.test.runner.AndroidJUnitRunner
     $outputDirectory = Join-Path $projectDirectory 'docs\android-qa'
     New-Item -ItemType Directory -Force -Path $outputDirectory | Out-Null
     $testOutput | Set-Content -Encoding utf8 -LiteralPath (Join-Path $outputDirectory "instrumentation-$Device.log")

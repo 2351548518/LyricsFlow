@@ -1,5 +1,7 @@
 # Android 开发版验收记录
 
+2026-11-01 v1.0.3：[性能与逻辑检查](./Performance-Audit-v1.0.3.md)。47 项 JVM、96 项模拟器回归全部通过，Debug / Release Lint 无错误，正式签名真机覆盖安装成功；同一暂停示例与悬浮窗场景截图逐像素一致，空闲主线程开销减少。样本与耗电结论的边界见记录。
+
 2026-11-01 v1.0.2：[应用内更新](./Updates-v1.0.2.md)、[全屏歌词](./Fullscreen-Lyrics.md)、[设置布局与整首翻译](./Settings-Single-Request-Translation.md)。44 项 JVM、Release Lint 与各专项检查通过，已完成正式签名真机覆盖安装；专项范围及可选联网测试见各记录。
 
 2026-10-28 图标配色：[v1.0.1 明亮蓝色图标与真实跨版本覆盖升级](./Release-v1.0.1.md)。42 项 JVM、Release Lint、1.0.0→1.0.1 覆盖安装、收藏/字号保留及系统图标视觉检查通过。

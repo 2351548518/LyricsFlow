@@ -101,11 +101,19 @@ internal class AmllClient(
     private var loadedAt = 0L
     private var offline = false
 
+    suspend fun trimMemory() = lock.withLock { loaded = emptyList() }
+
     private suspend fun index(): List<AmllEntry> =
         withContext(Dispatchers.IO) {
             lock.withLock {
-                if (loaded.isNotEmpty() && System.currentTimeMillis() - loadedAt < DAY)
-                    return@withLock loaded
+                if (System.currentTimeMillis() - loadedAt < DAY) {
+                    if (loaded.isNotEmpty()) return@withLock loaded
+                    // Restore the same disk snapshot without resetting the offline retry window.
+                    read(INDEX, if (offline) 14 * DAY else DAY)?.let {
+                        loaded = parseIndex(it)
+                        return@withLock loaded
+                    }
+                }
                 val cached = read(INDEX, DAY)
                 if (cached != null) {
                     loaded = parseIndex(cached)

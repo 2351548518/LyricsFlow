@@ -50,6 +50,7 @@ class PlaybackIntegrationTest {
         try {
             await { latest.get().track?.title == "First track" && latest.get().playing }
             assertTrue(latest.get().at(SystemClock.elapsedRealtime()) >= 1000)
+            i.runOnMainSync { repeat(5) { monitor.refresh() } }
             i.runOnMainSync { session.setPlaybackState(state(PlaybackState.STATE_PAUSED, 22000)) }
             await { !latest.get().playing && latest.get().position == 22000L }
             assertEquals(22000L, latest.get().at(SystemClock.elapsedRealtime() + 5000))

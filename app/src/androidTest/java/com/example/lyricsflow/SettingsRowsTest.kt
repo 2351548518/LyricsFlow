@@ -63,7 +63,8 @@ class SettingsRowsTest {
                 it.setContent {
                     MaterialTheme {
                         Box(Modifier.fillMaxSize().padding(24.dp)) {
-                            SourceSettings(graph.state.value, graph) {}
+                            val state by graph.state.collectAsState()
+                            SourceSettings(state, graph) {}
                         }
                     }
                 }

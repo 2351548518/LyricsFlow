@@ -13,6 +13,7 @@ class ApiFailure(message: String) : Exception(message)
 
 class MusicApi(private val store: Store) : LyricsLookup {
     var neteaseGateway = ""
+    internal suspend fun trimMemory() = amll.trimMemory()
     private val amll =
         AmllClient(
             read = { path, age -> store.get("cache", digest("amll:$path"), age) },

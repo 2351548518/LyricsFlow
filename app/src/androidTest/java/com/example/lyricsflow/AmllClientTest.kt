@@ -101,6 +101,17 @@ class AmllClientTest {
     }
 
     @Test
+    fun memoryTrimRestoresFreshIndexWithoutNetworkOrChangedResults() = runBlocking {
+        var calls = 0
+        val api = client(transport = RepositoryTransport { _, _ -> calls++; entry().toString() })
+        val before = api.search("Sunny").tracks
+        assertEquals(1, calls)
+        api.trimMemory()
+        assertEquals(before, api.search("Sunny").tracks)
+        assertEquals("Memory eviction must not trigger another network request", 1, calls)
+    }
+
+    @Test
     fun offlineUsesValidatedCacheAndInvalidXmlCannotPoisonIt() = runBlocking {
         val values = mutableMapOf(AmllClient.INDEX to entry().toString(), "raw-lyrics/$file" to xml)
         val api =

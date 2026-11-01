@@ -67,6 +67,13 @@ class LyricsFlowApp : Application() {
         )
         graph = AppGraph(this)
     }
+
+    @Suppress("DEPRECATION")
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        if (::graph.isInitialized && level >= TRIM_MEMORY_RUNNING_LOW)
+            graph.scope.launch(Dispatchers.IO) { graph.api.trimMemory() }
+    }
 }
 
 class AppGraph(val app: Application, lookup: LyricsLookup? = null) {

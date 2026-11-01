@@ -108,10 +108,15 @@ class PlaybackMonitor(
     }
 
     private fun update(list: List<MediaController>) {
-        controllers.forEach { it.unregisterCallback(callback) }
+        val incoming = list.filter { it.packageName in allowed }
+        val retained = controllers.associateBy { it.sessionToken }
+        val tokens = incoming.map { it.sessionToken }.toSet()
+        controllers.filter { it.sessionToken !in tokens }.forEach { it.unregisterCallback(callback) }
         controllers.clear()
-        controllers.addAll(list.filter { it.packageName in allowed })
-        controllers.forEach { it.registerCallback(callback, handler) }
+        incoming.distinctBy { it.sessionToken }.forEach { controller ->
+            val existing = retained[controller.sessionToken]
+            controllers += existing ?: controller.also { it.registerCallback(callback, handler) }
+        }
         select()
     }
 
