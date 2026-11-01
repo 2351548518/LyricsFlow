@@ -2,7 +2,19 @@
 
 首个正式版：**v1.0.0**，`versionCode = 1`，包名保持 `com.example.lyricsflow`。后续每次发行递增 versionCode，始终沿用首次发布的正式签名。
 
-当前版本：**v1.0.1**，`versionCode = 2`，图标配色更新；沿用首版签名。脚本按构建输出中的版本号生成对应 `dist/v<版本>/`，历史版本不覆盖。
+当前正式版本：**v1.0.2**，`versionCode = 3`，新增全屏歌词、应用内检查更新及整首翻译；沿用首版签名。脚本按构建输出中的版本号生成对应 `dist/v<版本>/`，历史版本不覆盖。
+
+## 应用内更新发布约定
+
+“我的 → 检查更新”匿名请求 `GET /repos/2351548518/LyricsFlow/releases/latest`，仅接受已发布的正式版本。每次发行必须递增 `versionCode` 和数字版本号，标签为 `v<版本号>`，通用 APK 附件名为 `LyricsFlow-v<版本号>.apk`。附件上传完成后再公开 Release；GitHub API 的附件 `digest` 必须提供 `sha256:` 校验值。草稿、预发行、缺少 APK 或校验信息的版本不会用于安装。
+
+公共 API 限流或暂时不可用时，改用官方 `releases/latest` 重定向读取版本，再从同一 Release 的 `SHA256SUMS.txt` 和 APK HEAD 响应获取哈希与大小；因此发行附件必须始终包含校验文件。备用路径不使用第三方镜像。
+
+从 API 取得附件 ID 后，下载优先走官方 Release asset API，以 `Accept: application/octet-stream` 直接取得文件或跳转 CDN；该路径失败时使用同一官方 Release 的浏览器下载地址。
+
+下载仅允许 GitHub 官方 HTTPS 文件服务；校验大小和 SHA-256 后，再检查 APK 包名、较大的 versionCode、匹配标签的 versionName、Android 最低版本和与已安装应用相同的签名。安装包暂存在应用私有缓存中，通过仅暴露 `updates/` 的 FileProvider 交给系统安装器。下载不使用 GitHub 登录凭证，也不申请存储权限。Android 8+ 首次使用需允许安装来源；系统安装步骤始终由用户确认。取消安装后可继续安装，取消下载会清除未完成文件。此更新器不会自动后台检查或静默安装。
+
+参考：[GitHub 最新 Release API](https://docs.github.com/en/rest/releases/releases#get-the-latest-release)、[Android FileProvider](https://developer.android.com/reference/androidx/core/content/FileProvider)、[安装来源授权](https://developer.android.com/reference/android/content/pm/PackageManager#canRequestPackageInstalls())。
 
 ## Windows 本机签名
 

@@ -20,6 +20,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
@@ -155,6 +156,49 @@ internal fun FlowSheetSystemBars() {
             androidx.core.view.WindowCompat.getInsetsController(window, view).apply {
                 isAppearanceLightStatusBars = light
                 isAppearanceLightNavigationBars = light
+            }
+        }
+    }
+}
+
+@Composable
+internal fun FlowChoiceRow(labels: List<String>, selected: Int, onSelect: (Int) -> Unit) {
+    val density = LocalDensity.current
+    val measurer = rememberTextMeasurer()
+    val fontSize = if (labels.size > 3) 12.sp else 13.sp
+    val minSlot = with(density) {
+        labels.maxOf { measurer.measure(it, TextStyle(fontSize = fontSize, fontWeight = FontWeight.Bold, letterSpacing = 0.sp)).size.width }.toDp()
+    } + 8.dp
+    BoxWithConstraints(Modifier.fillMaxWidth().padding(vertical = 6.dp).testTag("choices-${labels.first()}")) {
+        // Keep accessibility text legible at large scales; normal phone sizes fill one row.
+        val width = maxOf(maxWidth, minSlot * labels.size + 6.dp * (labels.size - 1))
+        Row(Modifier.horizontalScroll(rememberScrollState())) {
+            Row(Modifier.width(width).selectableGroup(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                labels.forEachIndexed { index, label ->
+                    val active = index == selected
+                    val colors = MaterialTheme.colorScheme
+                    Surface(
+                        modifier = Modifier.weight(1f).heightIn(min = 48.dp)
+                            .testTag("choice-$label")
+                            .selectable(active, role = Role.RadioButton, onClick = { onSelect(index) }),
+                        shape = RoundedCornerShape(14.dp),
+                        color = if (active) colors.primary else colors.surfaceContainer,
+                        contentColor = if (active) colors.onPrimary else colors.onSurface,
+                        border = BorderStroke(if (active) 2.dp else 1.dp, if (active) colors.primary else colors.outline),
+                    ) {
+                        Box(Modifier.heightIn(min = 48.dp), contentAlignment = Alignment.Center) {
+                            Text(label, Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 12.dp),
+                                fontSize = fontSize, fontWeight = if (active) FontWeight.Bold else FontWeight.Medium,
+                                letterSpacing = 0.sp,
+                                lineHeight = (fontSize.value * 1.4f).sp,
+                                textAlign = TextAlign.Center,
+                                maxLines = 1, softWrap = false)
+                            if (active) Glyph("check", Modifier.align(Alignment.TopEnd)
+                                .padding(top = 3.dp, end = 3.dp).size(9.dp)
+                                .testTag("selected-choice-$label"))
+                        }
+                    }
+                }
             }
         }
     }

@@ -36,7 +36,7 @@ suspend fun restoreBackup(
             dark =
                 o.optString("dark", "system").takeIf { it in listOf("light", "dark", "system") }
                     ?: "system",
-            palette = o.optInt("palette", 0).coerceIn(0, 4),
+            palette = o.optInt("palette", 4).coerceIn(0, 4),
             reduced = o.optBoolean("reduced", false),
             autoSources = o.optBoolean("autoSources", p.autoSources),
             overlaySize = number("overlaySize", 22f, 12f, 48f),
@@ -48,7 +48,7 @@ suspend fun restoreBackup(
             coverBlur = number("coverBlur", p.coverBlur, 0f, 24f),
             coverMesh = o.optBoolean("coverMesh", p.coverMesh),
             background =
-                o.optString("background", "color").takeIf {
+                o.optString("background", "cover").takeIf {
                     it in listOf("color", "cover", "custom", "mesh")
                 } ?: "color",
         )

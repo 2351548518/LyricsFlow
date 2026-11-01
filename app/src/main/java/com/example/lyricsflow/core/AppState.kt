@@ -15,7 +15,7 @@ data class Preferences(
     val free: Boolean = false,
     val fontSize: Float = 30f,
     val dark: String = "system",
-    val palette: Int = 0,
+    val palette: Int = 4,
     val reduced: Boolean = false,
     val overlaySize: Float = 22f,
     val overlayAlpha: Float = .85f,
@@ -25,7 +25,7 @@ data class Preferences(
     val consent: Boolean = false,
     val gateway: String = "",
     val playbackApp: String = "",
-    val background: String = "color",
+    val background: String = "cover",
     val autoTranslate: Boolean = false,
     val autoSources: Boolean = true,
     val coverBlur: Float = 8f,
@@ -76,6 +76,7 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
     val api = MusicApi(store)
     private val songLyrics = SongLyrics(store, lookup ?: api)
     val github by lazy { GitHubSync(this) }
+    internal val updates by lazy { AppUpdates(app, scope) }
     private val prefs = app.getSharedPreferences("settings", 0)
     private val mutable = MutableStateFlow(ScreenState(prefs = readPrefs()))
     val state = mutable.asStateFlow()
@@ -166,7 +167,7 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
             prefs.getBoolean("free", false),
             prefs.getFloat("fontSize", 30f),
             prefs.getString("dark", "system")!!,
-            prefs.getInt("palette", 0),
+            prefs.getInt("palette", 4),
             prefs.getBoolean("reduced", false),
             prefs.getFloat("overlaySize", 22f),
             prefs.getFloat("overlayAlpha", .85f).takeIf { it.isFinite() }?.coerceIn(0f, 1f) ?: .85f,
@@ -176,7 +177,7 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
             prefs.getBoolean("consent", false),
             prefs.getString("gateway", "")!!,
             prefs.getString("playbackApp", "")!!,
-            prefs.getString("background", "color")!!,
+            prefs.getString("background", "cover")!!,
             prefs.getBoolean("autoTranslate", false),
             prefs.getBoolean("autoSources", true),
             prefs.getFloat("coverBlur", 8f).takeIf { it.isFinite() }?.coerceIn(0f, 24f) ?: 8f,
@@ -822,25 +823,10 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
             "请先配置翻译服务，并确认发送歌词及可能产生的费用"
         }
         val result = l.lines.toMutableList()
-        val batches = mutableListOf<List<Int>>()
-        var batch = mutableListOf<Int>()
-        var size = 0
-        for (index in
-            l.lines.indices.filter {
-                l.lines[it].translation.isBlank() && needsChineseTranslation(l.lines[it].text)
-            }) {
-            val length = l.lines[index].text.length
-            require(length <= 4000) { "单行超过 4000 字符，暂不自动翻译" }
-            if (size + length > 4000 || batch.size >= 30) {
-                batches += batch
-                batch = mutableListOf()
-                size = 0
-            }
-            batch += index
-            size += length
+        val batch = l.lines.indices.filter {
+            l.lines[it].translation.isBlank() && needsChineseTranslation(l.lines[it].text)
         }
-        if (batch.isNotEmpty()) batches += batch
-        for (batch in batches) {
+        if (batch.isNotEmpty()) {
             val current = state.value
             if (
                 current.playback.track?.key != s.playback.track?.key ||
@@ -870,7 +856,7 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
                     p.translationUrl.trimEnd('/') + "/chat/completions",
                     body,
                     secrets.read(),
-                    readTimeoutMs = 45000,
+                    readTimeoutMs = 60000,
                 )
             val decoded = TranslationProtocol.decode(response, batch, l.lines, p.model)
             for (id in batch) result[id] = decoded[id]

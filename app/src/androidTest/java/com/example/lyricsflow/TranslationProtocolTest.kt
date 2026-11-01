@@ -71,6 +71,27 @@ class TranslationProtocolTest {
     }
 
     @Test
+    fun wholeSongRequestAndResponseHaveNoAppLineOrCharacterBatchCap() {
+        val song = (0 until 120).map { Line(it * 1000L, (it + 1) * 1000L, "A long original lyric ".repeat(8)) } +
+            Line(120_000, 121_000, "A single long lyric ".repeat(300))
+        val ids = song.indices.toList()
+        val request = TranslationProtocol.request("https://api.deepseek.com", "deepseek-flash", ids, song)
+        val prompt = request.getJSONArray("messages").getJSONObject(0).getString("content")
+        val sent = JSONArray(prompt.substringAfter('\n'))
+        assertEquals(121, sent.length())
+        assertEquals(song.last().text, sent.getJSONObject(120).getString("text"))
+        assertTrue(request.getLong("max_tokens") > 8192)
+        assertFalse(TranslationProtocol.request("https://example.com/v1", "user-model", ids, song).has("max_tokens"))
+        val translations = JSONArray().apply {
+            ids.reversed().forEach { put(JSONObject().put("id", it).put("text", if (it == 120) "长".repeat(10_001) else "译文 $it")) }
+        }
+        val decoded = TranslationProtocol.decode(response(JSONObject().put("lines", translations).toString()), ids, song, "test")
+        assertEquals(121, decoded.size)
+        assertEquals(10_001, decoded.last().translation.length)
+        assertEquals(song.map { it.text to it.start }, decoded.map { it.text to it.start })
+    }
+
+    @Test
     fun rejectsTruncatedOrInterruptedCompletion() {
         for (finish in listOf("length", "content_filter", "aborted", "tool_calls")) assertThrows(
             IllegalArgumentException::class.java

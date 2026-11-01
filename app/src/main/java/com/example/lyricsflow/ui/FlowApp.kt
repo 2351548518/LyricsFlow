@@ -12,6 +12,13 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
@@ -79,6 +86,11 @@ fun FlowApp(graph: AppGraph) {
     val accent = scheme.onSurface
     var page by rememberSaveable { mutableStateOf("home") }
     var sheet by rememberSaveable { mutableStateOf("") }
+    var showUpdate by rememberSaveable { mutableStateOf(false) }
+    var fullscreenLyrics by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(s.playback.track) {
+        if (s.playback.track == null) fullscreenLyrics = false
+    }
     var pendingImport by remember { mutableStateOf("lyrics") }
     var pendingBytes by remember { mutableStateOf(ByteArray(0)) }
     var pendingStyle by remember { mutableStateOf<StyleSpec?>(null) }
@@ -213,6 +225,7 @@ fun FlowApp(graph: AppGraph) {
     }
     fun back() {
         if (sheet.isNotEmpty()) sheet = ""
+        else if (fullscreenLyrics && page == "home") fullscreenLyrics = false
         else
             page =
                 if (
@@ -231,7 +244,7 @@ fun FlowApp(graph: AppGraph) {
                     "my"
                 else "home"
     }
-    BackHandler(enabled = sheet.isNotEmpty() || page != "home") { back() }
+    BackHandler(enabled = sheet.isNotEmpty() || page != "home" || fullscreenLyrics) { back() }
     CompositionLocalProvider(
         LocalCoverAverage provides average,
         LocalMeshSwatches provides swatches,
@@ -259,7 +272,16 @@ fun FlowApp(graph: AppGraph) {
                 Scaffold(
                     containerColor = Color.Transparent,
                     snackbarHost = { SnackbarHost(snack) },
-                    bottomBar = { if (page == "home" || page == "my") Dock(page) { page = it } },
+                    bottomBar = {
+                        if (page == "home" || page == "my") {
+                            LyricControlsReveal(!fullscreenLyrics, s.prefs.reduced, Alignment.Bottom) {
+                                Dock(page) {
+                                    fullscreenLyrics = false
+                                    page = it
+                                }
+                            }
+                        }
+                    },
                     modifier = Modifier.safeDrawingPadding(),
                 ) { pad ->
                     Column(
@@ -301,6 +323,8 @@ fun FlowApp(graph: AppGraph) {
                                     },
                                     { overlay() },
                                     { sheet = "delay" },
+                                    fullscreenLyrics,
+                                    { fullscreenLyrics = !fullscreenLyrics },
                                 )
                             "comments" ->
                                 CommentsScreen(
@@ -323,6 +347,10 @@ fun FlowApp(graph: AppGraph) {
                                     },
                                     githubLogin = github.login,
                                     githubLastSync = github.lastSync,
+                                    checkUpdate = {
+                                        showUpdate = true
+                                        graph.updates.check()
+                                    },
                                 )
                             "github" -> GitHubSettings(graph.github, ::output)
                             "library" ->
@@ -388,6 +416,7 @@ fun FlowApp(graph: AppGraph) {
                     }
                 }
             }
+            if (showUpdate) UpdateHost(graph.updates) { showUpdate = false }
             when (sheet) {
                 "search" ->
                     SearchSheet(graph, s.playback.track, { sheet = "" }) { t ->
@@ -799,6 +828,22 @@ fun Glyph(kind: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
+private fun LyricControlsReveal(
+    visible: Boolean,
+    reduced: Boolean,
+    anchor: Alignment.Vertical = Alignment.Top,
+    content: @Composable () -> Unit,
+) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = expandVertically(tween(if (reduced) 0 else 380), expandFrom = anchor) +
+            fadeIn(tween(if (reduced) 0 else 220)),
+        exit = shrinkVertically(tween(if (reduced) 0 else 380), shrinkTowards = anchor) +
+            fadeOut(tween(if (reduced) 0 else 140)),
+    ) { content() }
+}
+
+@Composable
 private fun Home(
     s: ScreenState,
     graph: AppGraph,
@@ -808,6 +853,8 @@ private fun Home(
     comments: () -> Unit,
     overlay: () -> Unit,
     delay: () -> Unit,
+    fullscreen: Boolean,
+    toggleFullscreen: () -> Unit,
 ) {
     val t = s.playback.track
     if (t == null) {
@@ -871,7 +918,9 @@ private fun Home(
             graph.demoPlay()
         }
     }
-    Column(Modifier.fillMaxSize()) {
+    Column(
+        Modifier.fillMaxSize().testTag(if (fullscreen) "fullscreen-lyrics" else "home-lyrics")
+    ) {
         Spacer(Modifier.height(16.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
@@ -879,12 +928,20 @@ private fun Home(
                 Spacer(Modifier.height(7.dp))
                 TrackMarquee(t.artist.ifBlank { "未知歌手" }, s.prefs.reduced, title = false)
             }
-            IconButton(
-                onClick = { graph.saveCurrent() },
-                enabled = s.lyrics != null,
-                modifier = Modifier.semantics { contentDescription = "保存当前歌词" },
+            AnimatedVisibility(
+                visible = !fullscreen,
+                enter = expandHorizontally(tween(if (s.prefs.reduced) 0 else 380)) +
+                    fadeIn(tween(if (s.prefs.reduced) 0 else 220)),
+                exit = shrinkHorizontally(tween(if (s.prefs.reduced) 0 else 380)) +
+                    fadeOut(tween(if (s.prefs.reduced) 0 else 140)),
             ) {
-                Glyph(if (s.saved) "check" else "heart")
+                IconButton(
+                    onClick = { graph.saveCurrent() },
+                    enabled = s.lyrics != null,
+                    modifier = Modifier.semantics { contentDescription = "保存当前歌词" },
+                ) {
+                    Glyph(if (s.saved) "check" else "heart")
+                }
             }
         }
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().padding(top = 14.dp, bottom = 8.dp)) {
@@ -895,7 +952,15 @@ private fun Home(
                 horizontalArrangement = Arrangement.spacedBy(60.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Box(Modifier.weight(1f).fillMaxHeight()) {
+                Box(
+                    Modifier.weight(1f).fillMaxHeight()
+                        .testTag("lyric-viewport")
+                        .then(
+                            if (s.lyrics?.lines?.isNotEmpty() == true)
+                                Modifier.lyricViewportTap(fullscreen, toggleFullscreen)
+                            else Modifier
+                        )
+                ) {
                     LyricBackground(s, bleed = if (wide) 0.dp else 24.dp) {
                         if (s.lyrics != null && s.lyrics.lines.isNotEmpty())
                             key(t.key) { LyricStage(s, style, active, lyricPosition) }
@@ -916,11 +981,11 @@ private fun Home(
                                     textAlign = TextAlign.Center,
                                     color = LocalLyricInk.current.color,
                                 )
-                                FlowOutlinedButton(onClick = search) { Text("歌曲匹配") }
+                                if (!fullscreen) FlowOutlinedButton(onClick = search) { Text("歌曲匹配") }
                             }
                     }
                 }
-                if (wide)
+                if (wide && !fullscreen)
                     Column(
                         Modifier.weight(.75f).fillMaxHeight(),
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -949,119 +1014,123 @@ private fun Home(
                     }
             }
         }
-        if (s.demo || s.browsing)
-            Text(
-                if (s.demo) "预览 · 自有示例 · 不播放音频" else "手动浏览 · 未播放音频",
-                fontSize = 10.sp,
-                color = MaterialTheme.colorScheme.primary,
-            )
-        else
-            Text(
-                "播放来自 ${playbackAppName(s.playback.packageName)}",
-                fontSize = 10.sp,
-                color = MaterialTheme.colorScheme.primary,
-            )
-        if (s.matchNotice.isNotBlank() && !s.demo && !s.browsing) {
-            Text(
-                s.matchNotice,
-                Modifier.padding(top = 4.dp),
-                fontSize = 11.sp,
-                lineHeight = 16.sp,
-                color = MaterialTheme.colorScheme.primary,
-            )
-            if (!s.busy && s.requestedSource != null)
-                TextButton(onClick = search, contentPadding = PaddingValues(0.dp)) {
-                    Text("在 ${s.requestedSource.label} 中匹配", fontSize = 12.sp)
-                }
-        }
-        if (
-            s.prefs.translation &&
-                s.lyrics?.lines?.any { needsChineseTranslation(it.text) } == true &&
-                s.lyrics.lines.none { it.translation.isNotBlank() }
-        )
-            Text(
-                "当前来源暂无可用译文，可切换来源或配置在线翻译。",
-                fontSize = 10.sp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = .6f),
-            )
-        BoxWithConstraints(Modifier.fillMaxWidth()) {
-            val compact = maxWidth < 380.dp
-            Row(
-                Modifier.fillMaxWidth().padding(top = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(2.dp),
-            ) {
-                TextButton(onClick = source, contentPadding = PaddingValues(horizontal = 8.dp)) {
-                    Box(
-                        Modifier.size(5.dp)
-                            .background(MaterialTheme.colorScheme.primary, CircleShape)
-                    )
-                    Spacer(Modifier.width(6.dp))
-                    Text(s.source.label, fontSize = 12.sp)
-                }
-                IconButton(
-                    onClick = { graph.refresh() },
-                    enabled = !s.busy && !s.demo,
-                    modifier = Modifier.size(44.dp).semantics { contentDescription = "刷新当前来源歌词" },
-                ) {
-                    Glyph("refresh", Modifier.size(18.dp))
-                }
-                IconButton(
-                    onClick = {
-                        graph.preferences(s.prefs.copy(translation = !s.prefs.translation))
-                    },
-                    modifier = Modifier.size(44.dp).semantics { contentDescription = "显示或隐藏译文" },
-                ) {
+        LyricControlsReveal(!fullscreen, s.prefs.reduced) {
+            Column {
+                if (s.demo || s.browsing)
                     Text(
-                        "译",
-                        fontSize = 16.sp,
-                        color =
-                            if (s.prefs.translation) MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.onSurface.copy(alpha = .3f),
+                        if (s.demo) "预览 · 自有示例 · 不播放音频" else "手动浏览 · 未播放音频",
+                        fontSize = 10.sp,
+                        color = MaterialTheme.colorScheme.primary,
                     )
+                else
+                    Text(
+                        "播放来自 ${playbackAppName(s.playback.packageName)}",
+                        fontSize = 10.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                if (s.matchNotice.isNotBlank() && !s.demo && !s.browsing) {
+                    Text(
+                        s.matchNotice,
+                        Modifier.padding(top = 4.dp),
+                        fontSize = 11.sp,
+                        lineHeight = 16.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                    if (!s.busy && s.requestedSource != null)
+                        TextButton(onClick = search, contentPadding = PaddingValues(0.dp)) {
+                            Text("在 ${s.requestedSource.label} 中匹配", fontSize = 12.sp)
+                        }
                 }
-                IconButton(
-                    onClick = overlay,
-                    modifier =
-                        Modifier.size(44.dp).semantics {
-                            contentDescription = if (s.overlay) "关闭悬浮窗" else "开启悬浮窗"
-                        },
-                ) {
-                    Glyph("window", Modifier.size(19.dp))
-                }
-                Spacer(Modifier.weight(1f))
-                FilledTonalButton(
-                    onClick = comments,
-                    modifier = Modifier.semantics { contentDescription = "歌曲评论 · 共鸣" },
-                    contentPadding = PaddingValues(horizontal = if (compact) 10.dp else 14.dp),
-                    colors =
-                        ButtonDefaults.filledTonalButtonColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        ),
-                ) {
-                    Glyph("comment", Modifier.size(17.dp))
-                    if (!compact) {
-                        Spacer(Modifier.width(6.dp))
-                        Text("共鸣", fontSize = 12.sp, maxLines = 1)
+                if (
+                    s.prefs.translation &&
+                        s.lyrics?.lines?.any { needsChineseTranslation(it.text) } == true &&
+                        s.lyrics.lines.none { it.translation.isNotBlank() }
+                )
+                    Text(
+                        "当前来源暂无可用译文，可切换来源或配置在线翻译。",
+                        fontSize = 10.sp,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = .6f),
+                    )
+                BoxWithConstraints(Modifier.fillMaxWidth()) {
+                    val compact = maxWidth < 380.dp
+                    Row(
+                        Modifier.fillMaxWidth().padding(top = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(2.dp),
+                    ) {
+                        TextButton(onClick = source, contentPadding = PaddingValues(horizontal = 8.dp)) {
+                            Box(
+                                Modifier.size(5.dp)
+                                    .background(MaterialTheme.colorScheme.primary, CircleShape)
+                            )
+                            Spacer(Modifier.width(6.dp))
+                            Text(s.source.label, fontSize = 12.sp)
+                        }
+                          IconButton(
+                            onClick = { graph.refresh() },
+                            enabled = !s.busy && !s.demo,
+                            modifier = Modifier.size(44.dp).semantics { contentDescription = "刷新当前来源歌词" },
+                        ) {
+                            Glyph("refresh", Modifier.size(18.dp))
+                        }
+                          IconButton(
+                            onClick = {
+                                graph.preferences(s.prefs.copy(translation = !s.prefs.translation))
+                            },
+                            modifier = Modifier.size(44.dp).semantics { contentDescription = "显示或隐藏译文" },
+                        ) {
+                            Text(
+                                "译",
+                                fontSize = 16.sp,
+                                color =
+                                    if (s.prefs.translation) MaterialTheme.colorScheme.primary
+                                    else MaterialTheme.colorScheme.onSurface.copy(alpha = .3f),
+                            )
+                        }
+                          IconButton(
+                            onClick = overlay,
+                            modifier =
+                                Modifier.size(44.dp).semantics {
+                                    contentDescription = if (s.overlay) "关闭悬浮窗" else "开启悬浮窗"
+                                },
+                        ) {
+                            Glyph("window", Modifier.size(19.dp))
+                        }
+                        Spacer(Modifier.weight(1f))
+                        FilledTonalButton(
+                            onClick = comments,
+                            modifier = Modifier.semantics { contentDescription = "歌曲评论 · 共鸣" },
+                            contentPadding = PaddingValues(horizontal = if (compact) 10.dp else 14.dp),
+                            colors =
+                                ButtonDefaults.filledTonalButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                ),
+                        ) {
+                            Glyph("comment", Modifier.size(17.dp))
+                            if (!compact) {
+                                Spacer(Modifier.width(6.dp))
+                                Text("共鸣", fontSize = 12.sp, maxLines = 1)
+                            }
+                        }
                     }
                 }
-            }
-        }
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            TextButton(onClick = delay, contentPadding = PaddingValues(4.dp)) {
-                Text(if (s.delay == 0L) "时间校准" else "${s.delay} ms", fontSize = 11.sp)
-            }
-            Spacer(Modifier.weight(1f))
-            TextButton(onClick = search, contentPadding = PaddingValues(4.dp)) {
-                Text("歌曲匹配", fontSize = 11.sp)
-            }
-            if (s.demo || s.browsing)
-                TextButton(onClick = { graph.live() }, contentPadding = PaddingValues(4.dp)) {
-                    Text("返回实时", fontSize = 11.sp)
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    TextButton(onClick = delay, contentPadding = PaddingValues(4.dp)) {
+                        Text(if (s.delay == 0L) "时间校准" else "${s.delay} ms", fontSize = 11.sp)
+                    }
+                    Spacer(Modifier.weight(1f))
+                    TextButton(onClick = search, contentPadding = PaddingValues(4.dp)) {
+                        Text("歌曲匹配", fontSize = 11.sp)
+                    }
+                    if (s.demo || s.browsing)
+                        TextButton(onClick = { graph.live() }, contentPadding = PaddingValues(4.dp)) {
+                            Text("返回实时", fontSize = 11.sp)
+                        }
                 }
+                PlaybackFooter(s, graph, t, position)
+            }
         }
-        PlaybackFooter(s, graph, t, position)
     }
 }
 

@@ -6,10 +6,10 @@
 
 为 Spotify 等本机音乐 App 带来同步歌词、中文翻译与音乐评论。
 
-[![Release](https://img.shields.io/github/v/release/2351548518/LyricsFlow?style=flat-square&color=3273f4&cacheSeconds=300&v=1.0.1)](https://github.com/2351548518/LyricsFlow/releases/latest)
+[![Release](https://img.shields.io/github/v/release/2351548518/LyricsFlow?style=flat-square&color=3273f4&cacheSeconds=300&v=1.0.2)](https://github.com/2351548518/LyricsFlow/releases/latest)
 ![Android](https://img.shields.io/badge/Android-7.0%2B-3273f4?style=flat-square)
 ![UI](https://img.shields.io/badge/UI-Jetpack_Compose-607d8b?style=flat-square)
-[![Downloads](https://img.shields.io/github/downloads/2351548518/LyricsFlow/total?style=flat-square&color=3273f4&cacheSeconds=300&v=1.0.1)](https://github.com/2351548518/LyricsFlow/releases)
+[![Downloads](https://img.shields.io/github/downloads/2351548518/LyricsFlow/total?style=flat-square&color=3273f4&cacheSeconds=300&v=1.0.2)](https://github.com/2351548518/LyricsFlow/releases)
 
 [下载正式版](https://github.com/2351548518/LyricsFlow/releases/latest) · [快速开始](#快速开始) · [界面预览](#界面预览) · [反馈问题](https://github.com/2351548518/LyricsFlow/issues)
 
@@ -23,11 +23,13 @@ LyricsFlow 读取本机播放器的曲目与进度，把歌词放在你正在听
 | --- | --- |
 | **四种歌词来源** | QQ 音乐 → 网易云 → AMLL → LRCLIB 自动匹配；可手动搜索、绑定具体记录，记住每首歌的选择 |
 | **双语与逐字歌词** | 原文、中文译文、来源提供的罗马音；当前行突出显示，支持已有真实时间戳的逐字高亮与时间校准 |
-| **在线翻译** | 接入自己的 OpenAI 兼容服务、API Key 与模型，按需补充缺失译文；应用内每日不限量，服务费用由对应提供者收取 |
+| **全屏歌词** | 轻点歌词展开阅读，只保留歌名、歌手和歌词；原背景与同步状态保持，支持展开/返回动画、再次轻点或系统返回退出 |
+| **在线翻译** | 接入自己的 OpenAI 兼容服务、API Key 与模型，一次提交整首歌的缺失译文；应用内不按行数或字符数拆批，每日不限量，服务费用由对应提供者收取 |
 | **音乐评论** | 阅读 QQ 音乐、网易云的热门与最新评论；评论与歌词可独立匹配，不支持发布或点赞 |
 | **随封面变换的主题** | 封面取色、动态网状渐变、中心与边缘柔化过渡；支持调节模糊程度、字号、配色和声明式主题文件 |
 | **桌面悬浮歌词** | 原文与译文同色；自定义字体颜色、字号、0%–100% 背景不透明度，支持拖动、调整宽度和锁定穿透 |
 | **本地与 GitHub 数据** | 收藏歌词、导入导出、本地备份；可选 GitHub 登录，将主题、配置、歌词、逐曲选择和独立评论绑定手动同步到专用私有仓库 |
+| **应用内更新** | 在“我的 → 检查更新”检查 GitHub 正式版，有更新时自动下载、校验并打开系统安装界面 |
 
 AMLL、LRCLIB 的收录范围和译文情况取决于社区记录；没有真实逐字时间戳时按行同步。
 
@@ -63,10 +65,11 @@ AMLL、LRCLIB 的收录范围和译文情况取决于社区记录；没有真实
 
 ## 快速开始
 
-1. 从 [GitHub Releases](https://github.com/2351548518/LyricsFlow/releases/latest) 下载最新的 `LyricsFlow-v1.0.1.apk` 并安装，支持 **Android 7.0 / API 24 及以上**。
+1. 从 [GitHub Releases](https://github.com/2351548518/LyricsFlow/releases/latest) 下载最新的 `LyricsFlow-v<版本号>.apk` 并安装，支持 **Android 7.0 / API 24 及以上**。
 2. 在“我的 → 播放与悬浮窗”授予**通知使用权**，然后在 Spotify 等支持的音乐 App 中播放歌曲。
 3. 返回首页查看歌词。若版本或歌曲不符，点击来源按钮或“歌曲匹配”，搜索并确认记录；选择会随歌曲保存。
 4. 需要悬浮歌词时，授予“显示在其他应用上层”权限并主动开启；翻译与 GitHub 同步均可按需配置。
+5. 在“我的 → 检查更新”获取后续正式版。无需登录 GitHub；下载完成后按系统提示允许 LyricsFlow 安装应用，再确认更新。支持取消、失败重试与重新打开安装界面。
 
 **从开发调试版迁移：** 正式版使用独立签名，不能直接覆盖旧调试版。请先在旧版导出本地备份，或完成 GitHub 同步，再卸载旧版、安装正式版并恢复。API Key、GitHub 登录凭证和系统权限需要重新配置。后续正式版保留同一签名，可覆盖升级。
 
@@ -119,7 +122,8 @@ android build :app:assembleDebug -- :app:assembleDebugAndroidTest :app:testDebug
 | [验收记录](docs/android-qa/README.md) | 真机、模拟器、来源与数据验证证据 |
 | [主题 Schema](docs/lyricsflow.style.schema.json) | 声明式主题格式 |
 | [品牌资源](docs/branding/README.md) | SVG Logo、PNG 与 Android 图标 |
-| [v1.0.1 发行说明](docs/releases/v1.0.1.md) | 最新图标配色与覆盖升级说明 |
+| [v1.0.2 发行说明](docs/releases/v1.0.2.md) | 全屏歌词、应用内更新、设置布局与整首翻译 |
+| [v1.0.1 发行说明](docs/releases/v1.0.1.md) | 图标配色与覆盖升级说明 |
 | [v1.0.0 发行说明](docs/releases/v1.0.0.md) | 首版功能与安装说明 |
 
 ## 致谢与参考

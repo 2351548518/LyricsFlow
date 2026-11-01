@@ -144,15 +144,7 @@ internal fun Toggle(
 
 @Composable
 private fun Choice(labels: List<String>, selected: Int, change: (Int) -> Unit) {
-    FlowRow(
-        Modifier.fillMaxWidth().selectableGroup(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        labels.forEachIndexed { i, l ->
-            FlowChoiceChip(l, selected == i) { change(i) }
-        }
-    }
+    FlowChoiceRow(labels, selected, change)
 }
 
 @Composable
@@ -163,6 +155,7 @@ fun MyScreen(
     live: () -> Unit,
     githubLogin: String = "",
     githubLastSync: Long = 0,
+    checkUpdate: () -> Unit = {},
 ) {
     val syncLabel =
         remember(githubLogin, githubLastSync) {
@@ -231,6 +224,7 @@ fun MyScreen(
             }
         }
         item { SettingRow("导入、导出与备份", "本地文件与数据管理") { navigate("data") } }
+        item { SettingRow("检查更新", "当前版本 v${com.example.lyricsflow.BuildConfig.VERSION_NAME}", checkUpdate) }
         item { SettingRow("帮助与隐私", "权限说明、接口与兼容边界") { navigate("help") } }
         item {
             SettingRow(if (s.demo || s.browsing) "返回实时聆听" else "进入交互预览", "原创示例，不播放音频") {
@@ -795,8 +789,9 @@ fun Appearance(
             graph.preferences(s.prefs.copy(romanization = it))
         }
         Section("色彩与显示")
-        Choice(listOf("苔绿", "陶土", "雾紫", "海蓝", "跟随封面"), s.prefs.palette) {
-            graph.preferences(s.prefs.copy(palette = it))
+        val paletteValues = listOf(4, 0, 1, 2, 3)
+        Choice(listOf("跟随封面", "苔绿", "陶土", "雾紫", "海蓝"), paletteValues.indexOf(s.prefs.palette)) {
+            graph.preferences(s.prefs.copy(palette = paletteValues[it]))
         }
         Text(
             if (s.prefs.palette == 4 && s.playback.artwork == null) "暂无歌曲封面，暂用柔和海蓝。播放时自动更新。"
@@ -816,15 +811,14 @@ fun Appearance(
             graph.preferences(s.prefs.copy(coverMesh = it))
         }
         Section("歌词背景")
+        val backgroundValues = listOf("cover", "color", "custom", "mesh")
         Choice(
-            listOf("纯色", "专辑封面", "自定义图片", "网状渐变"),
-            listOf("color", "cover", "custom", "mesh").indexOf(s.prefs.background),
+            listOf("专辑封面", "纯色", "自定义图片", "网状渐变"),
+            backgroundValues.indexOf(s.prefs.background),
         ) {
-            if (it == 2) background()
-            else
-                graph.preferences(
-                    s.prefs.copy(background = listOf("color", "cover", "custom", "mesh")[it])
-                )
+            val value = backgroundValues[it]
+            if (value == "custom") background()
+            else graph.preferences(s.prefs.copy(background = value))
         }
         Text(
             "封面模糊程度 · ${s.prefs.coverBlur.roundToInt()}",
@@ -1035,7 +1029,7 @@ fun TranslationSettings(s: ScreenState, graph: AppGraph) {
             Text("清除 API Key 并撤回同意")
         }
         Text(
-            "授权后可自动翻译缺失译文，来源已有译文时保留。每批最多 30 行／4,000 字符，失败不自动无限重试。模型响应必须返回完整且不重复的行 ID。",
+            "一次提交当前歌曲的全部缺失译文，保留来源已有译文。应用不按行数或字符数拆批，实际容量由所选模型决定；失败不自动无限重试。模型响应必须返回完整且不重复的行 ID。",
             fontSize = 12.sp,
             lineHeight = 20.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -1071,7 +1065,8 @@ fun SourceSettings(s: ScreenState, graph: AppGraph, search: () -> Unit) {
                     graph.preferences(s.prefs.copy(gateway = url.trim().trimEnd('/')))
                     graph.message("来源配置已保存")
                 } else graph.message("仅支持 HTTPS 服务")
-            }
+            },
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Text("保存来源设置")
         }
@@ -1164,7 +1159,11 @@ fun Library(graph: AppGraph, open: (Track, Lyrics) -> Unit) {
                         open(t, l)
                     }
                 }
-                TextButton(onClick = { deleting = t }) { Text("删除", fontSize = 12.sp) }
+                FlowOutlinedButton(
+                    onClick = { deleting = t },
+                    modifier = Modifier.padding(start = 8.dp, bottom = 8.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
+                ) { Text("删除", fontSize = 12.sp) }
             }
         }
     }
