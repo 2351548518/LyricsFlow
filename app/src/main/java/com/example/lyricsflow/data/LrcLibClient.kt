@@ -115,7 +115,23 @@ internal class LrcLibClient(
 ) {
     private val lock = Mutex()
     private var retryAt = 0L
-    private val known = java.util.concurrent.ConcurrentHashMap<String, JSONObject>()
+    // Only the display hint is needed after parsing. Retaining hundreds of full lyric JSON
+    // documents duplicates the disk cache and can keep megabytes alive between searches.
+    private val known = java.util.Collections.synchronizedMap(
+        object : LinkedHashMap<String, String>(64, .75f, true) {
+            override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, String>?) = size > 600
+        }
+    )
+
+    private fun remember(row: JSONObject) {
+        known[row.optString("id")] = when {
+            row.optBoolean("instrumental") -> "纯音乐"
+            hasKana(text(row, "syncedLyrics")) -> "含日文同步原文"
+            hasKana(text(row, "plainLyrics")) -> "含日文原文（无同步时间）"
+            latinOnly(text(row)) -> "拉丁字母歌词（可能为罗马音）"
+            else -> ""
+        }
+    }
 
     companion object {
         const val REVISION = 3
@@ -179,12 +195,11 @@ internal class LrcLibClient(
             rows.forEach { row ->
                 val id = row.optString("id")
                 if (id.matches(Regex("\\d{1,20}"))) {
-                    known[id] = row
+                    remember(row)
                     // Search responses already contain lyrics: avoid a second /get/<id> request.
                     if (!stale) write("/api/get/$id", row.toString())
                 }
             }
-            if (known.size > 600) known.keys.take(known.size - 400).forEach { known.remove(it) }
             LrcResult(rows, stale)
         }
 
@@ -228,7 +243,7 @@ internal class LrcLibClient(
 
     suspend fun record(id: String, refresh: Boolean = false): JSONObject {
         require(id.matches(Regex("\\d{1,20}"))) { "请输入 LRCLIB 数字记录 ID" }
-        return fetch("/api/get/$id", refresh).first.also { known[id] = it }
+        return fetch("/api/get/$id", refresh).first.also(::remember)
     }
 
     fun track(r: JSONObject) =
@@ -241,18 +256,7 @@ internal class LrcLibClient(
             r.optString("id"),
         )
 
-    fun hint(t: Track): String =
-        known[t.sourceId]
-            ?.let {
-                when {
-                    it.optBoolean("instrumental") -> "纯音乐"
-                    hasKana(text(it, "syncedLyrics")) -> "含日文同步原文"
-                    hasKana(text(it, "plainLyrics")) -> "含日文原文（无同步时间）"
-                    latinOnly(text(it)) -> "拉丁字母歌词（可能为罗马音）"
-                    else -> ""
-                }
-            }
-            .orEmpty()
+    fun hint(t: Track): String = known[t.sourceId].orEmpty()
 
     fun preferOriginal(current: Track, rows: List<JSONObject>): List<Track> {
         val tracks = rows.map(::track)

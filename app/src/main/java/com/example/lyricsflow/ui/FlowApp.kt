@@ -1200,7 +1200,7 @@ private fun PlaybackFooter(s: ScreenState, graph: AppGraph, t: Track, clock: Sta
     }
 }
 
-private fun time(ms: Long) =
+internal fun time(ms: Long) =
     "%02d:%02d".format(ms.coerceAtLeast(0) / 60000, ms.coerceAtLeast(0) / 1000 % 60)
 
 @Composable

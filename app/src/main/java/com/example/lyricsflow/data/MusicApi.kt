@@ -1,9 +1,11 @@
 package com.example.lyricsflow.data
 
 import com.example.lyricsflow.core.*
-import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -11,7 +13,8 @@ import org.json.JSONObject
 
 class ApiFailure(message: String) : Exception(message)
 
-class MusicApi(private val store: Store) : LyricsLookup {
+class MusicApi internal constructor(private val store: Store, private val http: MusicHttp) : LyricsLookup {
+    constructor(store: Store) : this(store, MusicHttp())
     var neteaseGateway = ""
     internal suspend fun trimMemory() = amll.trimMemory()
     private val amll =
@@ -45,54 +48,40 @@ class MusicApi(private val store: Store) : LyricsLookup {
         cacheMaxAgeMs: Long = 6 * 60 * 60 * 1000L,
     ): JSONObject =
         withContext(Dispatchers.IO) {
-            require(URL(url).protocol == "https") { "服务地址必须使用 HTTPS" }
-            val host = URL(url).host
-            val remaining = (cooldowns[host] ?: 0) - System.currentTimeMillis()
-            if (remaining > 0) throw ApiFailure("服务要求限流等待，请在 ${(remaining/1000)+1} 秒后重试")
+            val address = URL(url)
+            require(address.protocol == "https") { "服务地址必须使用 HTTPS" }
+            val host = address.host
             val cacheId = digest(url + (body?.toString().orEmpty()))
+            // A rate limit only blocks new network requests, not a usable local response.
             if (bearer == null && !refresh)
                 store.get("cache", cacheId, cacheMaxAgeMs)?.let {
                     return@withContext JSONObject(it)
                 }
-            val c = URL(url).openConnection() as HttpURLConnection
-            c.connectTimeout = 5000
-            c.readTimeout = readTimeoutMs.coerceIn(1000, 60000)
-            c.instanceFollowRedirects = false
-            c.setRequestProperty("User-Agent", "LyricsFlow/1.0 Android")
-            c.setRequestProperty("Accept", "application/json")
-            if (URL(url).host.endsWith("qq.com"))
-                c.setRequestProperty("Referer", "https://y.qq.com/")
-            if (URL(url).host == "music.163.com")
-                c.setRequestProperty("Referer", "https://music.163.com/")
-            if (bearer != null) c.setRequestProperty("Authorization", "Bearer $bearer")
+            val remaining = (cooldowns[host] ?: 0) - System.currentTimeMillis()
+            if (remaining > 0) throw ApiFailure("服务要求限流等待，请在 ${(remaining/1000)+1} 秒后重试")
             try {
-                if (body != null) {
-                    c.requestMethod = "POST"
-                    c.doOutput = true
-                    c.setRequestProperty("Content-Type", "application/json")
-                    c.outputStream.use { it.write(body.toString().toByteArray()) }
+                currentCoroutineContext().ensureActive()
+                val response = http.send(address, body?.toString(), bearer, readTimeoutMs)
+                currentCoroutineContext().ensureActive()
+                if (response.status == 429) {
+                    val wait = retryAfter(response.retryAfter).takeIf { it > 0 } ?: 60_000L
+                    cooldowns[host] = System.currentTimeMillis() + wait
+                    throw ApiFailure("请求过于频繁，请在 ${(wait + 999) / 1000} 秒后重试")
                 }
-                val code = c.responseCode
-                if (code == 429) {
-                    val retry = c.getHeaderField("Retry-After")
-                    val seconds = retry?.toLongOrNull()?.coerceIn(1, 604800) ?: 60
-                    cooldowns[host] = System.currentTimeMillis() + seconds * 1000
-                    throw ApiFailure("请求过于频繁，请在 $seconds 秒后重试")
-                }
-                if (code !in 200..299) throw ApiFailure("服务暂不可用（HTTP $code）")
-                val bytes = c.inputStream.use { it.readBytesLimited(4_000_000) }
-                val raw = String(bytes, Charsets.UTF_8).trim()
+                if (response.status !in 200..299) throw ApiFailure("服务暂不可用（HTTP ${response.status}）")
+                val raw = String(response.bytes, Charsets.UTF_8).trim()
                 val json =
                     if (raw.startsWith("[")) JSONObject().put("items", jsonArray(raw))
                     else jsonObject(raw)
+                currentCoroutineContext().ensureActive()
                 if (bearer == null) store.put("cache", cacheId, json.toString())
                 json
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: ApiFailure) {
                 throw e
             } catch (e: Exception) {
-                throw ApiFailure("${URL(url).host} 连接或响应失败（${e.javaClass.simpleName}），请稍后重试")
-            } finally {
-                c.disconnect()
+                throw ApiFailure("$host 连接或响应失败（${e.javaClass.simpleName}），请稍后重试")
             }
         }
 

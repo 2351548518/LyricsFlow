@@ -551,7 +551,7 @@ fun SearchSheet(
                 rows.forEach { t ->
                     SettingRow(
                         t.title,
-                        "${t.artist} · ${t.album}\n${t.duration/1000} 秒 · ${t.provider.label}" +
+                        "${t.artist} · ${t.album}\n${time(t.duration)} · ${t.provider.label}" +
                             graph.api.lyricHint(t).let { if (it.isBlank()) "" else "\n$it" },
                     ) {
                         select(t)
