@@ -23,10 +23,10 @@ class SongSelectionUiTest {
             f.play(t)
             f.main { f.graph.preferences(f.graph.state.value.prefs.copy(fontSize = 30f)) }
             compose.activityRule.scenario.onActivity { it.setContent { FlowApp(f.graph) } }
-            compose.onNodeWithContentDescription("刷新当前来源歌词").assertIsDisplayed()
+            compose.onNodeWithContentDescription("刷新当前来源歌词与缺失封面").assertIsDisplayed()
             compose.onNodeWithText("QQ 音乐").performClick()
             compose.onNodeWithText("重新自动匹配").assertIsDisplayed()
-            compose.onNodeWithText("刷新只重新获取当前来源的当前记录，不更换来源。重新自动匹配成功后会解除本曲的固定选择。").assertExists()
+            compose.onNodeWithText("刷新会重新获取当前来源的当前记录，并补取缺失封面，不更换来源。重新自动匹配成功后会解除本曲的固定选择。").assertExists()
             capture("source-actions")
             f.backend.failures += Provider.LRCLIB
             compose.onNodeWithText("LRCLIB").performClick()

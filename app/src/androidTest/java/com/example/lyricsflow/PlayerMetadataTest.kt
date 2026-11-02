@@ -30,9 +30,9 @@ class PlayerMetadataTest {
     @Test
     fun spotifyAndNormalQqKeepStandardFields() {
         val small =
-            android.graphics.Bitmap.createBitmap(32, 32, android.graphics.Bitmap.Config.ARGB_8888)
+            android.graphics.Bitmap.createBitmap(32, 32, android.graphics.Bitmap.Config.ARGB_8888).apply { eraseColor(0xff125ec9.toInt()) }
         val large =
-            android.graphics.Bitmap.createBitmap(640, 640, android.graphics.Bitmap.Config.ARGB_8888)
+            android.graphics.Bitmap.createBitmap(640, 640, android.graphics.Bitmap.Config.ARGB_8888).apply { eraseColor(0xff125ec9.toInt()) }
         val art =
             MediaMetadata.Builder()
                 .putBitmap(MediaMetadata.METADATA_KEY_ART, small)

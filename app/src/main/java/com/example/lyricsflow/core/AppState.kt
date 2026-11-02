@@ -96,7 +96,17 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
     private var lastReal = Playback()
     private var clockJob: Job? = null
     private val translationLock = Mutex()
-    val playback = com.example.lyricsflow.playback.PlaybackMonitor(app) { onPlayback(it) }
+    val playback = com.example.lyricsflow.playback.PlaybackMonitor(app, alternativeArtwork = { track ->
+        val loader = com.example.lyricsflow.playback.ArtworkLoader(app, cacheNamespace = track.key)
+        var image: android.graphics.Bitmap? = null
+        for (provider in listOf(Provider.QQ, Provider.NETEASE)) {
+            try { image = loader.load(api.artworkUrls(track, provider)) }
+            catch (e: CancellationException) { throw e }
+            catch (_: Exception) { /* Try the next independent catalogue. */ }
+            if (image != null) break
+        }
+        image
+    }) { onPlayback(it) }
 
     init {
         CalibrationOffsets.repairAccidental300(prefs)
@@ -611,6 +621,7 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
 
     /** Refresh the displayed record; never restart global provider matching. */
     fun refresh() {
+        playback.retryArtwork()
         val s = state.value
         s.playback.track?.let {
             loadAutomatic(

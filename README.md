@@ -6,10 +6,10 @@
 
 为 Spotify 等本机音乐 App 带来同步歌词、中文翻译与音乐评论。
 
-[![Release](https://img.shields.io/github/v/release/2351548518/LyricsFlow?style=flat-square&color=3273f4&cacheSeconds=300&v=1.0.3)](https://github.com/2351548518/LyricsFlow/releases/latest)
+[![Release](https://img.shields.io/github/v/release/2351548518/LyricsFlow?style=flat-square&color=3273f4&cacheSeconds=300&v=1.0.4)](https://github.com/2351548518/LyricsFlow/releases/latest)
 ![Android](https://img.shields.io/badge/Android-7.0%2B-3273f4?style=flat-square)
 ![UI](https://img.shields.io/badge/UI-Jetpack_Compose-607d8b?style=flat-square)
-[![Downloads](https://img.shields.io/github/downloads/2351548518/LyricsFlow/total?style=flat-square&color=3273f4&cacheSeconds=300&v=1.0.3)](https://github.com/2351548518/LyricsFlow/releases)
+[![Downloads](https://img.shields.io/github/downloads/2351548518/LyricsFlow/total?style=flat-square&color=3273f4&cacheSeconds=300&v=1.0.4)](https://github.com/2351548518/LyricsFlow/releases)
 
 [下载正式版](https://github.com/2351548518/LyricsFlow/releases/latest) · [快速开始](#快速开始) · [界面预览](#界面预览) · [反馈问题](https://github.com/2351548518/LyricsFlow/issues)
 
@@ -76,7 +76,7 @@ AMLL、LRCLIB 的收录范围和译文情况取决于社区记录；没有真实
 ## 数据与隐私
 
 - **本地优先。** 不登录也能使用歌词阅读、评论、本地收藏与个性化。
-- **只读取播放信息。** 通知使用权用于访问音乐 MediaSession 的曲目和进度，不读取聊天通知正文。
+- **只读取播放信息。** 通知使用权用于访问音乐 MediaSession 的曲目和进度；封面缺失时可读取同一播放器、会话和歌名匹配的音乐通知封面，不读取聊天通知正文。
 - **翻译由你选择。** 仅向你配置的服务发送待翻译歌词和行 ID；API Key 通过 Android Keystore 加密保存。
 - **同步由你操作。** GitHub Device Flow 登录后，连接或创建专用私有仓库，再预览并上传或下载快照；不会自动后台上传。恢复时同 ID 采用云端版本，并保留恢复前备份。
 - **凭证不随备份导出。** API Key、GitHub Token、系统权限和悬浮窗位置均不包含在应用备份中。
@@ -122,6 +122,7 @@ android build :app:assembleDebug -- :app:assembleDebugAndroidTest :app:testDebug
 | [验收记录](docs/android-qa/README.md) | 真机、模拟器、来源与数据验证证据 |
 | [主题 Schema](docs/lyricsflow.style.schema.json) | 声明式主题格式 |
 | [品牌资源](docs/branding/README.md) | SVG Logo、PNG 与 Android 图标 |
+| [v1.0.4 发行说明](docs/releases/v1.0.4.md) | 封面多来源恢复、灰图过滤与自动重试 |
 | [v1.0.3 发行说明](docs/releases/v1.0.3.md) | 减少空闲开销、内存优化与导出修复 |
 | [v1.0.2 发行说明](docs/releases/v1.0.2.md) | 全屏歌词、应用内更新、设置布局与整首翻译 |
 | [v1.0.1 发行说明](docs/releases/v1.0.1.md) | 图标配色与覆盖升级说明 |

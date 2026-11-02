@@ -474,7 +474,7 @@ fun FlowApp(graph: AppGraph) {
                                     graph.preferences(s.prefs.copy(autoSources = it))
                                 }
                                 Text(
-                                    "刷新只重新获取当前来源的当前记录，不更换来源。重新自动匹配成功后会解除本曲的固定选择。",
+                                    "刷新会重新获取当前来源的当前记录，并补取缺失封面，不更换来源。重新自动匹配成功后会解除本曲的固定选择。",
                                     Modifier.padding(top = 12.dp),
                                     fontSize = 13.sp,
                                 )
@@ -1091,7 +1091,7 @@ private fun Home(
                           IconButton(
                             onClick = { graph.refresh() },
                             enabled = !s.busy && !s.demo,
-                            modifier = Modifier.size(44.dp).semantics { contentDescription = "刷新当前来源歌词" },
+                            modifier = Modifier.size(44.dp).semantics { contentDescription = "刷新当前来源歌词与缺失封面" },
                         ) {
                             Glyph("refresh", Modifier.size(18.dp))
                         }

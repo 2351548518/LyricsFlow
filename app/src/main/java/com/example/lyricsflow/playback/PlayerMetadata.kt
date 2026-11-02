@@ -9,8 +9,8 @@ internal class ArtworkMemory {
     private var image: android.graphics.Bitmap? = null
 
     fun select(trackKey: String, candidate: android.graphics.Bitmap?): android.graphics.Bitmap? {
-        val previous = image?.takeUnless { it.isRecycled }
-        val next = candidate?.takeUnless { it.isRecycled }
+        val previous = image?.takeIf(ArtworkQuality::usable)
+        val next = candidate?.takeIf(ArtworkQuality::usable)
         image =
             if (key != trackKey) next
             else if (
@@ -33,13 +33,19 @@ internal class ArtworkMemory {
 
 /** QQ's Bluetooth lyric mode replaces TITLE/ARTIST but keeps stable UCAR song metadata. */
 object PlayerMetadata {
+    fun artworkUris(metadata: MediaMetadata?): List<String> =
+        listOf(MediaMetadata.METADATA_KEY_ALBUM_ART_URI, MediaMetadata.METADATA_KEY_ART_URI,
+            MediaMetadata.METADATA_KEY_DISPLAY_ICON_URI)
+            .mapNotNull { key -> runCatching { metadata?.getString(key)?.trim()?.takeIf { it.isNotEmpty() } }.getOrNull() }
+            .distinct()
+
     fun artwork(metadata: MediaMetadata?): android.graphics.Bitmap? =
         listOf(
                 MediaMetadata.METADATA_KEY_ART,
                 MediaMetadata.METADATA_KEY_ALBUM_ART,
                 MediaMetadata.METADATA_KEY_DISPLAY_ICON,
             )
-            .mapNotNull { metadata?.getBitmap(it)?.takeUnless { bitmap -> bitmap.isRecycled } }
+            .mapNotNull { metadata?.getBitmap(it)?.takeIf(ArtworkQuality::usable) }
             .maxByOrNull { it.width.toLong() * it.height }
 
     fun track(packageName: String, metadata: MediaMetadata?): Track? {

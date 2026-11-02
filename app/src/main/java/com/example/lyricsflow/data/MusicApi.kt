@@ -123,6 +123,32 @@ class MusicApi(private val store: Store) : LyricsLookup {
     suspend fun search(provider: Provider, query: String): List<Track> =
         searchPage(provider, query).tracks
 
+    /** Independent cover fallback. Never changes the user's lyric binding or source preference. */
+    internal suspend fun artworkUrls(current: Track, provider: Provider): List<String> {
+        val matches = search(provider, "${current.title} ${current.artist}")
+        val track = SongSearch.automatic(current, matches) ?: return emptyList()
+        val url = when (provider) {
+            Provider.QQ -> {
+                if (!Regex("[A-Za-z0-9]{10,20}").matches(track.mid)) return emptyList()
+                val detail = qq("detail", "music.pf_song_detail_svr", "get_song_detail_yqq",
+                    JSONObject().put("song_mid", track.mid).put("song_id", 0).put("song_type", 0))
+                val album = detail.optJSONObject("track_info")?.optJSONObject("album")?.optString("mid").orEmpty()
+                if (!Regex("[A-Za-z0-9]{10,20}").matches(album)) return emptyList()
+                "https://y.gtimg.cn/music/photo_new/T002R800x800M000$album.jpg"
+            }
+            Provider.NETEASE -> {
+                if (!Regex("[0-9]{1,20}").matches(track.sourceId)) return emptyList()
+                val detail = request("https://music.163.com/api/song/detail/?id=${track.sourceId}&ids=%5B${track.sourceId}%5D",
+                    readTimeoutMs = 5000, cacheMaxAgeMs = 5 * 60 * 1000L)
+                val song = detail.optJSONArray("songs")?.optJSONObject(0) ?: return emptyList()
+                (song.optJSONObject("album") ?: song.optJSONObject("al"))?.optString("picUrl").orEmpty()
+                    .replaceFirst(Regex("^http://"), "https://")
+            }
+            else -> return emptyList()
+        }
+        return listOf(url).filter { runCatching { URL(it).protocol == "https" }.getOrDefault(false) }
+    }
+
     override suspend fun searchExpanded(
         provider: Provider,
         query: String,

@@ -21,9 +21,23 @@ class MainActivity : ComponentActivity() {
         }
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                while (true) {
-                    delay(15000)
-                    (application as LyricsFlowApp).graph.playback.refresh()
+                val monitor = (application as LyricsFlowApp).graph.playback
+                val connectivity = getSystemService(android.net.ConnectivityManager::class.java)
+                val network = object : android.net.ConnectivityManager.NetworkCallback() {
+                    override fun onAvailable(network: android.net.Network) {
+                        lifecycleScope.launch {
+                            if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) monitor.retryArtwork()
+                        }
+                    }
+                }
+                val registered = runCatching { connectivity.registerDefaultNetworkCallback(network) }.isSuccess
+                try {
+                    while (true) {
+                        delay(15000)
+                        monitor.refresh()
+                    }
+                } finally {
+                    if (registered) connectivity.unregisterNetworkCallback(network)
                 }
             }
         }
