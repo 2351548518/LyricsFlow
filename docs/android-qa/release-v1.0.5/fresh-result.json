@@ -1,0 +1,7 @@
+{
+  "version": "1.0.5",
+  "freshInstall": true,
+  "coldStart": true,
+  "bilingualPreview": true,
+  "saveAndLibrary": true
+}
