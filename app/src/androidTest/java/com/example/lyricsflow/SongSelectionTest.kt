@@ -49,7 +49,7 @@ internal class ChoiceBackend : LyricsLookup {
 internal class ChoiceFixture {
     val instrumentation = InstrumentationRegistry.getInstrumentation()
     val backend = ChoiceBackend()
-    val graph = AppGraph(instrumentation.targetContext.applicationContext as Application, backend)
+    val graph = AppGraph(instrumentation.targetContext.applicationContext as Application, backend, monitorPlayback = false)
     val original = graph.state.value.prefs
     val tracks = mutableListOf<Track>()
 

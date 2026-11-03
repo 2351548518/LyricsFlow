@@ -26,6 +26,10 @@ fun needsChineseTranslation(text: String): Boolean = text.any {
     it.isLetter() && it !in '\u3400'..'\u9fff'
 }
 
+fun needsRomanization(text: String): Boolean = text.any {
+    it.isLetter() && Character.UnicodeScript.of(it.code) != Character.UnicodeScript.LATIN
+}
+
 fun graphemes(text: String): List<String> {
     val iterator = java.text.BreakIterator.getCharacterInstance(java.util.Locale.ROOT)
     iterator.setText(text)

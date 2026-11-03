@@ -169,17 +169,12 @@ internal class SongLyrics(private val store: Store, private val api: LyricsLooku
                 fetched.copy(
                     lines =
                         fetched.lines.map { row ->
-                            old[row.start to row.text]
-                                ?.takeIf {
-                                    row.translation.isBlank() && it.translation.isNotBlank()
-                                }
-                                ?.let {
-                                    row.copy(
-                                        translation = it.translation,
-                                        translationKind = it.translationKind,
-                                        translationModel = it.translationModel,
-                                    )
-                                } ?: row
+                            val prior = old[row.start to row.text]
+                            val translated = if (row.translation.isBlank() && !prior?.translation.isNullOrBlank())
+                                row.copy(translation = prior!!.translation,
+                                    translationKind = prior.translationKind, translationModel = prior.translationModel)
+                            else row
+                            translated.copy(romanization = translated.romanization.ifBlank { prior?.romanization.orEmpty() })
                         }
                 )
             return SourceLookup(ResolvedLyrics(candidate, merged))

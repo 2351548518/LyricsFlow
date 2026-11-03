@@ -1,0 +1,14 @@
+{
+  "device": "HONOR MLY-AN00",
+  "androidApi": 37,
+  "version": "1.0.6",
+  "versionCode": 7,
+  "officialApk": true,
+  "upgradeInstall": true,
+  "coldStart": true,
+  "romanizationHideShow": true,
+  "romanizationAfterTranslation": true,
+  "commentsOpen": true,
+  "existingSettingsRetained": true,
+  "readingsOriginNotDetermined": true
+}

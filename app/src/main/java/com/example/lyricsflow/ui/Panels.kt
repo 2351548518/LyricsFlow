@@ -785,7 +785,7 @@ fun Appearance(
             valueRange = 16f..48f,
         )
         Toggle("显示中文译文", s.prefs.translation) { graph.preferences(s.prefs.copy(translation = it)) }
-        Toggle("显示来源提供的罗马音", s.prefs.romanization, "没有现成注音时不自动生成") {
+        Toggle("显示罗马音", s.prefs.romanization, "优先使用来源注音；缺失时使用已授权的大模型 API 补全") {
             graph.preferences(s.prefs.copy(romanization = it))
         }
         Section("色彩与显示")
@@ -1029,7 +1029,7 @@ fun TranslationSettings(s: ScreenState, graph: AppGraph) {
             Text("清除 API Key 并撤回同意")
         }
         Text(
-            "一次提交当前歌曲的全部缺失译文，保留来源已有译文。应用不按行数或字符数拆批，实际容量由所选模型决定；失败不自动无限重试。模型响应必须返回完整且不重复的行 ID。",
+            "译文与罗马音共用上述服务和授权，生成的标注随用户数据备份与同步。开启罗马音显示时补全缺失标注。一次提交当前歌曲的全部缺失译文，保留来源已有译文。应用不按行数或字符数拆批，实际容量由所选模型决定；失败不自动无限重试。模型响应必须返回完整且不重复的行 ID。",
             fontSize = 12.sp,
             lineHeight = 20.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant,

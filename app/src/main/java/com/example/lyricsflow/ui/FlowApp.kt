@@ -1073,8 +1073,7 @@ private fun Home(
                         fontSize = 10.sp,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = .6f),
                     )
-                BoxWithConstraints(Modifier.fillMaxWidth()) {
-                    val compact = maxWidth < 380.dp
+                Box(Modifier.fillMaxWidth()) {
                     Row(
                         Modifier.fillMaxWidth().padding(top = 8.dp),
                         verticalAlignment = Alignment.CenterVertically,
@@ -1109,6 +1108,23 @@ private fun Home(
                                     else MaterialTheme.colorScheme.onSurface.copy(alpha = .3f),
                             )
                         }
+                        IconButton(
+                            onClick = {
+                                val enabled = !s.prefs.romanization
+                                graph.preferences(s.prefs.copy(romanization = enabled))
+                                if (enabled && !s.prefs.consent && s.lyrics?.lines?.any {
+                                        it.romanization.isBlank() && needsRomanization(it.text)
+                                    } == true)
+                                    graph.message("显示已有罗马音；补全缺失标注请先在在线翻译中配置 API 并授权")
+                            },
+                            modifier = Modifier.size(44.dp).testTag("romanization-toggle").semantics {
+                                contentDescription = if (s.romanizationBusy) "正在生成罗马音，点击关闭" else "显示或隐藏罗马音"
+                            },
+                        ) {
+                            Text("罗", fontSize = 16.sp,
+                                color = if (s.prefs.romanization) MaterialTheme.colorScheme.primary
+                                    else MaterialTheme.colorScheme.onSurface.copy(alpha = .3f))
+                        }
                           IconButton(
                             onClick = overlay,
                             modifier =
@@ -1119,21 +1135,11 @@ private fun Home(
                             Glyph("window", Modifier.size(19.dp))
                         }
                         Spacer(Modifier.weight(1f))
-                        FilledTonalButton(
+                        IconButton(
                             onClick = comments,
-                            modifier = Modifier.semantics { contentDescription = "歌曲评论 · 共鸣" },
-                            contentPadding = PaddingValues(horizontal = if (compact) 10.dp else 14.dp),
-                            colors =
-                                ButtonDefaults.filledTonalButtonColors(
-                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                ),
+                            modifier = Modifier.size(44.dp).semantics { contentDescription = "歌曲评论 · 共鸣" },
                         ) {
-                            Glyph("comment", Modifier.size(17.dp))
-                            if (!compact) {
-                                Spacer(Modifier.width(6.dp))
-                                Text("共鸣", fontSize = 12.sp, maxLines = 1)
-                            }
+                            Glyph("comment", Modifier.size(19.dp))
                         }
                     }
                 }

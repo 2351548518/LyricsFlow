@@ -1,0 +1,10 @@
+{
+  "fromVersion": "1.0.5",
+  "toVersion": "1.0.6",
+  "toCode": 7,
+  "sameSignature": true,
+  "savedSong": "Somewhere, softer",
+  "savedLines": 8,
+  "coldStart": true,
+  "bilingualReader": true
+}

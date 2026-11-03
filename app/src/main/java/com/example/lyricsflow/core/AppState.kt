@@ -54,6 +54,7 @@ data class ScreenState(
     val imageRevision: Int = 0,
     val selectionMode: String = "auto",
     val requestedSource: Provider? = null,
+    val romanizationBusy: Boolean = false,
 )
 
 class LyricsFlowApp : Application() {
@@ -76,7 +77,7 @@ class LyricsFlowApp : Application() {
     }
 }
 
-class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
+class AppGraph(val app: Application, lookup: LyricsLookup? = null, private val monitorPlayback: Boolean = true) {
     val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     val store = Store(app)
     val secrets = Secrets(app)
@@ -96,6 +97,7 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
     private var lastReal = Playback()
     private var clockJob: Job? = null
     private val translationLock = Mutex()
+    private var annotationSaveJob: Job? = null
     val playback = com.example.lyricsflow.playback.PlaybackMonitor(app, alternativeArtwork = { track ->
         val loader = com.example.lyricsflow.playback.ArtworkLoader(app, cacheNamespace = track.key)
         var image: android.graphics.Bitmap? = null
@@ -106,7 +108,7 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
             if (image != null) break
         }
         image
-    }) { onPlayback(it) }
+    }) { if (monitorPlayback) onPlayback(it) }
 
     init {
         CalibrationOffsets.repairAccidental300(prefs)
@@ -143,6 +145,27 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
                         message("自动翻译未完成：${e.message}")
                     }
                 }
+        }
+        // Changing visibility or song cancels the previous pronunciation request.
+        scope.launch {
+            state.map { s ->
+                listOf(s.playback.track?.key, s.lyrics?.source, s.lyrics?.hash,
+                    s.prefs.romanization && s.prefs.consent && !s.demo,
+                    s.lyrics?.lines?.any { it.romanization.isBlank() && needsRomanization(it.text) },
+                    s.prefs.translationUrl, s.prefs.model)
+            }.distinctUntilChanged().collectLatest { key ->
+                if (key[3] != true || key[4] != true) return@collectLatest
+                val captured = state.value
+                val l = captured.lyrics ?: return@collectLatest
+                val track = captured.playback.track ?: return@collectLatest
+                mutable.update { it.copy(romanizationBusy = true) }
+                try {
+                    val rows = translate(captured, romanization = true)
+                    applyTranslation(rows, l.hash, track.key, l.source, romanization = true)
+                } catch (e: CancellationException) { throw e }
+                  catch (e: Exception) { message("罗马音生成未完成：${e.message}；可关闭后重新开启重试") }
+                finally { mutable.update { it.copy(romanizationBusy = false) } }
+            }
         }
     }
 
@@ -621,7 +644,7 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
 
     /** Refresh the displayed record; never restart global provider matching. */
     fun refresh() {
-        playback.retryArtwork()
+        if (monitorPlayback) playback.retryArtwork()
         val s = state.value
         s.playback.track?.let {
             loadAutomatic(
@@ -808,28 +831,39 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
         hash: String,
         trackKey: String,
         source: Provider,
+        romanization: Boolean = false,
     ): Boolean {
         if (
             state.value.playback.track?.key == trackKey &&
                 state.value.lyrics?.hash == hash &&
                 state.value.lyrics?.source == source
         ) {
-            val l = state.value.lyrics!!.copy(lines = rows)
+            val current = state.value.lyrics!!
+            if (rows.size != current.lines.size || rows.indices.any {
+                    rows[it].text != current.lines[it].text || rows[it].start != current.lines[it].start
+                }) return false
+            val l = current.copy(lines = current.lines.mapIndexed { i, line ->
+                if (romanization) line.copy(romanization = line.romanization.ifBlank { rows[i].romanization })
+                else line.copy(translation = rows[i].translation,
+                    translationKind = rows[i].translationKind, translationModel = rows[i].translationModel)
+            })
             mutable.update { it.copy(lyrics = l) }
-            scope.launch(Dispatchers.IO) {
-                if (
-                    state.value.playback.track?.key == trackKey &&
-                        state.value.lyrics?.hash == hash &&
-                        state.value.source == l.source
-                )
-                    store.put("lyrics", trackKey + ":" + l.source.name, lyricsJson(l).toString())
+            val previous = annotationSaveJob
+            annotationSaveJob = scope.launch {
+                previous?.join()
+                try {
+                    withContext(Dispatchers.IO) {
+                        store.annotate(trackKey, l)
+                    }
+                } catch (e: CancellationException) { throw e }
+                  catch (e: Exception) { message("歌词标注保存未完成：${e.message}") }
             }
             return true
         }
         return false
     }
 
-    suspend fun translate(s: ScreenState = state.value): List<Line> = translationLock.withLock {
+    suspend fun translate(s: ScreenState = state.value, romanization: Boolean = false): List<Line> = translationLock.withLock {
         val l = s.lyrics ?: error("暂无歌词")
         val p = s.prefs
         require(
@@ -842,7 +876,8 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
         }
         val result = l.lines.toMutableList()
         val batch = l.lines.indices.filter {
-            l.lines[it].translation.isBlank() && needsChineseTranslation(l.lines[it].text)
+            if (romanization) l.lines[it].romanization.isBlank() && needsRomanization(l.lines[it].text)
+            else l.lines[it].translation.isBlank() && needsChineseTranslation(l.lines[it].text)
         }
         if (batch.isNotEmpty()) {
             val current = state.value
@@ -868,7 +903,7 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
                 .putInt("translation-chars:$day", count + chars)
                 .putInt("translation-calls:$day", calls + 1)
                 .apply()
-            val body = TranslationProtocol.request(p.translationUrl, p.model, batch, l.lines)
+            val body = TranslationProtocol.request(p.translationUrl, p.model, batch, l.lines, romanization)
             val response =
                 api.request(
                     p.translationUrl.trimEnd('/') + "/chat/completions",
@@ -876,7 +911,7 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null) {
                     secrets.read(),
                     readTimeoutMs = 60000,
                 )
-            val decoded = TranslationProtocol.decode(response, batch, l.lines, p.model)
+            val decoded = TranslationProtocol.decode(response, batch, l.lines, p.model, romanization)
             for (id in batch) result[id] = decoded[id]
         }
         result

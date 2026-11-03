@@ -6,10 +6,10 @@
 
 为 Spotify 等本机音乐 App 带来同步歌词、中文翻译与音乐评论。
 
-[![Release](https://img.shields.io/github/v/release/2351548518/LyricsFlow?style=flat-square&color=3273f4&cacheSeconds=300&v=1.0.5)](https://github.com/2351548518/LyricsFlow/releases/latest)
+[![Release](https://img.shields.io/github/v/release/2351548518/LyricsFlow?style=flat-square&color=3273f4&cacheSeconds=300&v=1.0.6)](https://github.com/2351548518/LyricsFlow/releases/latest)
 ![Android](https://img.shields.io/badge/Android-7.0%2B-3273f4?style=flat-square)
 ![UI](https://img.shields.io/badge/UI-Jetpack_Compose-607d8b?style=flat-square)
-[![Downloads](https://img.shields.io/github/downloads/2351548518/LyricsFlow/total?style=flat-square&color=3273f4&cacheSeconds=300&v=1.0.5)](https://github.com/2351548518/LyricsFlow/releases)
+[![Downloads](https://img.shields.io/github/downloads/2351548518/LyricsFlow/total?style=flat-square&color=3273f4&cacheSeconds=300&v=1.0.6)](https://github.com/2351548518/LyricsFlow/releases)
 
 [下载正式版](https://github.com/2351548518/LyricsFlow/releases/latest) · [快速开始](#快速开始) · [界面预览](#界面预览) · [反馈问题](https://github.com/2351548518/LyricsFlow/issues)
 
@@ -22,9 +22,9 @@ LyricsFlow 读取本机播放器的曲目与进度，把歌词放在你正在听
 | 功能 | 体验 |
 | --- | --- |
 | **四种歌词来源** | QQ 音乐 → 网易云 → AMLL → LRCLIB 自动匹配；可手动搜索、绑定具体记录，记住每首歌的选择 |
-| **双语与逐字歌词** | 原文、中文译文、来源提供的罗马音；当前行突出显示，支持已有真实时间戳的逐字高亮与时间校准 |
+| **双语与逐字歌词** | 原文、中文译文与罗马音；首页“译 / 罗”独立开关，当前行突出显示，支持已有真实时间戳的逐字高亮与时间校准 |
 | **全屏歌词** | 轻点歌词展开阅读，只保留歌名、歌手和歌词；原背景与同步状态保持，支持展开/返回动画、再次轻点或系统返回退出 |
-| **在线翻译** | 接入自己的 OpenAI 兼容服务、API Key 与模型，一次提交整首歌的缺失译文；应用内不按行数或字符数拆批，每日不限量，服务费用由对应提供者收取 |
+| **在线翻译** | 接入自己的 OpenAI 兼容服务、API Key 与模型，一次提交整首歌的缺失译文；开启罗马音时可补全缺失注音，标注随用户数据备份和 GitHub 同步；应用内不按行数或字符数拆批，每日不限量，服务费用由对应提供者收取 |
 | **音乐评论** | 阅读 QQ 音乐、网易云的热门与最新评论；评论与歌词可独立匹配，不支持发布或点赞 |
 | **随封面变换的主题** | 封面取色、动态网状渐变、中心与边缘柔化过渡；支持调节模糊程度、字号、配色和声明式主题文件 |
 | **桌面悬浮歌词** | 原文与译文同色；自定义字体颜色、字号、0%–100% 背景不透明度，支持拖动、调整宽度和锁定穿透 |
@@ -77,7 +77,7 @@ AMLL、LRCLIB 的收录范围和译文情况取决于社区记录；没有真实
 
 - **本地优先。** 不登录也能使用歌词阅读、评论、本地收藏与个性化。
 - **只读取播放信息。** 通知使用权用于访问音乐 MediaSession 的曲目和进度；封面缺失时可读取同一播放器、会话和歌名匹配的音乐通知封面，不读取聊天通知正文。
-- **翻译由你选择。** 仅向你配置的服务发送待翻译歌词和行 ID；API Key 通过 Android Keystore 加密保存。
+- **翻译由你选择。** 仅在授权后向你配置的服务发送待翻译或待注音的歌词和行 ID；API Key 通过 Android Keystore 加密保存。
 - **同步由你操作。** GitHub Device Flow 登录后，连接或创建专用私有仓库，再预览并上传或下载快照；不会自动后台上传。恢复时同 ID 采用云端版本，并保留恢复前备份。
 - **凭证不随备份导出。** API Key、GitHub Token、系统权限和悬浮窗位置均不包含在应用备份中。
 
@@ -122,6 +122,7 @@ android build :app:assembleDebug -- :app:assembleDebugAndroidTest :app:testDebug
 | [验收记录](docs/android-qa/README.md) | 真机、模拟器、来源与数据验证证据 |
 | [主题 Schema](docs/lyricsflow.style.schema.json) | 声明式主题格式 |
 | [品牌资源](docs/branding/README.md) | SVG Logo、PNG 与 Android 图标 |
+| [v1.0.6 发行说明](docs/releases/v1.0.6.md) | 罗马音补全与标注同步，评论按钮统一样式 |
 | [v1.0.5 发行说明](docs/releases/v1.0.5.md) | 请求取消、缓存与内存优化，候选时长显示为分秒 |
 | [v1.0.4 发行说明](docs/releases/v1.0.4.md) | 封面多来源恢复、灰图过滤与自动重试 |
 | [v1.0.3 发行说明](docs/releases/v1.0.3.md) | 减少空闲开销、内存优化与导出修复 |

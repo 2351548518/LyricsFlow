@@ -89,6 +89,28 @@ class Store(context: Context) : SQLiteOpenHelper(context, "lyricsflow.db", null,
             )
             .use { c -> buildList { while (c.moveToNext()) add(c.getString(0) to c.getString(1)) } }
 
+    /** Check the current recording and persist both user-data copies under one write transaction. */
+    @Synchronized
+    fun annotate(trackKey: String, lyrics: Lyrics) {
+        val db = writableDatabase
+        db.beginTransaction()
+        try {
+            val cacheKey = "$trackKey:${lyrics.source.name}"
+            val cached = get("lyrics", cacheKey)?.let { readLyrics(JSONObject(it)) }
+            if (cached == null || cached.hash == lyrics.hash)
+                put("lyrics", cacheKey, lyricsJson(lyrics).toString())
+            get("saved", trackKey)?.let { raw ->
+                val saved = JSONObject(raw)
+                val old = readLyrics(saved.getJSONObject("lyrics"))
+                if (old.source == lyrics.source && old.hash == lyrics.hash) {
+                    saved.put("lyrics", lyricsJson(lyrics))
+                    put("saved", trackKey, saved.toString())
+                }
+            }
+            db.setTransactionSuccessful()
+        } finally { db.endTransaction() }
+    }
+
     @Synchronized
     fun clearCache() {
         writableDatabase.delete("entries", "kind=?", arrayOf("cache"))
