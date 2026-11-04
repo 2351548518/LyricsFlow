@@ -174,7 +174,9 @@ internal class SongLyrics(private val store: Store, private val api: LyricsLooku
                                 row.copy(translation = prior!!.translation,
                                     translationKind = prior.translationKind, translationModel = prior.translationModel)
                             else row
-                            translated.copy(romanization = translated.romanization.ifBlank { prior?.romanization.orEmpty() })
+                            translated.copy(
+                                romanization = translated.romanization.ifBlank { prior?.romanization.orEmpty() },
+                                alignment = translated.alignment.ifEmpty { prior?.alignment.orEmpty() })
                         }
                 )
             return SourceLookup(ResolvedLyrics(candidate, merged))

@@ -152,6 +152,8 @@ internal data class GitHubSnapshot(
     val head: String,
     val tree: String,
     val files: Map<String, ByteArray>,
+    // Only a pending download retains parsed records. Connect/upload need just the bytes/metadata.
+    val validated: Pair<List<Triple<String, String, String>>, JSONObject>? = null,
 )
 
 /** One commit publishes the entire snapshot. Updating the branch is always a fast-forward. */
@@ -206,7 +208,12 @@ internal class GitHubApi(private val http: GitHubTransport = GitHubHttp()) {
 
     private fun root(login: String, r: GitHubRepo) = "/repos/${enc(login)}/${enc(r.name)}"
 
-    suspend fun snapshot(token: String, login: String, repo: GitHubRepo): GitHubSnapshot =
+    suspend fun snapshot(
+        token: String,
+        login: String,
+        repo: GitHubRepo,
+        retainValidation: Boolean = false,
+    ): GitHubSnapshot =
         withContext(Dispatchers.IO) {
             val root = root(login, repo)
             val head =
@@ -259,8 +266,8 @@ internal class GitHubApi(private val http: GitHubTransport = GitHubHttp()) {
                 total += bytes.size
                 files[name] = bytes
             }
-            Transfer.validateBackup(SnapshotFiles.zip(files))
-            GitHubSnapshot(repo, head, tree, files)
+            val validated = SnapshotFiles.validate(files)
+            GitHubSnapshot(repo, head, tree, files, validated.takeIf { retainValidation })
         }
 
     suspend fun upload(
@@ -274,7 +281,7 @@ internal class GitHubApi(private val http: GitHubTransport = GitHubHttp()) {
             require(snapshot.files.isEmpty() || baseline == snapshot.head) {
                 "云端已有新的资料，请先下载并确认合并，再上传；不会覆盖其他设备的修改"
             }
-            Transfer.validateBackup(SnapshotFiles.zip(files))
+            SnapshotFiles.validate(files)
             if (
                 files.keys == snapshot.files.keys &&
                     files.all { (key, value) -> value.contentEquals(snapshot.files[key]) }
@@ -344,15 +351,29 @@ internal object SnapshotFiles {
     val names = setOf("manifest.json", "data.json", "settings.json")
 
     fun unzip(bytes: ByteArray): Map<String, ByteArray> {
-        Transfer.validateBackup(bytes)
+        return readArchive(bytes).also { Transfer.validateBackupFiles(it) }
+    }
+
+    /** Bounded, single inflation. Callers must validate the resulting content before use. */
+    internal fun readArchive(bytes: ByteArray): Map<String, ByteArray> {
+        require(bytes.size <= 20_000_000) { "备份超过 20 MB" }
         val files = linkedMapOf<String, ByteArray>()
+        var total = 0
         ZipInputStream(ByteArrayInputStream(bytes)).use { zip ->
             while (true) {
                 val e = zip.nextEntry ?: break
-                files[e.name] = zip.readBytesLimited(20_000_000)
+                require(e.name in names && !files.containsKey(e.name)) { "备份含未知、重复或不安全路径" }
+                val content = zip.readBytesLimited(20_000_000 - total)
+                total += content.size
+                files[e.name] = content
             }
         }
         return files
+    }
+
+    fun validate(files: Map<String, ByteArray>): Pair<List<Triple<String, String, String>>, JSONObject> {
+        require(files.keys == names) { "快照文件缺失" }
+        return Transfer.validateBackupFiles(files)
     }
 
     fun zip(files: Map<String, ByteArray>): ByteArray {

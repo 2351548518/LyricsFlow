@@ -1,0 +1,606 @@
+{
+  "input": [
+    {
+      "id": 0,
+      "text": "君の声を聞きたい",
+      "existingRomanization": "",
+      "existingTranslation": "",
+      "units": [
+        {
+          "index": 0,
+          "text": "君"
+        },
+        {
+          "index": 1,
+          "text": "の"
+        },
+        {
+          "index": 2,
+          "text": "声"
+        },
+        {
+          "index": 3,
+          "text": "を"
+        },
+        {
+          "index": 4,
+          "text": "聞"
+        },
+        {
+          "index": 5,
+          "text": "き"
+        },
+        {
+          "index": 6,
+          "text": "た"
+        },
+        {
+          "index": 7,
+          "text": "い"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "text": "Hello,  世界！",
+      "existingRomanization": "",
+      "existingTranslation": "",
+      "units": [
+        {
+          "index": 0,
+          "text": "H"
+        },
+        {
+          "index": 1,
+          "text": "e"
+        },
+        {
+          "index": 2,
+          "text": "l"
+        },
+        {
+          "index": 3,
+          "text": "l"
+        },
+        {
+          "index": 4,
+          "text": "o"
+        },
+        {
+          "index": 5,
+          "text": ","
+        },
+        {
+          "index": 6,
+          "text": " "
+        },
+        {
+          "index": 7,
+          "text": " "
+        },
+        {
+          "index": 8,
+          "text": "世"
+        },
+        {
+          "index": 9,
+          "text": "界"
+        },
+        {
+          "index": 10,
+          "text": "！"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "text": "作詞：青木 / 作曲：林",
+      "existingRomanization": "",
+      "existingTranslation": "",
+      "units": [
+        {
+          "index": 0,
+          "text": "作"
+        },
+        {
+          "index": 1,
+          "text": "詞"
+        },
+        {
+          "index": 2,
+          "text": "："
+        },
+        {
+          "index": 3,
+          "text": "青"
+        },
+        {
+          "index": 4,
+          "text": "木"
+        },
+        {
+          "index": 5,
+          "text": " "
+        },
+        {
+          "index": 6,
+          "text": "/"
+        },
+        {
+          "index": 7,
+          "text": " "
+        },
+        {
+          "index": 8,
+          "text": "作"
+        },
+        {
+          "index": 9,
+          "text": "曲"
+        },
+        {
+          "index": 10,
+          "text": "："
+        },
+        {
+          "index": 11,
+          "text": "林"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "text": "SP：星空文化（中国）有限公司",
+      "existingRomanization": "",
+      "existingTranslation": "",
+      "units": [
+        {
+          "index": 0,
+          "text": "S"
+        },
+        {
+          "index": 1,
+          "text": "P"
+        },
+        {
+          "index": 2,
+          "text": "："
+        },
+        {
+          "index": 3,
+          "text": "星"
+        },
+        {
+          "index": 4,
+          "text": "空"
+        },
+        {
+          "index": 5,
+          "text": "文"
+        },
+        {
+          "index": 6,
+          "text": "化"
+        },
+        {
+          "index": 7,
+          "text": "（"
+        },
+        {
+          "index": 8,
+          "text": "中"
+        },
+        {
+          "index": 9,
+          "text": "国"
+        },
+        {
+          "index": 10,
+          "text": "）"
+        },
+        {
+          "index": 11,
+          "text": "有"
+        },
+        {
+          "index": 12,
+          "text": "限"
+        },
+        {
+          "index": 13,
+          "text": "公"
+        },
+        {
+          "index": 14,
+          "text": "司"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "text": "Ich höre deine Stimme.",
+      "existingRomanization": "",
+      "existingTranslation": "",
+      "units": [
+        {
+          "index": 0,
+          "text": "I"
+        },
+        {
+          "index": 1,
+          "text": "c"
+        },
+        {
+          "index": 2,
+          "text": "h"
+        },
+        {
+          "index": 3,
+          "text": " "
+        },
+        {
+          "index": 4,
+          "text": "h"
+        },
+        {
+          "index": 5,
+          "text": "ö"
+        },
+        {
+          "index": 6,
+          "text": "r"
+        },
+        {
+          "index": 7,
+          "text": "e"
+        },
+        {
+          "index": 8,
+          "text": " "
+        },
+        {
+          "index": 9,
+          "text": "d"
+        },
+        {
+          "index": 10,
+          "text": "e"
+        },
+        {
+          "index": 11,
+          "text": "i"
+        },
+        {
+          "index": 12,
+          "text": "n"
+        },
+        {
+          "index": 13,
+          "text": "e"
+        },
+        {
+          "index": 14,
+          "text": " "
+        },
+        {
+          "index": 15,
+          "text": "S"
+        },
+        {
+          "index": 16,
+          "text": "t"
+        },
+        {
+          "index": 17,
+          "text": "i"
+        },
+        {
+          "index": 18,
+          "text": "m"
+        },
+        {
+          "index": 19,
+          "text": "m"
+        },
+        {
+          "index": 20,
+          "text": "e"
+        },
+        {
+          "index": 21,
+          "text": "."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "text": "この橋の向こうに",
+      "existingRomanization": "",
+      "existingTranslation": "",
+      "units": [
+        {
+          "index": 0,
+          "text": "こ"
+        },
+        {
+          "index": 1,
+          "text": "の"
+        },
+        {
+          "index": 2,
+          "text": "橋"
+        },
+        {
+          "index": 3,
+          "text": "の"
+        },
+        {
+          "index": 4,
+          "text": "向"
+        },
+        {
+          "index": 5,
+          "text": "こ"
+        },
+        {
+          "index": 6,
+          "text": "う"
+        },
+        {
+          "index": 7,
+          "text": "に"
+        }
+      ]
+    }
+  ],
+  "response": {
+    "lines": [
+      {
+        "id": 0,
+        "text": "kimi no koe o kikitai",
+        "segments": [
+          {
+            "start": 0,
+            "end": 2,
+            "romanization": "kimi no",
+            "translation": "你的"
+          },
+          {
+            "start": 2,
+            "end": 3,
+            "romanization": "koe",
+            "translation": "声音"
+          },
+          {
+            "start": 3,
+            "end": 4,
+            "romanization": "o",
+            "translation": "（宾格）"
+          },
+          {
+            "start": 4,
+            "end": 8,
+            "romanization": "kikitai",
+            "translation": "想听"
+          }
+        ]
+      },
+      {
+        "id": 1,
+        "text": "Hello,  shìjiè!",
+        "segments": [
+          {
+            "start": 0,
+            "end": 5,
+            "romanization": "Hello",
+            "translation": "你好"
+          },
+          {
+            "start": 5,
+            "end": 8,
+            "romanization": ",  ",
+            "translation": ""
+          },
+          {
+            "start": 8,
+            "end": 10,
+            "romanization": "shìjiè",
+            "translation": "世界"
+          },
+          {
+            "start": 10,
+            "end": 11,
+            "romanization": "!",
+            "translation": ""
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "text": "zuòcí: qīngmù / zuòqǔ: lín",
+        "segments": [
+          {
+            "start": 0,
+            "end": 2,
+            "romanization": "zuòcí",
+            "translation": "作词"
+          },
+          {
+            "start": 2,
+            "end": 3,
+            "romanization": ":",
+            "translation": ""
+          },
+          {
+            "start": 3,
+            "end": 5,
+            "romanization": "qīngmù",
+            "translation": "青木"
+          },
+          {
+            "start": 5,
+            "end": 8,
+            "romanization": " / ",
+            "translation": ""
+          },
+          {
+            "start": 8,
+            "end": 10,
+            "romanization": "zuòqǔ",
+            "translation": "作曲"
+          },
+          {
+            "start": 10,
+            "end": 11,
+            "romanization": ":",
+            "translation": ""
+          },
+          {
+            "start": 11,
+            "end": 12,
+            "romanization": "lín",
+            "translation": "林"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "text": "SP: xīngkōng wénhuà (zhōngguó) yǒuxiàn gōngsī",
+        "segments": [
+          {
+            "start": 0,
+            "end": 2,
+            "romanization": "SP",
+            "translation": "SP"
+          },
+          {
+            "start": 2,
+            "end": 3,
+            "romanization": ":",
+            "translation": ""
+          },
+          {
+            "start": 3,
+            "end": 7,
+            "romanization": "xīngkōng wénhuà",
+            "translation": "星空文化"
+          },
+          {
+            "start": 7,
+            "end": 8,
+            "romanization": "(",
+            "translation": ""
+          },
+          {
+            "start": 8,
+            "end": 10,
+            "romanization": "zhōngguó",
+            "translation": "中国"
+          },
+          {
+            "start": 10,
+            "end": 11,
+            "romanization": ")",
+            "translation": ""
+          },
+          {
+            "start": 11,
+            "end": 15,
+            "romanization": "yǒuxiàn gōngsī",
+            "translation": "有限公司"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "text": "Ich höre deine Stimme.",
+        "segments": [
+          {
+            "start": 0,
+            "end": 3,
+            "romanization": "Ich",
+            "translation": "我"
+          },
+          {
+            "start": 3,
+            "end": 4,
+            "romanization": " ",
+            "translation": ""
+          },
+          {
+            "start": 4,
+            "end": 8,
+            "romanization": "höre",
+            "translation": "听见"
+          },
+          {
+            "start": 8,
+            "end": 9,
+            "romanization": " ",
+            "translation": ""
+          },
+          {
+            "start": 9,
+            "end": 14,
+            "romanization": "deine",
+            "translation": "你的"
+          },
+          {
+            "start": 14,
+            "end": 15,
+            "romanization": " ",
+            "translation": ""
+          },
+          {
+            "start": 15,
+            "end": 21,
+            "romanization": "Stimme",
+            "translation": "声音"
+          },
+          {
+            "start": 21,
+            "end": 22,
+            "romanization": ".",
+            "translation": ""
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "text": "kono hashi no mukō ni",
+        "segments": [
+          {
+            "start": 0,
+            "end": 2,
+            "romanization": "kono",
+            "translation": "这座"
+          },
+          {
+            "start": 2,
+            "end": 3,
+            "romanization": "hashi",
+            "translation": "桥"
+          },
+          {
+            "start": 3,
+            "end": 4,
+            "romanization": "no",
+            "translation": "的"
+          },
+          {
+            "start": 4,
+            "end": 7,
+            "romanization": "mukō",
+            "translation": "对面"
+          },
+          {
+            "start": 7,
+            "end": 8,
+            "romanization": "ni",
+            "translation": "在"
+          }
+        ]
+      }
+    ]
+  }
+}

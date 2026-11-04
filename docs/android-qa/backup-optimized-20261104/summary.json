@@ -1,0 +1,229 @@
+{
+  "device": "MLY-AN00",
+  "api": 37,
+  "maxHeapBytes": 402653184,
+  "implementation": "direct-files-single-validation",
+  "fixtures": [
+    {
+      "bytes": 522029,
+      "zipBytes": 137218,
+      "records": 22,
+      "phases": {
+        "zip": {
+          "wallMs": 15.696771,
+          "threadCpuMs": 14.356196,
+          "allocatedBytes": 499760,
+          "sampledPeakHeapBytes": 3783352,
+          "sampledHeapRiseBytes": 499760,
+          "baselineHeapBytes": 3283592,
+          "gcCount": 0,
+          "minWallMs": 15.472344,
+          "maxWallMs": 15.833802
+        },
+        "validate_zip": {
+          "wallMs": 71.604792,
+          "threadCpuMs": 65.880522,
+          "allocatedBytes": 8040496,
+          "sampledPeakHeapBytes": 10065288,
+          "sampledHeapRiseBytes": 6762544,
+          "baselineHeapBytes": 3299944,
+          "gcCount": 1,
+          "minWallMs": 67.413854,
+          "maxWallMs": 75.953906
+        },
+        "validated_unzip": {
+          "wallMs": 71.8725,
+          "threadCpuMs": 66.535108,
+          "allocatedBytes": 8040496,
+          "sampledPeakHeapBytes": 9961976,
+          "sampledHeapRiseBytes": 6680624,
+          "baselineHeapBytes": 3281352,
+          "gcCount": 1,
+          "minWallMs": 63.275521,
+          "maxWallMs": 74.356927
+        },
+        "zip_then_validate": {
+          "wallMs": 88.606771,
+          "threadCpuMs": 80.912448,
+          "allocatedBytes": 8523824,
+          "sampledPeakHeapBytes": 10019320,
+          "sampledHeapRiseBytes": 6737968,
+          "baselineHeapBytes": 3281904,
+          "gcCount": 1,
+          "minWallMs": 77.900416,
+          "maxWallMs": 91.075104
+        },
+        "preview_local_codec_chain": {
+          "wallMs": 65.973073,
+          "threadCpuMs": 62.642133,
+          "allocatedBytes": 6189104,
+          "sampledPeakHeapBytes": 9471560,
+          "sampledHeapRiseBytes": 6189104,
+          "baselineHeapBytes": 3282456,
+          "gcCount": 0,
+          "minWallMs": 63.375885,
+          "maxWallMs": 67.644844
+        },
+        "legacy_preview_control": {
+          "wallMs": 168.559635,
+          "threadCpuMs": 160.667713,
+          "allocatedBytes": 18849840,
+          "sampledPeakHeapBytes": 12670128,
+          "sampledHeapRiseBytes": 9387120,
+          "baselineHeapBytes": 3283008,
+          "gcCount": 2,
+          "minWallMs": 159.667187,
+          "maxWallMs": 174.879375
+        }
+      }
+    },
+    {
+      "bytes": 5005976,
+      "zipBytes": 1303531,
+      "records": 211,
+      "phases": {
+        "zip": {
+          "wallMs": 145.409167,
+          "threadCpuMs": 136.669107,
+          "allocatedBytes": 4046896,
+          "sampledPeakHeapBytes": 13012760,
+          "sampledHeapRiseBytes": 4046896,
+          "baselineHeapBytes": 8965864,
+          "gcCount": 0,
+          "minWallMs": 144.222292,
+          "maxWallMs": 148.610885
+        },
+        "validate_zip": {
+          "wallMs": 560.785885,
+          "threadCpuMs": 537.670313,
+          "allocatedBytes": 84394032,
+          "sampledPeakHeapBytes": 44869048,
+          "sampledHeapRiseBytes": 35899720,
+          "baselineHeapBytes": 8966416,
+          "gcCount": 4,
+          "minWallMs": 553.605833,
+          "maxWallMs": 585.292604
+        },
+        "validated_unzip": {
+          "wallMs": 574.804167,
+          "threadCpuMs": 537.014314,
+          "allocatedBytes": 84410416,
+          "sampledPeakHeapBytes": 44818248,
+          "sampledHeapRiseBytes": 35845568,
+          "baselineHeapBytes": 8963624,
+          "gcCount": 4,
+          "minWallMs": 557.800364,
+          "maxWallMs": 579.671146
+        },
+        "zip_then_validate": {
+          "wallMs": 697.686302,
+          "threadCpuMs": 673.810017,
+          "allocatedBytes": 88440880,
+          "sampledPeakHeapBytes": 47514664,
+          "sampledHeapRiseBytes": 38549832,
+          "baselineHeapBytes": 8964176,
+          "gcCount": 4,
+          "minWallMs": 692.024375,
+          "maxWallMs": 718.898125
+        },
+        "preview_local_codec_chain": {
+          "wallMs": 547.449479,
+          "threadCpuMs": 512.486456,
+          "allocatedBytes": 59547696,
+          "sampledPeakHeapBytes": 39355864,
+          "sampledHeapRiseBytes": 30391136,
+          "baselineHeapBytes": 8964728,
+          "gcCount": 4,
+          "minWallMs": 529.339687,
+          "maxWallMs": 550.145104
+        },
+        "legacy_preview_control": {
+          "wallMs": 1451.910103,
+          "threadCpuMs": 1369.887661,
+          "allocatedBytes": 201695280,
+          "sampledPeakHeapBytes": 74031568,
+          "sampledHeapRiseBytes": 65069032,
+          "baselineHeapBytes": 8965280,
+          "gcCount": 7,
+          "minWallMs": 1424.569062,
+          "maxWallMs": 1500.106979
+        }
+      }
+    },
+    {
+      "bytes": 15017926,
+      "zipBytes": 3907138,
+      "records": 633,
+      "phases": {
+        "zip": {
+          "wallMs": 431.73026,
+          "threadCpuMs": 389.777767,
+          "allocatedBytes": 14802992,
+          "sampledPeakHeapBytes": 36396536,
+          "sampledHeapRiseBytes": 14802992,
+          "baselineHeapBytes": 21593544,
+          "gcCount": 0,
+          "minWallMs": 405.288907,
+          "maxWallMs": 445.862135
+        },
+        "validate_zip": {
+          "wallMs": 1745.010729,
+          "threadCpuMs": 1606.910016,
+          "allocatedBytes": 233087024,
+          "sampledPeakHeapBytes": 101654376,
+          "sampledHeapRiseBytes": 80066400,
+          "baselineHeapBytes": 21594096,
+          "gcCount": 8,
+          "minWallMs": 1666.62901,
+          "maxWallMs": 1760.634895
+        },
+        "validated_unzip": {
+          "wallMs": 1690.84401,
+          "threadCpuMs": 1599.588415,
+          "allocatedBytes": 233070640,
+          "sampledPeakHeapBytes": 101613816,
+          "sampledHeapRiseBytes": 80021320,
+          "baselineHeapBytes": 21591304,
+          "gcCount": 8,
+          "minWallMs": 1641.13151,
+          "maxWallMs": 1719.06276
+        },
+        "zip_then_validate": {
+          "wallMs": 2162.107083,
+          "threadCpuMs": 2014.778779,
+          "allocatedBytes": 247955504,
+          "sampledPeakHeapBytes": 105515248,
+          "sampledHeapRiseBytes": 83928928,
+          "baselineHeapBytes": 21591856,
+          "gcCount": 10,
+          "minWallMs": 2104.414947,
+          "maxWallMs": 2300.419583
+        },
+        "preview_local_codec_chain": {
+          "wallMs": 1605.680156,
+          "threadCpuMs": 1527.194795,
+          "allocatedBytes": 178409520,
+          "sampledPeakHeapBytes": 86743992,
+          "sampledHeapRiseBytes": 65148792,
+          "baselineHeapBytes": 21592408,
+          "gcCount": 8,
+          "minWallMs": 1573.355051,
+          "maxWallMs": 1631.494218
+        },
+        "legacy_preview_control": {
+          "wallMs": 4365.782967,
+          "threadCpuMs": 4068.357705,
+          "allocatedBytes": 550670384,
+          "sampledPeakHeapBytes": 124626792,
+          "sampledHeapRiseBytes": 103039368,
+          "baselineHeapBytes": 21592960,
+          "gcCount": 22,
+          "minWallMs": 4317.849947,
+          "maxWallMs": 4385.449737
+        }
+      }
+    }
+  ],
+  "thermalStatusBefore": 0,
+  "thermalStatusAfter": 1
+}

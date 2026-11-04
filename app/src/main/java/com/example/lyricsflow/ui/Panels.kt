@@ -760,32 +760,42 @@ fun Appearance(
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         ) {
             Column(Modifier.fillMaxWidth().padding(24.dp)) {
+                if (s.prefs.romanization)
+                    Text("hikari o mukaete", Modifier.testTag("size-preview-romanization").padding(bottom = 5.dp),
+                        fontSize = s.prefs.romanizationSize.sp, lineHeight = (s.prefs.romanizationSize * 1.3f).sp)
                 Text(
-                    "Leave a little room\nfor the light",
-                    fontSize = s.prefs.fontSize.coerceAtMost(38f).sp,
+                    "光を迎えて",
+                    modifier = Modifier.testTag("size-preview-original"),
+                    fontSize = s.prefs.fontSize.sp,
                     fontWeight = FontWeight.Bold,
-                    lineHeight = 44.sp,
+                    lineHeight = (s.prefs.fontSize * 1.3f).sp,
                 )
                 if (s.prefs.translation)
-                    Text("为光，留一点空隙", Modifier.padding(top = 12.dp), fontSize = 14.sp)
+                    Text("迎接微光", Modifier.testTag("size-preview-translation").padding(top = 12.dp),
+                        fontSize = s.prefs.translationSize.sp, lineHeight = (s.prefs.translationSize * 1.4f).sp)
             }
         }
         Section("歌词排版")
         Choice(listOf("经典滚动", "自由排版"), if (s.prefs.free) 1 else 0) {
             graph.preferences(s.prefs.copy(free = it == 1))
         }
-        Text(
-            "歌词字号 · ${s.prefs.fontSize.toInt()} sp",
-            Modifier.padding(top = 18.dp),
-            fontSize = 14.sp,
-        )
-        Slider(
-            value = s.prefs.fontSize.coerceIn(16f, 48f),
-            onValueChange = { graph.preferences(s.prefs.copy(fontSize = it)) },
-            valueRange = 16f..48f,
-        )
+        @Composable
+        fun sizeControl(label: String, tag: String, size: Float, range: ClosedFloatingPointRange<Float>, change: (Float) -> Unit) {
+            Text("$label · ${size.roundToInt()} sp", Modifier.padding(top = 18.dp), fontSize = 14.sp)
+            Slider(value = size.coerceIn(range.start, range.endInclusive), onValueChange = change,
+                valueRange = range, modifier = Modifier.testTag(tag).semantics { contentDescription = label })
+        }
+        sizeControl("原文字号", "original-size", s.prefs.fontSize, 16f..48f) {
+            graph.preferences(s.prefs.copy(fontSize = it))
+        }
+        sizeControl("翻译字号", "translation-size", s.prefs.translationSize, 8f..48f) {
+            graph.preferences(s.prefs.copy(translationSize = it))
+        }
+        sizeControl("罗马音字号", "romanization-size", s.prefs.romanizationSize, 8f..40f) {
+            graph.preferences(s.prefs.copy(romanizationSize = it))
+        }
         Toggle("显示中文译文", s.prefs.translation) { graph.preferences(s.prefs.copy(translation = it)) }
-        Toggle("显示罗马音", s.prefs.romanization, "优先使用来源注音；缺失时使用已授权的大模型 API 补全") {
+        Toggle("显示罗马音", s.prefs.romanization, "已有注音优先保留；授权后补全注音及原文、中文的词组对应，可能产生服务费用") {
             graph.preferences(s.prefs.copy(romanization = it))
         }
         Section("色彩与显示")
@@ -1029,7 +1039,7 @@ fun TranslationSettings(s: ScreenState, graph: AppGraph) {
             Text("清除 API Key 并撤回同意")
         }
         Text(
-            "译文与罗马音共用上述服务和授权，生成的标注随用户数据备份与同步。开启罗马音显示时补全缺失标注。一次提交当前歌曲的全部缺失译文，保留来源已有译文。应用不按行数或字符数拆批，实际容量由所选模型决定；失败不自动无限重试。模型响应必须返回完整且不重复的行 ID。",
+            "译文与罗马音共用上述服务和授权，生成的标注随用户数据备份与同步。开启罗马音时，可为已有或缺失注音的歌词生成原文、读音与中文的词组对应；已有整句译文保留，词组释义可能与整句措辞不同。一次提交整首歌，应用不按行数或字符数拆批，实际容量由所选模型决定；失败不自动无限重试。",
             fontSize = 12.sp,
             lineHeight = 20.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant,

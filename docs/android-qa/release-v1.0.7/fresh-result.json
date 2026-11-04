@@ -1,0 +1,10 @@
+{
+  "version": "1.0.7",
+  "versionCode": 8,
+  "freshInstall": true,
+  "coldStart": true,
+  "preview": true,
+  "save": true,
+  "savedSong": "Somewhere, softer",
+  "savedLines": 8
+}

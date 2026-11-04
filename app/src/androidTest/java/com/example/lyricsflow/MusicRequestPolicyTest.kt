@@ -94,6 +94,9 @@ class MusicRequestPolicyTest {
         assertEquals(body, response.output.toString("UTF-8"))
         assertFalse(response.instanceFollowRedirects)
         assertEquals(60000, response.readTimeout)
+        val longResponse = Response()
+        MusicHttp { longResponse }.send(URL("https://music-test.invalid/long-model"), body, "test-only", 120000)
+        assertEquals("Long model request must not be silently clamped to 60 seconds", 120000, longResponse.readTimeout)
         val oversized = object : Response() {
             override fun getContentLengthLong() = 4_000_001L
             override fun getInputStream(): ByteArrayInputStream = error("Must reject before body allocation")

@@ -60,6 +60,19 @@ data class Track(
 
 data class Word(val text: String, val start: Long, val end: Long)
 
+data class LyricAlignment(val text: String, val romanization: String, val translation: String)
+
+fun validAlignment(text: String, parts: List<LyricAlignment>): Boolean =
+    parts.isNotEmpty() && parts.size <= text.length && parts.joinToString("") { it.text } == text &&
+        parts.all { part ->
+            part.text.isNotEmpty() && part.romanization.length <= 2000 && part.translation.length <= 2000 &&
+                !needsRomanization(part.romanization) &&
+                (!part.text.any { it.isLetter() } ||
+                    part.romanization.any { it.isLetter() } && part.translation.isNotBlank())
+        }
+
+fun Line.needsAlignment(): Boolean = text.any { it.isLetter() } && alignment.isEmpty()
+
 data class Line(
     val start: Long?,
     val end: Long?,
@@ -69,7 +82,11 @@ data class Line(
     val words: List<Word> = emptyList(),
     val translationKind: String = "provider",
     val translationModel: String = "",
-)
+    val alignment: List<LyricAlignment> = emptyList(),
+) {
+    // Immutable rows are reused while the playback clock advances.
+    val hasValidAlignment: Boolean by lazy(LazyThreadSafetyMode.PUBLICATION) { validAlignment(text, alignment) }
+}
 
 data class Lyrics(
     val lines: List<Line>,
@@ -77,6 +94,10 @@ data class Lyrics(
     val instrumental: Boolean = false,
     val providerRevision: Int = 0,
 ) {
+    val needsTranslation: Boolean by lazy(LazyThreadSafetyMode.PUBLICATION) {
+        lines.any { it.translation.isBlank() && needsChineseTranslation(it.text) }
+    }
+    val needsWordAlignment: Boolean by lazy(LazyThreadSafetyMode.PUBLICATION) { lines.any { it.needsAlignment() } }
     val hash: String by lazy(LazyThreadSafetyMode.PUBLICATION) {
         digest(lines.joinToString("\n") { "${it.start}:${it.end}:${it.text}:${it.words}" })
     }

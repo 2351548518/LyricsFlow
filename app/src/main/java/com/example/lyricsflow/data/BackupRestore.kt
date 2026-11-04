@@ -33,6 +33,8 @@ suspend fun restoreBackup(
             romanization = o.optBoolean("romanization", p.romanization),
             free = o.optBoolean("free", p.free),
             fontSize = number("fontSize", 30f, 10f, 96f),
+            translationSize = number("translationSize", (number("fontSize", 30f, 10f, 96f) * .6f).coerceAtLeast(16f).coerceAtMost(48f), 8f, 48f),
+            romanizationSize = number("romanizationSize", 13f, 8f, 40f),
             dark =
                 o.optString("dark", "system").takeIf { it in listOf("light", "dark", "system") }
                     ?: "system",

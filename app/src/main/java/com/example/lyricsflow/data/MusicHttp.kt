@@ -26,7 +26,7 @@ internal class MusicHttp(
     }
 
     suspend fun send(url: URL, body: String?, bearer: String?, readTimeoutMs: Int): MusicResponse {
-        val timeout = readTimeoutMs.coerceIn(1000, 60000)
+        val timeout = readTimeoutMs.coerceIn(1000, 120000)
         try {
             return withTimeout(timeout + 10_000L) {
                 suspendCancellableCoroutine { continuation ->

@@ -109,7 +109,11 @@ internal constructor(
     }
 
     fun includeBackground(value: Boolean) {
-        if (!state.value.busy) change { it.copy(includeBackground = value) }
+        if (!state.value.busy && state.value.includeBackground != value) {
+            // The pending upload contains the bytes captured at preview time.
+            pendingUpload = null
+            change { it.copy(includeBackground = value, uploadPreview = "") }
+        }
     }
 
     private fun run(message: String, block: suspend () -> Unit) {
@@ -331,16 +335,16 @@ internal constructor(
     fun previewUpload() =
         run("正在校验云端版本并生成上传预览…") {
             require(state.value.connected) { "请先连接私有仓库" }
-            val files =
+            val (files, summary) =
                 withContext(Dispatchers.IO) {
-                    SnapshotFiles.unzip(Transfer.backup(graph, state.value.includeBackground))
+                    val files = Transfer.backupFiles(graph, state.value.includeBackground)
+                    files to describe(files, SnapshotFiles.validate(files))
                 }
             val token = token()
             val remote = api.snapshot(token, state.value.login, repo(token))
             require(remote.files.isEmpty() || remote.head == prefs.getString("baseline", "")) {
                 "云端有尚未合并的资料，请先下载确认后再上传"
             }
-            val summary = withContext(Dispatchers.IO) { describe(files) }
             pendingUpload = remote to files
             change { it.copy(uploadPreview = summary, message = "已生成上传预览，尚未提交") }
         }
@@ -367,9 +371,9 @@ internal constructor(
         run("正在下载并校验完整快照…") {
             require(state.value.connected) { "请先连接私有仓库" }
             val token = token()
-            val remote = api.snapshot(token, state.value.login, repo(token))
+            val remote = api.snapshot(token, state.value.login, repo(token), retainValidation = true)
             require(remote.files.isNotEmpty()) { "云端还没有快照，请先上传本机资料" }
-            val summary = withContext(Dispatchers.IO) { describe(remote.files) }
+            val summary = withContext(Dispatchers.IO) { describe(remote.files, checkNotNull(remote.validated)) }
             pendingDownload = remote
             change {
                 it.copy(downloadPreview = summary, message = "云端资料已校验，确认后才会合并到本机")
@@ -386,7 +390,7 @@ internal constructor(
             require(latest.head == remote.head) { "云端在预览期间已更新，请重新下载" }
             val validated =
                 withContext(Dispatchers.IO) {
-                    val backup = Transfer.validateBackup(SnapshotFiles.zip(remote.files))
+                    val backup = checkNotNull(remote.validated)
                     val bytes = Transfer.backup(graph)
                     // AtomicFile retains the previous recovery file if disk write fails.
                     val file = android.util.AtomicFile(recovery)
@@ -415,10 +419,13 @@ internal constructor(
         change { it.copy(lastSync = now) }
     }
 
-    private fun describe(files: Map<String, ByteArray>): String {
-        val rows = Transfer.validateBackup(SnapshotFiles.zip(files)).first
+    private fun describe(
+        files: Map<String, ByteArray>,
+        validated: Pair<List<Triple<String, String, String>>, JSONObject>,
+    ): String {
+        val rows = validated.first
         val grouped = rows.groupingBy { it.first }.eachCount()
-        return "主题 ${grouped["style"] ?: 0} 项 · 已存歌词 ${grouped["saved"] ?: 0} 首\n歌词数据 ${grouped["lyrics"] ?: 0} 项 · 歌词绑定 ${grouped["binding"] ?: 0} 项\n评论绑定 ${grouped["commentBinding"] ?: 0} 项\n逐曲选择 ${grouped["selection"] ?: 0} 项（来源与具体记录）\n显示设置、逐曲来源与时间偏移\n共 ${files.values.sumOf { it.size } / 1024 + 1} KB；${if (JSONObject(String(files.getValue("settings.json"), Charsets.UTF_8)).has("backgroundImage")) "包含自定义背景" else "不含自定义背景"}"
+        return "主题 ${grouped["style"] ?: 0} 项 · 已存歌词 ${grouped["saved"] ?: 0} 首\n歌词数据 ${grouped["lyrics"] ?: 0} 项 · 歌词绑定 ${grouped["binding"] ?: 0} 项\n评论绑定 ${grouped["commentBinding"] ?: 0} 项\n逐曲选择 ${grouped["selection"] ?: 0} 项（来源与具体记录）\n显示设置、逐曲来源与时间偏移\n共 ${files.values.sumOf { it.size } / 1024 + 1} KB；${if (validated.second.has("backgroundImage")) "包含自定义背景" else "不含自定义背景"}"
     }
 
     fun discardPreview() {

@@ -1,0 +1,193 @@
+{
+  "device": "MLY-AN00",
+  "api": 37,
+  "maxHeapBytes": 402653184,
+  "fixtures": [
+    {
+      "bytes": 522029,
+      "zipBytes": 137218,
+      "records": 22,
+      "phases": {
+        "zip": {
+          "wallMs": 28.133,
+          "threadCpuMs": 25.847,
+          "allocatedBytes": 499760,
+          "sampledPeakHeapBytes": 3786784,
+          "sampledHeapRiseBytes": 499760,
+          "baselineHeapBytes": 3287024,
+          "gcCount": 0,
+          "minWallMs": 26.456,
+          "maxWallMs": 29.688
+        },
+        "validate_zip": {
+          "wallMs": 127.719,
+          "threadCpuMs": 121.405,
+          "allocatedBytes": 8040496,
+          "sampledPeakHeapBytes": 9953536,
+          "sampledHeapRiseBytes": 6648288,
+          "baselineHeapBytes": 3287576,
+          "gcCount": 1,
+          "minWallMs": 123.983,
+          "maxWallMs": 136.875
+        },
+        "validated_unzip": {
+          "wallMs": 137.342,
+          "threadCpuMs": 130.449,
+          "allocatedBytes": 9842736,
+          "sampledPeakHeapBytes": 10003840,
+          "sampledHeapRiseBytes": 6713392,
+          "baselineHeapBytes": 3285352,
+          "gcCount": 1,
+          "minWallMs": 131.222,
+          "maxWallMs": 144.39
+        },
+        "zip_then_validate": {
+          "wallMs": 161.635,
+          "threadCpuMs": 151.164,
+          "allocatedBytes": 8540208,
+          "sampledPeakHeapBytes": 10005280,
+          "sampledHeapRiseBytes": 6721584,
+          "baselineHeapBytes": 3285920,
+          "gcCount": 1,
+          "minWallMs": 158.399,
+          "maxWallMs": 163.372
+        },
+        "preview_local_codec_chain": {
+          "wallMs": 316.549,
+          "threadCpuMs": 302.218,
+          "allocatedBytes": 18866224,
+          "sampledPeakHeapBytes": 12869952,
+          "sampledHeapRiseBytes": 9581240,
+          "baselineHeapBytes": 3286472,
+          "gcCount": 2,
+          "minWallMs": 313.084,
+          "maxWallMs": 335.493
+        }
+      }
+    },
+    {
+      "bytes": 5005976,
+      "zipBytes": 1303531,
+      "records": 211,
+      "phases": {
+        "zip": {
+          "wallMs": 257.553,
+          "threadCpuMs": 244.298,
+          "allocatedBytes": 4046896,
+          "sampledPeakHeapBytes": 13000800,
+          "sampledHeapRiseBytes": 4046896,
+          "baselineHeapBytes": 8953904,
+          "gcCount": 0,
+          "minWallMs": 251.653,
+          "maxWallMs": 276.929
+        },
+        "validate_zip": {
+          "wallMs": 1057.89,
+          "threadCpuMs": 1007.846,
+          "allocatedBytes": 84394032,
+          "sampledPeakHeapBytes": 44950720,
+          "sampledHeapRiseBytes": 35993008,
+          "baselineHeapBytes": 8954456,
+          "gcCount": 4,
+          "minWallMs": 1036.172,
+          "maxWallMs": 1098.695
+        },
+        "validated_unzip": {
+          "wallMs": 1093.602,
+          "threadCpuMs": 1052.081,
+          "allocatedBytes": 109273136,
+          "sampledPeakHeapBytes": 62651592,
+          "sampledHeapRiseBytes": 53700504,
+          "baselineHeapBytes": 8952232,
+          "gcCount": 4,
+          "minWallMs": 1082.949,
+          "maxWallMs": 1120.776
+        },
+        "zip_then_validate": {
+          "wallMs": 1295.753,
+          "threadCpuMs": 1257.314,
+          "allocatedBytes": 88424496,
+          "sampledPeakHeapBytes": 47497896,
+          "sampledHeapRiseBytes": 38542888,
+          "baselineHeapBytes": 8952800,
+          "gcCount": 4,
+          "minWallMs": 1288.499,
+          "maxWallMs": 1375.548
+        },
+        "preview_local_codec_chain": {
+          "wallMs": 2657.128,
+          "threadCpuMs": 2550.595,
+          "allocatedBytes": 201728048,
+          "sampledPeakHeapBytes": 76814928,
+          "sampledHeapRiseBytes": 67858560,
+          "baselineHeapBytes": 8953352,
+          "gcCount": 8,
+          "minWallMs": 2624.276,
+          "maxWallMs": 2804.482
+        }
+      }
+    },
+    {
+      "bytes": 15017926,
+      "zipBytes": 3907138,
+      "records": 633,
+      "phases": {
+        "zip": {
+          "wallMs": 798.296,
+          "threadCpuMs": 750.993,
+          "allocatedBytes": 14802992,
+          "sampledPeakHeapBytes": 36382080,
+          "sampledHeapRiseBytes": 14802992,
+          "baselineHeapBytes": 21579088,
+          "gcCount": 0,
+          "minWallMs": 749.205,
+          "maxWallMs": 819.121
+        },
+        "validate_zip": {
+          "wallMs": 3141.494,
+          "threadCpuMs": 3004.243,
+          "allocatedBytes": 233087024,
+          "sampledPeakHeapBytes": 93881304,
+          "sampledHeapRiseBytes": 72301664,
+          "baselineHeapBytes": 21579640,
+          "gcCount": 8,
+          "minWallMs": 1545.528,
+          "maxWallMs": 3281.39
+        },
+        "validated_unzip": {
+          "wallMs": 3350.385,
+          "threadCpuMs": 3138.845,
+          "allocatedBytes": 287846448,
+          "sampledPeakHeapBytes": 97417176,
+          "sampledHeapRiseBytes": 75834744,
+          "baselineHeapBytes": 21577416,
+          "gcCount": 10,
+          "minWallMs": 2087.966,
+          "maxWallMs": 3547.588
+        },
+        "zip_then_validate": {
+          "wallMs": 3975.827,
+          "threadCpuMs": 3757.648,
+          "allocatedBytes": 247955504,
+          "sampledPeakHeapBytes": 97378192,
+          "sampledHeapRiseBytes": 75800208,
+          "baselineHeapBytes": 21577984,
+          "gcCount": 10,
+          "minWallMs": 1795.651,
+          "maxWallMs": 4345.502
+        },
+        "preview_local_codec_chain": {
+          "wallMs": 8266.124,
+          "threadCpuMs": 7681.417,
+          "allocatedBytes": 550703152,
+          "sampledPeakHeapBytes": 114455936,
+          "sampledHeapRiseBytes": 92872952,
+          "baselineHeapBytes": 21578536,
+          "gcCount": 22,
+          "minWallMs": 5035.166,
+          "maxWallMs": 8534.58
+        }
+      }
+    }
+  ]
+}

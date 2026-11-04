@@ -289,6 +289,29 @@ class GitHubSyncTest {
         withTimeout(15000) { while (sync.state.value.busy) delay(20) }
     }
 
+    @Test fun changingBackgroundOptionInvalidatesCapturedUploadBytes() = runBlocking {
+        val graph = AppGraph(context.applicationContext as android.app.Application, monitorPlayback = false)
+        val slot = "github-upload-option-test"
+        val server = MemoryGitHub()
+        val sync = GitHubSync(graph, GitHubApi(server), slot) {}
+        try {
+            withContext(Dispatchers.Main) { sync.configure("test-public-client-id", repo.name); sync.signIn() }
+            idle(sync)
+            withContext(Dispatchers.Main) { sync.connect() }; idle(sync)
+            withContext(Dispatchers.Main) { sync.previewUpload() }; idle(sync)
+            assertTrue(sync.state.value.uploadPreview.isNotBlank())
+            withContext(Dispatchers.Main) { sync.includeBackground(true) }
+            assertEquals("", sync.state.value.uploadPreview)
+            withContext(Dispatchers.Main) { sync.publish() }; idle(sync)
+            assertTrue(sync.state.value.failed)
+            assertEquals(0, server.patchCount)
+        } finally {
+            graph.scope.cancel()
+            context.getSharedPreferences(slot, 0).edit().clear().commit()
+            Secrets(context, slot).write("")
+        }
+    }
+
     @Test
     fun restoreKeepsLocalOnlyRowsCreatesRecoveryAndDisablesPaidTranslation() = runBlocking {
         val graph = AppGraph(context.applicationContext as android.app.Application)

@@ -232,92 +232,85 @@ object Transfer {
         }
 
     fun backup(graph: AppGraph, includeBackground: Boolean = true): ByteArray {
-        val out = ByteArrayOutputStream()
-        ZipOutputStream(out).use { zip ->
-            fun add(name: String, text: String) {
-                zip.putNextEntry(ZipEntry(name))
-                zip.write(text.toByteArray())
-                zip.closeEntry()
-            }
-            add(
-                "manifest.json",
-                JSONObject()
-                    .put("format", "lyricsflow.backup")
-                    .put("schemaVersion", "1.0")
-                    .toString(),
-            )
-            val rows = JSONArray()
-            var size = 0
-            for (k in
-                listOf("binding", "commentBinding", "lyrics", "saved", "style", "selection")) graph
-                .store
-                .all(k)
-                .forEach { (id, body) ->
-                    size += body.toByteArray().size
-                    require(size <= 16_000_000 && rows.length() < 3000) {
-                        "资料超过单份备份 16 MB／3000 项限制，请先导出部分歌词"
-                    }
-                    rows.put(JSONObject().put("kind", k).put("id", id).put("body", body))
-                }
-            add("data.json", rows.toString())
-            val p = graph.state.value.prefs
-            val settings =
-                JSONObject()
-                    .put("translation", p.translation)
-                    .put("romanization", p.romanization)
-                    .put("free", p.free)
-                    .put("fontSize", p.fontSize)
-                    .put("dark", p.dark)
-                    .put("palette", p.palette)
-                    .put("reduced", p.reduced)
-                    .put("autoSources", p.autoSources)
-                    .put("overlaySize", p.overlaySize)
-                    .put("overlayAlpha", p.overlayAlpha)
-                    .put("overlayTranslation", p.overlayTranslation)
-                    .put("overlayColor", p.overlayColor)
-                    .put("background", p.background)
-                    .put("coverBlur", p.coverBlur)
-                    .put("coverMesh", p.coverMesh)
-                    .put("trackPreferences", graph.trackPreferences())
-            val image = File(graph.app.filesDir, "background.jpg")
-            if (includeBackground && image.exists())
-                settings.put(
-                    "backgroundImage",
-                    android.util.Base64.encodeToString(
-                        image.readBytes(),
-                        android.util.Base64.NO_WRAP,
-                    ),
-                )
-            add("settings.json", settings.toString())
+        return SnapshotFiles.zip(backupFiles(graph, includeBackground))
+    }
+
+    /** GitHub stores JSON blobs directly; only exports and recovery files need a ZIP. */
+    internal fun backupFiles(graph: AppGraph, includeBackground: Boolean = true): Map<String, ByteArray> {
+        val files = linkedMapOf<String, ByteArray>()
+        fun add(name: String, text: String) {
+            files[name] = text.toByteArray(Charsets.UTF_8)
         }
-        return out.toByteArray()
+        add(
+            "manifest.json",
+            JSONObject()
+                .put("format", "lyricsflow.backup")
+                .put("schemaVersion", "1.0")
+                .toString(),
+        )
+        val rows = JSONArray()
+        var size = 0
+        for (k in
+            listOf("binding", "commentBinding", "lyrics", "saved", "style", "selection")) graph
+            .store
+            .all(k)
+            .forEach { (id, body) ->
+                size += body.toByteArray().size
+                require(size <= 16_000_000 && rows.length() < 3000) {
+                    "资料超过单份备份 16 MB／3000 项限制，请先导出部分歌词"
+                }
+                rows.put(JSONObject().put("kind", k).put("id", id).put("body", body))
+            }
+        add("data.json", rows.toString())
+        val p = graph.state.value.prefs
+        val settings =
+            JSONObject()
+                .put("translation", p.translation)
+                .put("romanization", p.romanization)
+                .put("free", p.free)
+                .put("fontSize", p.fontSize)
+                .put("translationSize", p.translationSize)
+                .put("romanizationSize", p.romanizationSize)
+                .put("dark", p.dark)
+                .put("palette", p.palette)
+                .put("reduced", p.reduced)
+                .put("autoSources", p.autoSources)
+                .put("overlaySize", p.overlaySize)
+                .put("overlayAlpha", p.overlayAlpha)
+                .put("overlayTranslation", p.overlayTranslation)
+                .put("overlayColor", p.overlayColor)
+                .put("background", p.background)
+                .put("coverBlur", p.coverBlur)
+                .put("coverMesh", p.coverMesh)
+                .put("trackPreferences", graph.trackPreferences())
+        val image = File(graph.app.filesDir, "background.jpg")
+        if (includeBackground && image.exists())
+            settings.put(
+                "backgroundImage",
+                android.util.Base64.encodeToString(
+                    image.readBytes(),
+                    android.util.Base64.NO_WRAP,
+                ),
+            )
+        add("settings.json", settings.toString())
+        return files
     }
 
     fun validateBackup(bytes: ByteArray): Pair<List<Triple<String, String, String>>, JSONObject> {
-        require(bytes.size <= 20_000_000) { "备份超过 20 MB" }
-        val entries = mutableMapOf<String, String>()
-        var total = 0
-        ZipInputStream(ByteArrayInputStream(bytes)).use { zip ->
-            while (true) {
-                val e = zip.nextEntry ?: break
-                require(
-                    e.name in listOf("manifest.json", "data.json", "settings.json") &&
-                        !entries.containsKey(e.name)
-                ) {
-                    "备份含未知、重复或不安全路径"
-                }
-                val b = zip.readBytesLimited(20_000_000)
-                total += b.size
-                require(total <= 20_000_000)
-                entries[e.name] = String(b, Charsets.UTF_8)
-            }
-        }
-        val manifest = jsonObject(entries["manifest.json"] ?: error("缺少 manifest"))
+        return validateBackupFiles(SnapshotFiles.readArchive(bytes))
+    }
+
+    /** Share the exact same schema/content validation between ZIP imports and GitHub blobs. */
+    internal fun validateBackupFiles(files: Map<String, ByteArray>): Pair<List<Triple<String, String, String>>, JSONObject> {
+        require(files.keys.all { it in SnapshotFiles.names }) { "备份含未知或不安全路径" }
+        require(files.values.sumOf { it.size.toLong() } <= 20_000_000) { "备份超过 20 MB" }
+        fun content(name: String) = files[name]?.toString(Charsets.UTF_8)
+        val manifest = jsonObject(content("manifest.json") ?: error("缺少 manifest"))
         require(
             manifest.getString("format") == "lyricsflow.backup" &&
                 manifest.getString("schemaVersion") == "1.0"
         )
-        val a = jsonArray(entries["data.json"] ?: error("缺少数据"))
+        val a = jsonArray(content("data.json") ?: error("缺少数据"))
         require(a.length() <= 3000)
         val rows =
             (0 until a.length()).map {
@@ -353,7 +346,7 @@ object Transfer {
                 }
                 Triple(k, id, b)
             }
-        val settings = jsonObject(entries["settings.json"] ?: "{}")
+        val settings = jsonObject(content("settings.json") ?: "{}")
         if (settings.has("overlayColor"))
             require(OverlayColors.normalize(settings.getString("overlayColor")) != null) {
                 "悬浮歌词颜色应为 #RRGGBB，或留空跟随主题"

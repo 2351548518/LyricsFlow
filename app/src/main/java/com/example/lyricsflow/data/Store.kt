@@ -234,6 +234,11 @@ fun lyricsJson(l: Lyrics): JSONObject =
                                     .put("model", row.translationModel),
                             )
                             .put("romanization", row.romanization)
+                            .put("alignment", JSONArray().apply {
+                                row.alignment.forEach { part -> put(JSONObject()
+                                    .put("text", part.text).put("romanization", part.romanization)
+                                    .put("translation", part.translation)) }
+                            })
                             .put(
                                 "words",
                                 JSONArray().apply {
@@ -261,6 +266,8 @@ fun readLyrics(o: JSONObject): Lyrics {
                 val r = a.getJSONObject(n)
                 val ws = r.optJSONArray("words") ?: JSONArray()
                 val t = r.opt("translation")
+                val alignment = r.optJSONArray("alignment") ?: JSONArray()
+                require(alignment.length() <= r.getString("text").length) { "逐词标注数量无效" }
                 Line(
                     if (r.isNull("startMs")) null else r.getLong("startMs"),
                     if (r.isNull("endMs")) null else r.getLong("endMs"),
@@ -273,12 +280,17 @@ fun readLyrics(o: JSONObject): Lyrics {
                     },
                     if (t is JSONObject) t.optString("kind", "provider") else "provider",
                     if (t is JSONObject) t.optString("model") else "",
+                    (0 until alignment.length()).map { i ->
+                        val part = alignment.getJSONObject(i)
+                        LyricAlignment(part.getString("text"), part.getString("romanization"), part.getString("translation"))
+                    },
                 )
             }
             .onEach { r ->
                 require(r.start == null || r.start >= 0)
                 require(r.end == null || r.start == null || r.end >= r.start)
                 require(r.text.length <= 20000)
+                require(r.alignment.isEmpty() || validAlignment(r.text, r.alignment)) { "逐词标注与原文不一致" }
                 r.words.forEach { require(it.start >= 0 && it.end >= it.start) }
             }
             .sortedBy { it.start ?: Long.MAX_VALUE },

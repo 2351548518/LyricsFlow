@@ -31,6 +31,8 @@ data class Preferences(
     val coverBlur: Float = 8f,
     val overlayColor: String = "",
     val coverMesh: Boolean = true,
+    val translationSize: Float = 18f,
+    val romanizationSize: Float = 13f,
 )
 
 data class ScreenState(
@@ -117,25 +119,12 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null, private val m
         reloadStyles()
         scope.launch {
             state
-                .map {
-                    Triple(
-                        it.playback.track?.key.orEmpty() + it.lyrics?.hash,
-                        it.prefs.autoTranslate && it.prefs.consent,
-                        it.lyrics,
-                    )
-                }
+                .map { it.annotationRequestKey(romanization = false) }
                 .distinctUntilChanged()
-                .collectLatest { (_, enabled, l) ->
-                    if (
-                        !enabled ||
-                            l == null ||
-                            l.lines.none {
-                                it.translation.isBlank() && needsChineseTranslation(it.text)
-                            } ||
-                            state.value.demo
-                    )
-                        return@collectLatest
+                .collectLatest { key ->
+                    if (!key.enabled || !key.missing) return@collectLatest
                     val captured = state.value
+                    val l = captured.lyrics ?: return@collectLatest
                     val track = captured.playback.track ?: return@collectLatest
                     try {
                         val rows = translate(captured)
@@ -148,13 +137,8 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null, private val m
         }
         // Changing visibility or song cancels the previous pronunciation request.
         scope.launch {
-            state.map { s ->
-                listOf(s.playback.track?.key, s.lyrics?.source, s.lyrics?.hash,
-                    s.prefs.romanization && s.prefs.consent && !s.demo,
-                    s.lyrics?.lines?.any { it.romanization.isBlank() && needsRomanization(it.text) },
-                    s.prefs.translationUrl, s.prefs.model)
-            }.distinctUntilChanged().collectLatest { key ->
-                if (key[3] != true || key[4] != true) return@collectLatest
+            state.map { it.annotationRequestKey(romanization = true) }.distinctUntilChanged().collectLatest { key ->
+                if (!key.enabled || !key.missing) return@collectLatest
                 val captured = state.value
                 val l = captured.lyrics ?: return@collectLatest
                 val track = captured.playback.track ?: return@collectLatest
@@ -162,6 +146,8 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null, private val m
                 try {
                     val rows = translate(captured, romanization = true)
                     applyTranslation(rows, l.hash, track.key, l.source, romanization = true)
+                    if (rows.any { it.needsAlignment() })
+                        message("部分词组对应未通过校验，已保留整句标注；可关闭再开启“罗”重试")
                 } catch (e: CancellationException) { throw e }
                   catch (e: Exception) { message("罗马音生成未完成：${e.message}；可关闭后重新开启重试") }
                 finally { mutable.update { it.copy(romanizationBusy = false) } }
@@ -181,7 +167,13 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null, private val m
             )
         }
         if ("home" in targets)
-            preferences(state.value.prefs.copy(free = spec.mode == "free", fontSize = spec.size))
+            preferences(state.value.prefs.copy(free = spec.mode == "free", fontSize = spec.size,
+                translationSize = o.optJSONObject("text")?.optJSONObject("translation")
+                    ?.optDouble("textSizeSp", state.value.prefs.translationSize.toDouble())?.toFloat()
+                    ?.coerceIn(8f, 48f) ?: state.value.prefs.translationSize,
+                romanizationSize = o.optJSONObject("text")?.optJSONObject("romanization")
+                    ?.optDouble("textSizeSp", state.value.prefs.romanizationSize.toDouble())?.toFloat()
+                    ?.coerceIn(8f, 40f) ?: state.value.prefs.romanizationSize))
         scope.launch(Dispatchers.IO) {
             for (target in targets) store.put("style", target, raw)
             store.put("style", "user:${o.getString("id")}", raw)
@@ -223,6 +215,9 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null, private val m
             prefs.getFloat("coverBlur", 8f).takeIf { it.isFinite() }?.coerceIn(0f, 24f) ?: 8f,
             OverlayColors.normalize(prefs.getString("overlayColor", "").orEmpty()).orEmpty(),
             prefs.getBoolean("coverMesh", true),
+            prefs.getFloat("translationSize", (prefs.getFloat("fontSize", 30f) * .6f).coerceAtLeast(16f))
+                .takeIf { it.isFinite() }?.coerceIn(8f, 48f) ?: 18f,
+            prefs.getFloat("romanizationSize", 13f).takeIf { it.isFinite() }?.coerceIn(8f, 40f) ?: 13f,
         )
 
     fun preferences(p: Preferences) {
@@ -233,6 +228,8 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null, private val m
             .putBoolean("romanization", p.romanization)
             .putBoolean("free", p.free)
             .putFloat("fontSize", p.fontSize)
+            .putFloat("translationSize", p.translationSize)
+            .putFloat("romanizationSize", p.romanizationSize)
             .putString("dark", p.dark)
             .putInt("palette", p.palette)
             .putBoolean("reduced", p.reduced)
@@ -248,9 +245,9 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null, private val m
             .putString("background", p.background)
             .putFloat("coverBlur", p.coverBlur)
             .putBoolean("coverMesh", p.coverMesh)
+            .putBoolean("autoTranslate", p.autoTranslate)
+            .putBoolean("autoSources", p.autoSources)
             .apply()
-        prefs.edit().putBoolean("autoTranslate", p.autoTranslate).apply()
-        prefs.edit().putBoolean("autoSources", p.autoSources).apply()
         api.neteaseGateway = p.gateway
         mutable.update { it.copy(prefs = p) }
         playback.preferred = p.playbackApp
@@ -843,9 +840,11 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null, private val m
                     rows[it].text != current.lines[it].text || rows[it].start != current.lines[it].start
                 }) return false
             val l = current.copy(lines = current.lines.mapIndexed { i, line ->
-                if (romanization) line.copy(romanization = line.romanization.ifBlank { rows[i].romanization })
-                else line.copy(translation = rows[i].translation,
+                if (romanization) line.copy(romanization = line.romanization.ifBlank { rows[i].romanization },
+                    alignment = line.alignment.ifEmpty { rows[i].alignment })
+                else if (line.translation.isBlank()) line.copy(translation = rows[i].translation,
                     translationKind = rows[i].translationKind, translationModel = rows[i].translationModel)
+                else line
             })
             mutable.update { it.copy(lyrics = l) }
             val previous = annotationSaveJob
@@ -864,32 +863,31 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null, private val m
     }
 
     suspend fun translate(s: ScreenState = state.value, romanization: Boolean = false): List<Line> = translationLock.withLock {
-        val l = s.lyrics ?: error("暂无歌词")
+        val captured = s.lyrics ?: error("暂无歌词")
         val p = s.prefs
-        require(
-            p.consent &&
-                p.translationUrl.startsWith("https://") &&
-                p.model.isNotBlank() &&
-                secrets.read().isNotBlank()
-        ) {
-            "请先配置翻译服务，并确认发送歌词及可能产生的费用"
+        fun currentLyrics(): Lyrics {
+            val current = state.value
+            if (current.playback.track?.key != s.playback.track?.key ||
+                current.lyrics?.source != captured.source || current.lyrics?.hash != captured.hash ||
+                !current.prefs.consent || current.prefs.translationUrl != p.translationUrl ||
+                current.prefs.model != p.model)
+                throw CancellationException("歌曲、歌词或翻译配置已切换")
+            return current.lyrics!!
         }
+        // A previous request may have filled the missing rows while this call waited for the mutex.
+        val l = currentLyrics()
         val result = l.lines.toMutableList()
         val batch = l.lines.indices.filter {
-            if (romanization) l.lines[it].romanization.isBlank() && needsRomanization(l.lines[it].text)
+            if (romanization) l.lines[it].needsAlignment()
             else l.lines[it].translation.isBlank() && needsChineseTranslation(l.lines[it].text)
         }
         if (batch.isNotEmpty()) {
-            val current = state.value
-            if (
-                current.playback.track?.key != s.playback.track?.key ||
-                    current.lyrics?.source != l.source ||
-                    current.lyrics?.hash != l.hash ||
-                    !current.prefs.consent ||
-                    current.prefs.translationUrl != p.translationUrl ||
-                    current.prefs.model != p.model
-            )
-                throw CancellationException("歌曲或歌词来源已切换")
+            require(p.consent && p.translationUrl.startsWith("https://") && p.model.isNotBlank()) {
+                "请先配置翻译服务，并确认发送歌词及可能产生的费用"
+            }
+            val key = withContext(Dispatchers.IO) { secrets.read() }
+            require(key.isNotBlank()) { "请先配置翻译服务，并确认发送歌词及可能产生的费用" }
+            currentLyrics()
             val day =
                 java.text
                     .SimpleDateFormat("yyyy-MM-dd", java.util.Locale.ROOT)
@@ -908,9 +906,10 @@ class AppGraph(val app: Application, lookup: LyricsLookup? = null, private val m
                 api.request(
                     p.translationUrl.trimEnd('/') + "/chat/completions",
                     body,
-                    secrets.read(),
-                    readTimeoutMs = 60000,
+                    key,
+                    readTimeoutMs = if (romanization) 120000 else 60000,
                 )
+            currentLyrics() // Manual requests must also reject results after configuration changes.
             val decoded = TranslationProtocol.decode(response, batch, l.lines, p.model, romanization)
             for (id in batch) result[id] = decoded[id]
         }

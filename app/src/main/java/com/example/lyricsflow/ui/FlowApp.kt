@@ -37,6 +37,7 @@ import androidx.compose.ui.geometry.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.*
 import androidx.compose.ui.platform.*
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.*
@@ -1113,7 +1114,7 @@ private fun Home(
                                 val enabled = !s.prefs.romanization
                                 graph.preferences(s.prefs.copy(romanization = enabled))
                                 if (enabled && !s.prefs.consent && s.lyrics?.lines?.any {
-                                        it.romanization.isBlank() && needsRomanization(it.text)
+                                        it.needsAlignment()
                                     } == true)
                                     graph.message("显示已有罗马音；补全缺失标注请先在在线翻译中配置 API 并授权")
                             },
@@ -1288,6 +1289,72 @@ private fun LyricText(
     )
 }
 
+/** Pack semantic units without separating their three corresponding text fragments. */
+@Composable
+private fun AlignedLyric(
+    parts: List<LyricAlignment>, original: AnnotatedString,
+    textSize: Float, translationSize: Float, romanSize: Float,
+    font: FontFamily, weight: FontWeight, color: Color, romanColor: Color,
+    translationColor: Color, showTranslation: Boolean, align: TextAlign,
+) {
+    Layout(modifier = Modifier.fillMaxWidth().testTag("aligned-lyric"), content = {
+        var offset = 0
+        parts.forEach { part ->
+            LyricText(AnnotatedString(part.romanization), fontSize = romanSize.sp,
+                lineHeight = (romanSize * 1.3f).sp, fontFamily = font, color = romanColor,
+                textAlign = TextAlign.Center)
+            LyricText(original.subSequence(offset, offset + part.text.length), fontSize = textSize.sp,
+                lineHeight = (textSize * 1.22f).sp, fontFamily = font, fontWeight = weight,
+                color = color, textAlign = TextAlign.Center)
+            LyricText(AnnotatedString(if (showTranslation) part.translation else ""),
+                fontSize = translationSize.sp, lineHeight = (translationSize * 1.4f).sp,
+                fontFamily = font, color = translationColor, textAlign = TextAlign.Center)
+            offset += part.text.length
+        }
+    }) { measurables, constraints ->
+        val gap = 4.dp.roundToPx()
+        val unitGap = 3.dp.roundToPx()
+        val maxWidth = constraints.maxWidth.coerceAtLeast(1)
+        val cells = measurables.chunked(3).map { texts ->
+            val width = texts.maxOf { it.maxIntrinsicWidth(Int.MAX_VALUE) }.coerceIn(1, maxWidth)
+            texts.map { it.measure(Constraints(minWidth = width, maxWidth = width)) }
+        }
+        val rows = mutableListOf<MutableList<Int>>()
+        var used = 0
+        cells.indices.forEach { i ->
+            val width = cells[i][0].width
+            if (rows.isEmpty() || used + unitGap + width > maxWidth) {
+                rows.add(mutableListOf()); used = 0
+            }
+            if (rows.last().isNotEmpty()) used += unitGap
+            rows.last().add(i); used += width
+        }
+        val heights = rows.map { row ->
+            intArrayOf(row.maxOf { cells[it][0].height }, row.maxOf { cells[it][1].height },
+                if (showTranslation) row.maxOf { cells[it][2].height } else 0)
+        }
+        val height = heights.sumOf { it.sum() + gap + if (showTranslation) gap else 0 } +
+            (rows.size - 1).coerceAtLeast(0) * gap * 2
+        layout(maxWidth, constraints.constrainHeight(height)) {
+            var y = 0
+            rows.forEachIndexed { n, row ->
+                val h = heights[n]
+                val width = row.sumOf { cells[it][0].width } + (row.size - 1) * unitGap
+                var x = when (align) { TextAlign.Center -> (maxWidth - width) / 2
+                    TextAlign.End -> maxWidth - width; else -> 0 }
+                row.forEach { i ->
+                    val c = cells[i]
+                    c[0].placeRelative(x, y + h[0] - c[0].height)
+                    c[1].placeRelative(x, y + h[0] + gap)
+                    if (showTranslation) c[2].placeRelative(x, y + h[0] + gap + h[1] + gap)
+                    x += c[0].width + unitGap
+                }
+                y += h.sum() + gap + (if (showTranslation) gap else 0) + gap * 2
+            }
+        }
+    }
+}
+
 @Composable
 private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position: () -> Long) {
     val lines = s.lyrics!!.lines
@@ -1370,11 +1437,10 @@ private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position:
             if (partitionHeight != null)
                 minOf(preferredSize, ((partitionHeight - 36f) / 2.5f).coerceAtLeast(10f))
             else preferredSize
-        val translationSize =
-            if (partitionHeight != null) (textSize * .6f).coerceAtLeast(12f)
-            else
-                (theme?.translation?.size ?: (s.prefs.fontSize * .6f)).coerceAtLeast(16f) *
-                    (1f + (targetEmphasis - 1f) * .55f)
+        val translationSize = s.prefs.translationSize * (1f + (targetEmphasis - 1f) * .55f)
+        val original = rowText(row, current)
+        val aligned = s.prefs.romanization && !vertical &&
+            row.hasValidAlignment && original.text == row.text
         Column(
             modifier
                 .fillMaxWidth()
@@ -1409,7 +1475,27 @@ private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position:
                     vertical = (if (partitionHeight != null) 4f else (theme?.gap ?: 28f) / 2).dp,
                 )
         ) {
-            if (vertical && partitionHeight != null) {
+            if (aligned) AlignedLyric(row.alignment, original, textSize, translationSize,
+                s.prefs.romanizationSize, font,
+                FontWeight(theme?.original?.weight ?: if (current) 700 else 600), color,
+                if (ink.overImage) color.copy(alpha = .85f) else theme?.romanization?.color?.let { Color(it) } ?: color.copy(alpha = .64f),
+                if (ink.overImage) color.copy(alpha = .9f) else theme?.translation?.color?.let { Color(it) } ?: color.copy(alpha = .68f),
+                s.prefs.translation, align)
+            if (!aligned && s.prefs.romanization && row.romanization.isNotBlank())
+                LyricText(
+                    AnnotatedString(row.romanization),
+                    Modifier.fillMaxWidth().padding(bottom = 5.dp),
+                    fontSize = s.prefs.romanizationSize.sp,
+                    fontFamily = font,
+                    color =
+                        if (ink.overImage) color.copy(alpha = .85f)
+                        else
+                            theme?.romanization?.color?.let { Color(it) }
+                                ?: color.copy(alpha = .64f),
+                    style = LocalTextStyle.current.copy(shadow = shadow),
+                    textAlign = align,
+                )
+            if (!aligned && vertical && partitionHeight != null) {
                 val charsPerColumn =
                     ((partitionHeight - 36f) / (textSize * 1.12f)).toInt().coerceIn(2, 20)
                 Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
@@ -1424,9 +1510,9 @@ private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position:
                         )
                     }
                 }
-            } else
+            } else if (!aligned)
                 LyricText(
-                    rowText(row, current),
+                    original,
                     fontSize = textSize.sp,
                     lineHeight = (textSize * 1.22f).sp,
                     fontFamily = font,
@@ -1438,7 +1524,7 @@ private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position:
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.fillMaxWidth(),
                 )
-            if (s.prefs.translation && row.translation.isNotBlank())
+            if (!aligned && s.prefs.translation && row.translation.isNotBlank())
                 LyricText(
                     AnnotatedString(row.translation),
                     Modifier.fillMaxWidth()
@@ -1453,20 +1539,6 @@ private fun LyricStage(s: ScreenState, style: StyleSpec?, active: Int, position:
                         else
                             theme?.translation?.color?.let { Color(it) }
                                 ?: color.copy(alpha = .68f),
-                    style = LocalTextStyle.current.copy(shadow = shadow),
-                    textAlign = align,
-                )
-            if (s.prefs.romanization && row.romanization.isNotBlank())
-                LyricText(
-                    AnnotatedString(row.romanization),
-                    Modifier.fillMaxWidth().padding(top = 5.dp),
-                    fontSize = (theme?.romanization?.size ?: 13f).sp,
-                    fontFamily = font,
-                    color =
-                        if (ink.overImage) color.copy(alpha = .85f)
-                        else
-                            theme?.romanization?.color?.let { Color(it) }
-                                ?: color.copy(alpha = .64f),
                     style = LocalTextStyle.current.copy(shadow = shadow),
                     textAlign = align,
                 )
